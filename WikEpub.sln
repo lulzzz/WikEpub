@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikEpub", "WikEpub\WikEpub.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTester", "ConsoleTester\ConsoleTester.csproj", "{653F9136-2848-439B-9866-E052B01CECAC}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebScraper", "WebScraper\WebScraper.fsproj", "{A19EB893-53DC-4DF5-A1F6-89B1A0E16B0B}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WikEpubLibrary", "WikEpubLibrary\WikEpubLibrary.fsproj", "{AE08249B-F658-4CFE-B827-1F0A98F635CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{653F9136-2848-439B-9866-E052B01CECAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{653F9136-2848-439B-9866-E052B01CECAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{653F9136-2848-439B-9866-E052B01CECAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A19EB893-53DC-4DF5-A1F6-89B1A0E16B0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A19EB893-53DC-4DF5-A1F6-89B1A0E16B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A19EB893-53DC-4DF5-A1F6-89B1A0E16B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A19EB893-53DC-4DF5-A1F6-89B1A0E16B0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE08249B-F658-4CFE-B827-1F0A98F635CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE08249B-F658-4CFE-B827-1F0A98F635CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE08249B-F658-4CFE-B827-1F0A98F635CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE08249B-F658-4CFE-B827-1F0A98F635CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
