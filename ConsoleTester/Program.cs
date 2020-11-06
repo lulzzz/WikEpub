@@ -1,19 +1,18 @@
 ﻿using FSharp.Data;
-using Microsoft.FSharp.Core;
-using Microsoft.VisualBasic;
 using System;
-using WebScraper;
-
+using System.Linq;
+using WikEpubLibrary;
 namespace ConsoleTester
 {
     class Program
     {
         static void Main(string[] args)
         {
-            HtmlDocument doc = HtmlDocument.Load("https://www.google.com");
-            Console.WriteLine(doc.Body());
-            Say.hello("Harry");
-            Console.WriteLine("Hello World!");
+
+            HtmlDocument htmlDocument = HtmlDocument.Load("https://en.wikipedia.org/wiki/Example_(musician)");
+            //     Console.WriteLine(htmlDocument);
+            var newDoc = ScrapeWiki.getNewHtml(htmlDocument);
+            Console.Write(newDoc.ToString());
         }
     }
 }
