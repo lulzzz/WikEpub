@@ -6,5 +6,7 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
     public interface IGetHtmlDoc
     {
         HtmlDocument GetHtmlDocument(HtmlDocument inputDocument);
+
+
     }
 }
