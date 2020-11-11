@@ -3,6 +3,6 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
 {
     public interface IProcessPictureDownloads
     {
-        HtmlDocument ProcessDownloadLinks(HtmlDocument inputDocument);
+        HtmlDocument ProcessDownloadLinks(HtmlDocument inputDocument, string downLoadDirectory);
     }
 }
