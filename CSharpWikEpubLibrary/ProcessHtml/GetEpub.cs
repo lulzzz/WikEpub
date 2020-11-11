@@ -13,7 +13,10 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             bool HeadPredicate(HtmlNode node) => (node.Name == "meta" & node.Attributes.Any(attribute => attribute.Name == "charset")) 
                                                  | node.Name == "title";
 
-            var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", node => true, "body");
+            bool BodyPredicate(HtmlNode node) =>
+                node.Name != "style" | node.Attributes.All(attribute => attribute.Name != "role");
+
+            var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
             var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
             var htmlString = 
                 string.Join(
@@ -42,7 +45,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 currentNode = currentNode.NextSibling;
             }
 
-            return string.Join("", nodeStrings.Prepend($"<{encapsulateWithNode}>").Append($"</{encapsulateWithNode}"));
+            return string.Join("", nodeStrings.Prepend($"<{encapsulateWithNode}>").Append($"</{encapsulateWithNode}>"));
         }
 
 
