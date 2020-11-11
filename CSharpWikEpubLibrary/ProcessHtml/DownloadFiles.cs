@@ -33,7 +33,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 var responseResult = _httpClient.GetAsync(url);
                 using var memoryStream = responseResult.Result.Content.ReadAsStreamAsync().Result;
                 using var fileStream = File.Create($"{toDirectory}{url.Split('/').LastOrDefault()}"); 
-                memoryStream.CopyToAsync(fileStream);
+                memoryStream.CopyTo(fileStream);
             });
         
 
