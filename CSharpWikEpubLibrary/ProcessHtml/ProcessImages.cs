@@ -44,21 +44,16 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
             
             ChangeFileNamesIn(imageDirectory);
 
-
-            inputDocument
-                .DocumentNode
-                .Descendants()
-                .Where(node => node.Name == "img")
-                .ToList()
-                .ForEach(node =>
+            foreach (var node in inputDocument.DocumentNode.Descendants().Where(node => node.Name == "img"))
+            {
+                var srcValue = node.Attributes.First(a => a.Name == "src").Value;
+                if (imageLinkSet.Contains(srcValue))
                 {
-                    var srcValue = node.Attributes.First(a => a.Name == "src").Value;
-                    if (imageLinkSet.Contains(srcValue))
-                    {
-                        ChangeHtmlNodeAttribute(node, "src", _mapOldToNewName[srcValue.Split('/').Last()]);
-                    }
-                });
-            
+                    ChangeHtmlNodeAttribute(node, "src", _mapOldToNewName[srcValue.Split('/').Last()]);
+                }
+
+            }
+                       
             return inputDocument;
         }
 
