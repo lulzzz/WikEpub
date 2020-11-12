@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FileManager\FilesToCopy\" />
+    <Folder Include="FileManager\FilesToCopy\OEBPS\" />
     <Folder Include="ProcessHtml\TestDlFolder\" />
   </ItemGroup>
 
