@@ -5,7 +5,7 @@ using HtmlAgilityPack;
 
 namespace CSharpWikEpubLibrary.ProcessHtml
 {
-    public class GetEpub : ITransformHtmlDoc
+    public class ParseHtml : IParseHtmlDoc
     {
         public HtmlDocument Transform(HtmlDocument inputDocument)
         {

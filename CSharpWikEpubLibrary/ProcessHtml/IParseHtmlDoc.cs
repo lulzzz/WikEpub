@@ -2,7 +2,7 @@
 
 namespace CSharpWikEpubLibrary.ProcessHtml
 {
-    public interface ITransformHtmlDoc
+    public interface IParseHtmlDoc
     {
         HtmlDocument Transform(HtmlDocument inputDocument);
 
