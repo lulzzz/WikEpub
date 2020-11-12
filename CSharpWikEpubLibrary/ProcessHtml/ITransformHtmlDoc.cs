@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 
-namespace CSharpWikEpubLibrary.ScrapeWiki
+namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public interface ITransformHtmlDoc
     {

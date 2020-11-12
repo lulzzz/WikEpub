@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using CSharpWikEpubLibrary.ProcessHtml;
+using CSharpWikEpubLibrary.FileManager;
 using HtmlAgilityPack;
 
-namespace CSharpWikEpubLibrary.ScrapeWiki
+namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public class ProcessImages : IProcessImages
     {
@@ -26,11 +20,12 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
         }
 
         /// <summary>
-        /// Downloads image files to specified directory, points image file path in html doc to new directory
+        /// Downloads image files to specified directory, points image file path in html doc to new directory.
+        /// If no image nodes are present in the document, an unaltered document will be returned
         /// </summary>
         /// <param name="inputDocument">Html document to transform</param>
         /// <param name="imageDirectory">Directory to save images to</param>
-        /// <returns></returns>
+        /// <returns>Html document</returns>
         public HtmlDocument ProcessDownloadLinks(HtmlDocument inputDocument, string imageDirectory)
         {
             HtmlNode[] imageNodes = inputDocument

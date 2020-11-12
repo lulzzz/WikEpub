@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CSharpWikEpubLibrary.ScrapeWiki;
 using HtmlAgilityPack;
 
 namespace CSharpWikEpubLibrary.ProcessHtml
@@ -14,7 +13,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                                                  | node.Name == "title";
 
             bool BodyPredicate(HtmlNode node) =>
-                node.Name != "style" | node.Attributes.All(attribute => attribute.Name != "role");
+                !(node.Name == "style" | node.Attributes.Any(attribute => attribute.Name == "role"));
 
             var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
             var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");

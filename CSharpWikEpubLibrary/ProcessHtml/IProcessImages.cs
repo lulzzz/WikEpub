@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
-namespace CSharpWikEpubLibrary.ScrapeWiki
+
+namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public interface IProcessImages
     {
