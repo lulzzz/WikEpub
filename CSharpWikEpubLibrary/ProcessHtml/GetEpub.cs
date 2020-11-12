@@ -13,7 +13,9 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                                                  | node.Name == "title";
 
             bool BodyPredicate(HtmlNode node) =>
-                !(node.Name == "style" | node.Attributes.Any(attribute => attribute.Name == "role"));
+                node.Name != "style"
+                & (node.Attributes.All(attribute => attribute.Name != "role")
+                | node.Attributes.Any(attribute => attribute.Value == "toc"));
 
             var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
             var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
