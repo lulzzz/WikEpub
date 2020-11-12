@@ -78,19 +78,32 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
         private int _fileNumber;
         private void ChangeFileNamesIn(string directory)
         {
+            
             DirectoryInfo directoryInfo = new DirectoryInfo(directory);
             FileInfo[] info = directoryInfo.GetFiles();
+            HashSet<string> directoryHashSet = info.Select(inf => inf.FullName).ToHashSet();
+
             foreach (var fileInfo in info)
             {
                 var oldFileNameWithType = fileInfo.Name;
                 var oldFileNameWithoutType = oldFileNameWithType.Split('.').First();
                 var newFileName = fileInfo.FullName.Replace(oldFileNameWithoutType, $"Image_{_fileNumber}");
-                
-                File.Move(fileInfo.FullName, newFileName );
+
+                if (directoryHashSet.Contains(newFileName))
+                {
+                    File.Delete(fileInfo.FullName);
+                }
+                else
+                {
+                    File.Move(fileInfo.FullName, newFileName );
+                }
                 
                 _mapOldToNewName.Add(oldFileNameWithType, newFileName);
                 _fileNumber++;
             } 
+        
+            
+
 
         }
 

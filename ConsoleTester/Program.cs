@@ -21,7 +21,7 @@ namespace CSharpConsoleDebugger
             //Console.WriteLine(epubDoc.DocumentNode.SelectSingleNode("//html").OuterHtml + "\n");
 
             using HttpClient httpClient = new HttpClient();
-            IProcessImages images = new ProcessImages(new DownloadFiles(httpClient), new ChangeFileNames());
+            IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
             var processedDoc = images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
 
             Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
