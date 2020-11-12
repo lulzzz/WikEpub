@@ -66,7 +66,6 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
                 .First(attribute => attribute.Name == attName)
                 .Value = newValue;
         
-        
         private int _fileNumber;
         private void ChangeFileNamesIn(string directory)
         {
