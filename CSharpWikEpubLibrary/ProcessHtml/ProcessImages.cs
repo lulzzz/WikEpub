@@ -15,45 +15,48 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
     public class ProcessImages : IProcessImages
     {
         private readonly IDownloadFiles _downloadFiles;
-        private Dictionary<string, string> _mapOldToNewName = new Dictionary<string, string>();
+        /// <summary>
+        /// maps old file name to new file directory path
+        /// </summary>
+        private readonly Dictionary<string, string> _mapOldNameToNewDirPath = new Dictionary<string, string>();
         
         public ProcessImages(IDownloadFiles downloadFiles)
         {
             _downloadFiles = downloadFiles;
         }
 
+        /// <summary>
+        /// Downloads image files to specified directory, points image file path in html doc to new directory
+        /// </summary>
+        /// <param name="inputDocument">Html document to transform</param>
+        /// <param name="imageDirectory">Directory to save images to</param>
+        /// <returns></returns>
         public HtmlDocument ProcessDownloadLinks(HtmlDocument inputDocument, string imageDirectory)
         {
-            IEnumerable<string> imageLinks;
-            try
-            {
-                 // get the links to each image 
-                imageLinks = GetImageLinks(inputDocument).Distinct();
-            }
-            catch (ArgumentNullException)
-            {
-                return inputDocument;
-            }
-            
-                       
-            //download each link to a specified folder
-            _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
+            HtmlNode[] imageNodes = inputDocument
+                    .DocumentNode
+                    .Descendants()
+                    .Where(node => node.Name == "img").ToArray();
 
+            if (!imageNodes.Any())
+                return inputDocument;
+
+            // get the links to each image 
+            string[] imageLinks = imageNodes.Select(node => node.GetAttributeValue("src", "no_value")).Distinct().ToArray();
             // Get Map of image links from html
             var imageLinkSet = imageLinks.ToHashSet();
-            
+
+            //download each link to a specified folder
+            _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
+                        
             ChangeFileNamesIn(imageDirectory);
 
-            foreach (var node in inputDocument.DocumentNode.Descendants().Where(node => node.Name == "img"))
+            foreach (var node in imageNodes)
             {
                 var srcValue = node.Attributes.First(a => a.Name == "src").Value;
                 if (imageLinkSet.Contains(srcValue))
-                {
-                    ChangeHtmlNodeAttribute(node, "src", _mapOldToNewName[srcValue.Split('/').Last()]);
-                }
-
+                    ChangeHtmlNodeAttribute(node, "src", _mapOldNameToNewDirPath[srcValue.Split('/').Last()]);
             }
-                       
             return inputDocument;
         }
 
@@ -63,17 +66,10 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
                 .First(attribute => attribute.Name == attName)
                 .Value = newValue;
         
-
-        private IEnumerable<string> GetImageLinks(HtmlDocument inputDocument) =>
-            inputDocument.DocumentNode
-                .Descendants()
-                .Where(node => node.Name == "img")
-                .Select(node => node.GetAttributeValue("src", "no_value"));
-
+        
         private int _fileNumber;
         private void ChangeFileNamesIn(string directory)
         {
-            
             DirectoryInfo directoryInfo = new DirectoryInfo(directory);
             FileInfo[] info = directoryInfo.GetFiles();
             HashSet<string> directoryHashSet = info.Select(inf => inf.FullName).ToHashSet();
@@ -91,18 +87,10 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
                 else
                 {
                     File.Move(fileInfo.FullName, newFileName );
-                    _mapOldToNewName.Add(oldFileNameWithType, newFileName);
+                    _mapOldNameToNewDirPath.Add(oldFileNameWithType, newFileName);
                 }
-                
                 _fileNumber++;
             } 
-        
-            
-
-
         }
-
-
-
     }
 }
