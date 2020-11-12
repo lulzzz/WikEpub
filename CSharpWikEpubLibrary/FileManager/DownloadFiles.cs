@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.IO.Enumeration;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
-using CSharpWikEpubLibrary.ScrapeWiki;
 
-namespace CSharpWikEpubLibrary.ProcessHtml
+namespace CSharpWikEpubLibrary.FileManager
 {
     public class DownloadFiles : IDownloadFiles
     {
