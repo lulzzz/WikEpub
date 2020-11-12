@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="FileManager\FilesToCopy\" />
     <Folder Include="ProcessHtml\TestDlFolder\" />
   </ItemGroup>
 
