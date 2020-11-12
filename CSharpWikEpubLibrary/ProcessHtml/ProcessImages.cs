@@ -96,9 +96,9 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
                 else
                 {
                     File.Move(fileInfo.FullName, newFileName );
+                    _mapOldToNewName.Add(oldFileNameWithType, newFileName);
                 }
                 
-                _mapOldToNewName.Add(oldFileNameWithType, newFileName);
                 _fileNumber++;
             } 
         
