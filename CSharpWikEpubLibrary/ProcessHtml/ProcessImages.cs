@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
@@ -14,13 +15,11 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
     public class ProcessImages : IProcessImages
     {
         private readonly IDownloadFiles _downloadFiles;
-        private readonly IChangeFilesNames _changeFilesNames;
+        private Dictionary<string, string> _mapOldToNewName = new Dictionary<string, string>();
         
-        //TODO incorp change Filenames into class
-        public ProcessImages(IDownloadFiles downloadFiles, IChangeFilesNames changeFileNames )
+        public ProcessImages(IDownloadFiles downloadFiles)
         {
             _downloadFiles = downloadFiles;
-            _changeFilesNames = changeFileNames;
         }
 
         public HtmlDocument ProcessDownloadLinks(HtmlDocument inputDocument, string imageDirectory)
@@ -43,9 +42,8 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
             // Get Map of image links from html
             var imageLinkSet = imageLinks.ToHashSet();
             
-            _changeFilesNames.ChangeFileNamesIn(imageDirectory);
+            ChangeFileNamesIn(imageDirectory);
 
-            var oldNewFileNameMap = _changeFilesNames.MapOldToNewName;
 
             inputDocument
                 .DocumentNode
@@ -57,7 +55,7 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
                     var srcValue = node.Attributes.First(a => a.Name == "src").Value;
                     if (imageLinkSet.Contains(srcValue))
                     {
-                        ChangeHtmlNodeAttribute(node, "src", oldNewFileNameMap[srcValue.Split('/').Last()]);
+                        ChangeHtmlNodeAttribute(node, "src", _mapOldToNewName[srcValue.Split('/').Last()]);
                     }
                 });
             
@@ -76,6 +74,25 @@ namespace CSharpWikEpubLibrary.ScrapeWiki
                 .Descendants()
                 .Where(node => node.Name == "img")
                 .Select(node => node.GetAttributeValue("src", "no_value"));
+
+        private int _fileNumber;
+        private void ChangeFileNamesIn(string directory)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+            FileInfo[] info = directoryInfo.GetFiles();
+            foreach (var fileInfo in info)
+            {
+                var oldFileNameWithType = fileInfo.Name;
+                var oldFileNameWithoutType = oldFileNameWithType.Split('.').First();
+                var newFileName = fileInfo.FullName.Replace(oldFileNameWithoutType, $"Image_{_fileNumber}");
+                
+                File.Move(fileInfo.FullName, newFileName );
+                
+                _mapOldToNewName.Add(oldFileNameWithType, newFileName);
+                _fileNumber++;
+            } 
+
+        }
 
 
 
