@@ -4,6 +4,6 @@ namespace CSharpWikEpubLibrary.FileManager
 {
     public interface IDownloadFiles
     {
-        public void  DownloadAsync(IEnumerable<string> fromUrls, string toDirectory);
+        public void  Download(IEnumerable<string> fromUrls, string toDirectory);
     }
 }
