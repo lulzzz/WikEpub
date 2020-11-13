@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using HtmlAgilityPack;
@@ -16,7 +19,7 @@ namespace CSharpWikEpubLibrary.FileManager
 {
     public class ContentOpf : IContentOpf
     {
-        public void Create(Dictionary<HtmlDocument, string> htmlInfo, string inDirectory, string bookTitle)
+        public async Task Create(Dictionary<HtmlDocument, string> htmlInfo, string inDirectory, string bookTitle)
         {
             XNamespace defaultNs = "http://www.idpf.org/2007/opf";
 
@@ -34,14 +37,19 @@ namespace CSharpWikEpubLibrary.FileManager
                 new XElement(defaultNs + "metadata", 
                     new XElement("{http://purl.org/dc/elements/1.1/}title", bookTitle, new XAttribute(xmlns,  purl)),
                     new XElement("{http://purl.org/dc/elements/1.1/}publisher", "Wikipedia", new XAttribute(xmlns,  purl)),
-                    new XElement("{http://purl.org/dc/elements/1.1/}date", DateTime.Now.Date, new XAttribute(xmlns, purl)),
+                    new XElement("{http://purl.org/dc/elements/1.1/}date", $"{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}", new XAttribute(xmlns, purl)),
                     new XElement("{http://purl.org/dc/elements/1.1/}creator", "Harry Prior", new XAttribute(xmlns, purl))
                 );
 
             XElement manifest = 
                 new XElement(defaultNs + "manifest"); 
             
-            manifest.Add(new XElement(defaultNs + "item", new XAttribute("id", "cover"), new XAttribute("href", "cover.html"), new XAttribute("media-type", "application/xhtml+xml")));
+            manifest.Add(
+                new XElement(
+                    defaultNs + "item",
+                    new XAttribute("id", "cover"), 
+                    new XAttribute("href", "cover.html"),
+                    new XAttribute("media-type", "application/xhtml+xml")));
 
             int imageId = 0;
             string GetImageId() => $"image_{++imageId}";
@@ -82,8 +90,11 @@ namespace CSharpWikEpubLibrary.FileManager
             package.Add(metadata);
             package.Add(manifest);
             package.Add(spine);
+
             XDocument doc = new XDocument(new XDeclaration("1,0", "utf-8", "no"), package);
-            Console.WriteLine(doc);
+            await using Stream s = File.Create(inDirectory + "content.opf");
+            await doc.SaveAsync(s, SaveOptions.None, CancellationToken.None);
+            Console.Write(doc.ToString());
         }
 
         IEnumerable<HtmlNode> DocumentNodes(HtmlDocument document) => document.DocumentNode.Descendants();
