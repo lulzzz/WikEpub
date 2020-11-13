@@ -17,14 +17,23 @@ namespace CSharpConsoleDebugger
             var web = new HtmlWeb();
             var doc = web.Load("https://en.wikipedia.org/wiki/Sean_Connery");
             IParseHtmlDoc getEpub = new ParseHtml();
-            var epubDoc = getEpub.Transform(doc); 
+            var epubDoc = getEpub.Transform(doc);
             //Console.WriteLine(epubDoc.DocumentNode.SelectSingleNode("//html").OuterHtml + "\n");
 
-            using HttpClient httpClient = new HttpClient();
-            IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
-            var processedDoc = images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
+            //using HttpClient httpClient = new HttpClient();
+            //IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
+            //var processedDoc = images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
 
-            Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
+            //Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
+
+            Dictionary<HtmlDocument, string> idDict = new Dictionary<HtmlDocument, string>()
+            {
+                {epubDoc, "doc_1"}
+            };
+
+            IContentOpf contentOpf = new ContentOpf();
+            contentOpf.Create(idDict,@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+
         }
 
         private static void httpClientTest()
