@@ -12,7 +12,7 @@ namespace CSharpConsoleDebugger
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var web = new HtmlWeb();
             var doc = web.Load("https://en.wikipedia.org/wiki/Sean_Connery");
@@ -20,20 +20,22 @@ namespace CSharpConsoleDebugger
             var epubDoc = getEpub.Transform(doc);
             //Console.WriteLine(epubDoc.DocumentNode.SelectSingleNode("//html").OuterHtml + "\n");
 
-            //using HttpClient httpClient = new HttpClient();
-            //IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
-            //var processedDoc = images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
+            using HttpClient httpClient = new HttpClient();
+            IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
+            var processedDoc =  images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
 
             //Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
 
-            Dictionary<HtmlDocument, string> idDict = new Dictionary<HtmlDocument, string>()
-            {
-                {epubDoc, "doc_1"}
-            };
+            //Dictionary<HtmlDocument, string> idDict = new Dictionary<HtmlDocument, string>()
+            //{
+            //    {epubDoc, "doc_1"}
+            //};
 
-            IContentOpf contentOpf = new ContentOpf();
-            contentOpf.Create(idDict,@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+            //IContentOpf contentOpf = new ContentOpf();
+            //var getContentTask = contentOpf.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
 
+            // do cool stuff here
+            //await getContentTask;
         }
 
         private static void httpClientTest()
@@ -54,7 +56,7 @@ namespace CSharpConsoleDebugger
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/ConneryKilt.jpg/180px-ConneryKilt.jpg"
             };
             Console.WriteLine("Starting Dowloads");
-            dlFiles.DownloadAsync(urls, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
+            dlFiles.Download(urls, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
             Console.Write("Finished!!!");
         }
     }

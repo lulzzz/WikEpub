@@ -56,7 +56,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 .Replace(' ','_');
 
             //download each link to a specified folder
-            _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
+            _downloadFiles.Download(imageLinks.Select(link => $"https:{link}"), imageDirectory);
 
             ChangeFileNamesIn(imageDirectory, title);
             
