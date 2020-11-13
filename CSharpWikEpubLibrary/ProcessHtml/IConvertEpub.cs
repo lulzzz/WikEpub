@@ -5,6 +5,6 @@ namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public interface IConvertEpub
     {
-        void Convert(IEnumerable<string> urls);
+        void Convert(IEnumerable<string> urls, string toDirectory);
     }
 }

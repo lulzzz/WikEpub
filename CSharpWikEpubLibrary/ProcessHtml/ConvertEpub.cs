@@ -16,12 +16,14 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             _getInitHtml = getInitHtml;
             _processImages = processImages;
         }
-        public void Convert(IEnumerable<string> urls)
+        public void Convert(IEnumerable<string> urls, string toDirectory)
         {
             throw new NotImplementedException();
 
         }
-        
+
+
+        // Get ID for document shared between toc and content files
         private int _htmlId;
         private string HtmlId => $"doc_{_htmlId++}";
         private Dictionary<HtmlDocument,string> GetHtmlId(IEnumerable<HtmlDocument> htmlDocuments) =>
