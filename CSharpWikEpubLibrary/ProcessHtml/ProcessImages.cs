@@ -38,13 +38,13 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 return inputDocument;
 
             // get the links to each image 
-            string[] imageLinks = imageNodes.Select(node => node.GetAttributeValue("src", "no_value")).Distinct().ToArray();
-            // Get Map of image links from html
-            var imageLinkSet = imageLinks.ToHashSet();
+            string[] imageLinks = imageNodes
+                .Select(node => node.GetAttributeValue("src", "no_value"))
+                .Distinct()
+                .ToArray();
 
-            //download each link to a specified folder
-            _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
-                        
+            var oldImageUrls = imageLinks.ToHashSet();
+
             var title = inputDocument
                 .DocumentNode
                 .Descendants()
@@ -55,12 +55,16 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 .Trim()
                 .Replace(' ','_');
 
-            ChangeFileNamesIn(imageDirectory, title);
+            //download each link to a specified folder
+            _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
 
+            ChangeFileNamesIn(imageDirectory, title);
+            
+            // TODO this could probably be achieved by using the full initial path as the key
             foreach (var node in imageNodes)
             {
                 var srcValue = node.Attributes.First(a => a.Name == "src").Value;
-                if (imageLinkSet.Contains(srcValue))
+                if (oldImageUrls.Contains(srcValue))
                     ChangeHtmlNodeAttribute(node, "src", _mapOldNameToNewDirPath[srcValue.Split('/').Last()]);
             }
             return inputDocument;
