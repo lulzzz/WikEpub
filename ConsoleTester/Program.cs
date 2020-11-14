@@ -16,26 +16,34 @@ namespace CSharpConsoleDebugger
         {
             var web = new HtmlWeb();
             var doc = web.Load("https://en.wikipedia.org/wiki/Sean_Connery");
+            var doc_2 = web.Load("https://en.wikipedia.org/wiki/The_Hunting_of_the_Snark");
             IParseHtmlDoc getEpub = new ParseHtml();
             var epubDoc = getEpub.Transform(doc);
+            var epubDoc2 = getEpub.Transform(doc_2);
             //Console.WriteLine(epubDoc.DocumentNode.SelectSingleNode("//html").OuterHtml + "\n");
 
-            //using HttpClient httpClient = new HttpClient();
-            //IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
-            //var processedDoc =  await images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
-            
+            using HttpClient httpClient = new HttpClient();
+            IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
+            IProcessImages images2 = new ProcessImages(new DownloadFiles(httpClient ));
+
+            var processedEpubDoc1 =  images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
+            var processedEpubDoc2 = images2.ProcessDownloadLinks(epubDoc2,
+                @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
             //Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
 
             Dictionary<HtmlDocument, string> idDict = new Dictionary<HtmlDocument, string>()
             {
-                {epubDoc, "doc_1"}
+                {await processedEpubDoc1, "doc_1"},
+                {await processedEpubDoc2, "doc_2"}
             };
 
-            //IContentOpf contentOpf = new ContentOpf();
-            //var getContentTask =  contentOpf.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+            IContentOpf contentOpf = new ContentOpf();
+            Toc toc = new Toc();
 
-            // do cool stuff here
-            //await getContentTask;
+            var getContentTask =  contentOpf.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+            var getTocTask = toc.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+            await getContentTask;
+            await getTocTask;
         }
 
         private static void httpClientTest()
