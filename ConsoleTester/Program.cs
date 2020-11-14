@@ -18,16 +18,16 @@ namespace CSharpConsoleDebugger
             var doc = web.Load("https://en.wikipedia.org/wiki/Sean_Connery");
             var doc_2 = web.Load("https://en.wikipedia.org/wiki/The_Hunting_of_the_Snark");
             IParseHtmlDoc getEpub = new ParseHtml();
-            var epubDoc = getEpub.Transform(doc);
-            var epubDoc2 = getEpub.Transform(doc_2);
+            var epubDoc = getEpub.TransformAsync(doc);
+            var epubDoc2 = getEpub.TransformAsync(doc_2);
             //Console.WriteLine(epubDoc.DocumentNode.SelectSingleNode("//html").OuterHtml + "\n");
 
             using HttpClient httpClient = new HttpClient();
             IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
             IProcessImages images2 = new ProcessImages(new DownloadFiles(httpClient ));
 
-            var processedEpubDoc1 =  images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\one\");
-            var processedEpubDoc2 = images.ProcessDownloadLinks(epubDoc2,
+            var processedEpubDoc1 =  images.ProcessDownloadLinks(epubDoc.Result, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\one\");
+            var processedEpubDoc2 = images.ProcessDownloadLinks(epubDoc2.Result,
                 @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\two\");
             Console.WriteLine(processedEpubDoc2.Result.DocumentNode.SelectSingleNode("/").OuterHtml);
 
