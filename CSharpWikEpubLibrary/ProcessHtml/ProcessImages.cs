@@ -38,15 +38,17 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             if (!imageNodes.Any())
                 return inputDocument;
 
-            // get the links to each image 
             string[] imageLinks = imageNodes
                 .Select(node => node.GetAttributeValue("src", "no_value"))
                 .Distinct()
                 .ToArray();
 
+            //download each link to a specified folder
+            Task downloadFiles = _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
+
             var oldImageUrls = imageLinks.ToHashSet();
 
-            var title = inputDocument
+            var wikiTitle = inputDocument
                 .DocumentNode
                 .Descendants()
                 .First(node => node.Name == "title")
@@ -56,11 +58,9 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 .Trim()
                 .Replace(' ','_');
 
-            //download each link to a specified folder
-            Task downloadFiles = _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
 
             await downloadFiles;
-            ChangeFileNamesIn(imageDirectory, title);
+            ChangeFileNamesIn(imageDirectory, wikiTitle);
             
             // TODO this could probably be achieved by using the full initial path as the key
             foreach (var node in imageNodes)
