@@ -20,19 +20,19 @@ namespace CSharpConsoleDebugger
             var epubDoc = getEpub.Transform(doc);
             //Console.WriteLine(epubDoc.DocumentNode.SelectSingleNode("//html").OuterHtml + "\n");
 
-            using HttpClient httpClient = new HttpClient();
-            IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
-            var processedDoc =  await images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
-
+            //using HttpClient httpClient = new HttpClient();
+            //IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
+            //var processedDoc =  await images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
+            
             //Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
 
-            //Dictionary<HtmlDocument, string> idDict = new Dictionary<HtmlDocument, string>()
-            //{
-            //    {epubDoc, "doc_1"}
-            //};
+            Dictionary<HtmlDocument, string> idDict = new Dictionary<HtmlDocument, string>()
+            {
+                {epubDoc, "doc_1"}
+            };
 
             //IContentOpf contentOpf = new ContentOpf();
-            //var getContentTask = contentOpf.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+            //var getContentTask =  contentOpf.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
 
             // do cool stuff here
             //await getContentTask;
