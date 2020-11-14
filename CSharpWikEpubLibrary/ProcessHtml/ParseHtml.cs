@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public class ParseHtml : IParseHtmlDoc
     {
-        public HtmlDocument Transform(HtmlDocument inputDocument)
+        public Task<HtmlDocument> TransformAsync(HtmlDocument inputDocument)
         {
-            bool HeadPredicate(HtmlNode node) => (node.Name == "meta" & node.Attributes.Any(attribute => attribute.Name == "charset")) 
-                                                 | node.Name == "title";
+            return Task.Run(() =>
+            {
+                bool HeadPredicate(HtmlNode node) => (node.Name == "meta" & node.Attributes.Any(attribute => attribute.Name == "charset")) 
+                                                     | node.Name == "title";
 
-            bool BodyPredicate(HtmlNode node) =>
-                node.Name != "style"
-                & (node.Attributes.All(attribute => attribute.Name != "role")
-                | node.Attributes.Any(attribute => attribute.Value == "toc"));
+                bool BodyPredicate(HtmlNode node) =>
+                    node.Name != "style"
+                    & (node.Attributes.All(attribute => attribute.Name != "role")
+                    | node.Attributes.Any(attribute => attribute.Value == "toc"));
 
-            var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
-            var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
-            var htmlString = 
-                string.Join(
-                    "", 
-                    new List<string>{headString, bodyString}
-                        .Prepend("<!DOCTYPE html><html>")
-                        .Append("</html>")
-                    );
-            HtmlDocument newDoc = new HtmlDocument();
-            newDoc.LoadHtml(htmlString);
-            return newDoc;
+                var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
+                var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
+                var htmlString = 
+                    string.Join(
+                        "", 
+                        new List<string>{headString, bodyString}
+                            .Prepend("<!DOCTYPE html><html>")
+                            .Append("</html>")
+                        );
+                HtmlDocument newDoc = new HtmlDocument();
+                newDoc.LoadHtml(htmlString);
+                return newDoc;
+
+            });
         }
        
 

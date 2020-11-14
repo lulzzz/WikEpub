@@ -1,10 +1,11 @@
-﻿using HtmlAgilityPack;
+﻿using System.Threading.Tasks;
+using HtmlAgilityPack;
 
 namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public interface IParseHtmlDoc
     {
-        HtmlDocument Transform(HtmlDocument inputDocument);
+        Task<HtmlDocument> TransformAsync(HtmlDocument inputDocument);
 
 
     }
