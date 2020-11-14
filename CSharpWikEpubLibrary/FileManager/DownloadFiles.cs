@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CSharpWikEpubLibrary.FileManager
 {
@@ -22,15 +23,16 @@ namespace CSharpWikEpubLibrary.FileManager
         /// </remarks>
         /// <param name="fromUrls">Urls to download from</param>
         /// <param name="toDirectory">Root directory where files will be downloaded to</param>
-        public void Download(IEnumerable<string> fromUrls, string toDirectory) =>
-            fromUrls.AsParallel().ToList().ForEach(async url =>
+        public async Task Download(IEnumerable<string> fromUrls, string toDirectory)
+        {
+            await fromUrls.AsParallel().ToList().ForEachAsync(async url =>
             {
                 var responseResult = _httpClient.GetAsync(url);
                 await using var memoryStream = responseResult.Result.Content.ReadAsStreamAsync().Result;
-                await using var fileStream = File.Create($"{toDirectory}{url.Split('/').LastOrDefault()}"); 
+                await using var fileStream = File.Create($"{toDirectory}{url.Split('/').LastOrDefault()}");
                 await memoryStream.CopyToAsync(fileStream);
             });
-        
+        }
 
     }
 }
