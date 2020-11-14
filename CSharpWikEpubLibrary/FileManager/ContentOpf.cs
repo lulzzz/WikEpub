@@ -43,7 +43,8 @@ namespace CSharpWikEpubLibrary.FileManager
                             new XElement("{http://purl.org/dc/elements/1.1/}publisher", "Wikipedia", new XAttribute(xmlns, purl)),
                             new XElement("{http://purl.org/dc/elements/1.1/}date",
                                 $"{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Year}", new XAttribute(xmlns, purl)),
-                            new XElement("{http://purl.org/dc/elements/1.1/}creator", "Harry Prior", new XAttribute(xmlns, purl))
+                            new XElement("{http://purl.org/dc/elements/1.1/}creator", "Harry Prior", new XAttribute(xmlns, purl)),
+                            new XElement(defaultNs + "meta", new XAttribute("name", "cover"), new XAttribute("content", "cover-image"))
                         );
 
                     XElement manifest =
@@ -55,6 +56,14 @@ namespace CSharpWikEpubLibrary.FileManager
                             new XAttribute("id", "cover"),
                             new XAttribute("href", "cover.html"),
                             new XAttribute("media-type", "application/xhtml+xml")));
+                     
+                    manifest.Add(
+                        new XElement(
+                            defaultNs + "item",
+                            new XAttribute("id", "ncxtoc"),
+                            new XAttribute("href", "toc.ncx"),
+                            new XAttribute("media-type", "application/dtbncx+xml")));
+
 
                     int imageId = 0;
                     string GetImageId() => $"image_{++imageId}";
