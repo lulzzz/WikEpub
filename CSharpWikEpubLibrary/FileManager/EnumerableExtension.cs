@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpWikEpubLibrary.FileManager
 {
-    public static class  IEnumerableExtension
+    public static class  EnumerableExtension
     {
         public static async Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> action)
         {
