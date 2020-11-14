@@ -23,7 +23,7 @@ namespace CSharpWikEpubLibrary.FileManager
         /// </remarks>
         /// <param name="fromUrls">Urls to download from</param>
         /// <param name="toDirectory">Root directory where files will be downloaded to</param>
-        public async Task Download(IEnumerable<string> fromUrls, string toDirectory)
+        public async Task DownloadAsync(IEnumerable<string> fromUrls, string toDirectory)
         {
             await fromUrls.AsParallel().ToList().ForEachAsync(async url =>
             {
