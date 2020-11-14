@@ -26,10 +26,10 @@ namespace CSharpConsoleDebugger
             IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
             IProcessImages images2 = new ProcessImages(new DownloadFiles(httpClient ));
 
-            var processedEpubDoc1 =  images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
-            var processedEpubDoc2 = images2.ProcessDownloadLinks(epubDoc2,
-                @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
-            //Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
+            var processedEpubDoc1 =  images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\one\");
+            var processedEpubDoc2 = images.ProcessDownloadLinks(epubDoc2,
+                @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\two\");
+            Console.WriteLine(processedEpubDoc2.Result.DocumentNode.SelectSingleNode("/").OuterHtml);
 
             Dictionary<HtmlDocument, string> idDict = new Dictionary<HtmlDocument, string>()
             {
