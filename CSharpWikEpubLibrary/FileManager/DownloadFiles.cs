@@ -29,6 +29,7 @@ namespace CSharpWikEpubLibrary.FileManager
             {
                 var responseResult = _httpClient.GetAsync(url);
                 await using var memoryStream = responseResult.Result.Content.ReadAsStreamAsync().Result;
+                Directory.CreateDirectory(toDirectory);
                 await using var fileStream = File.Create($"{toDirectory}{url.Split('/').LastOrDefault()}");
                 await memoryStream.CopyToAsync(fileStream);
             });
