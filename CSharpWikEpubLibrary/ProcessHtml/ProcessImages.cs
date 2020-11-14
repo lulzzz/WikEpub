@@ -25,6 +25,9 @@ namespace CSharpWikEpubLibrary.ProcessHtml
         /// Downloads image files to specified directory, points image file path in html doc to new directory.
         /// If no image nodes are present in the document, an unaltered document will be returned
         /// </summary>
+        /// <remarks>
+        /// Due to the concurrent nature of downloading and file renaming, no two calls to this method should have the same directory path
+        /// </remarks>
         /// <param name="inputDocument">Html document to transform</param>
         /// <param name="imageDirectory">Directory to save images to</param>
         /// <returns>Html document</returns>
