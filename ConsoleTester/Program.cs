@@ -22,7 +22,7 @@ namespace CSharpConsoleDebugger
 
             using HttpClient httpClient = new HttpClient();
             IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
-            var processedDoc =  images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
+            var processedDoc =  await images.ProcessDownloadLinks(epubDoc, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
 
             //Console.WriteLine(processedDoc.DocumentNode.SelectSingleNode("/").OuterHtml);
 
@@ -56,7 +56,7 @@ namespace CSharpConsoleDebugger
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/ConneryKilt.jpg/180px-ConneryKilt.jpg"
             };
             Console.WriteLine("Starting Dowloads");
-            dlFiles.Download(urls, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
+            dlFiles.DownloadAsync(urls, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\");
             Console.Write("Finished!!!");
         }
     }
