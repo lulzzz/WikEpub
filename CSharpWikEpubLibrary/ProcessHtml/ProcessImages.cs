@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using CSharpWikEpubLibrary.FileManager;
 using HtmlAgilityPack;
 
@@ -27,7 +28,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
         /// <param name="inputDocument">Html document to transform</param>
         /// <param name="imageDirectory">Directory to save images to</param>
         /// <returns>Html document</returns>
-        public HtmlDocument ProcessDownloadLinks(HtmlDocument inputDocument, string imageDirectory)
+        public async Task<HtmlDocument> ProcessDownloadLinks(HtmlDocument inputDocument, string imageDirectory)
         {
             HtmlNode[] imageNodes = inputDocument
                     .DocumentNode
@@ -56,8 +57,9 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 .Replace(' ','_');
 
             //download each link to a specified folder
-            _downloadFiles.Download(imageLinks.Select(link => $"https:{link}"), imageDirectory);
+            Task downloadFiles = _downloadFiles.DownloadAsync(imageLinks.Select(link => $"https:{link}"), imageDirectory);
 
+            await downloadFiles;
             ChangeFileNamesIn(imageDirectory, title);
             
             // TODO this could probably be achieved by using the full initial path as the key
@@ -67,6 +69,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 if (oldImageUrls.Contains(srcValue))
                     ChangeHtmlNodeAttribute(node, "src", _mapOldNameToNewDirPath[srcValue.Split('/').Last()]);
             }
+            
             return inputDocument;
         }
 
