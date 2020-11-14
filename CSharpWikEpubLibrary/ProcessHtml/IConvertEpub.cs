@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public interface IConvertEpub
     {
-        void Convert(IEnumerable<string> urls, string toDirectory);
+        Task ConvertAsync(IEnumerable<string> urls, string rootDirectory);
     }
 }
