@@ -14,6 +14,25 @@ namespace CSharpConsoleDebugger
     {
         static async Task Main(string[] args)
         {
+            HttpClient httpClient = new HttpClient();
+            IConvertEpub convert = new ConvertEpub(
+                new ParseHtml(), 
+                new ProcessImages(new DownloadFiles(httpClient)), 
+                new ContentOpf(), 
+                new Toc());
+
+            List<string> urls = new List<string>
+            {
+                "https://en.wikipedia.org/wiki/Sean_Connery",
+                "https://en.wikipedia.org/wiki/Christian_Stofer",
+                "https://en.wikipedia.org/wiki/Ken_McNaught",
+                "https://en.wikipedia.org/wiki/Charles_Christian_Nahl"
+            };
+            await convert.ConvertAsync(urls, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "TestBook");
+        }   
+
+        private async Task Test1()
+        {
             var web = new HtmlWeb();
             var doc = web.Load("https://en.wikipedia.org/wiki/Sean_Connery");
             var doc_2 = web.Load("https://en.wikipedia.org/wiki/The_Hunting_of_the_Snark");
@@ -44,6 +63,7 @@ namespace CSharpConsoleDebugger
             var getTocTask = toc.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
             await getContentTask;
             await getTocTask;
+
         }
 
         private static void httpClientTest()

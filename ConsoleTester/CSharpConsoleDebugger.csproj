@@ -10,8 +10,4 @@
     <ProjectReference Include="..\WikEpubLibrary\FSharpWikEpubLibrary.fsproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestFolder\" />
-  </ItemGroup>
-
 </Project>
