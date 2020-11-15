@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Xml.Linq;
 
-
-
-
 namespace CSharpWikEpubLibrary.FileManager
 {
     public class ContentOpf : IContentOpf
