@@ -8,8 +8,4 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.27" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="FileManager\FilesToCopy\OEBPS\" />
-  </ItemGroup>
-
 </Project>
