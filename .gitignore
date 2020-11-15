@@ -509,3 +509,4 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,windows,aspnetcore
+/CSharpWikEpubLibrary/CSharpWikEpubLibrary.csproj.DotSettings
