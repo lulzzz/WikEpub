@@ -3,11 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CSharpWikEpubLibrary\CSharpWikEpubLibrary.csproj" />
-    <ProjectReference Include="..\WikEpubLibrary\FSharpWikEpubLibrary.fsproj" />
   </ItemGroup>
 
 </Project>

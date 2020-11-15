@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using CSharpWikEpubLibrary.FileManager;
 using CSharpWikEpubLibrary.ProcessHtml;
-using FSharp.Data;
 using HtmlAgilityPack;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -26,15 +25,11 @@ namespace CSharpConsoleDebugger
 
             List<string> urls = new List<string>
             {
-            "https://en.wikipedia.org/wiki/Sean_Connery",
-            "https://en.wikipedia.org/wiki/Christian_Stofer",
-            "https://en.wikipedia.org/wiki/Ken_McNaught",
-            "https://en.wikipedia.org/wiki/Charles_Christian_Nahl"
+            "https://en.wikipedia.org/wiki/Physical_therapy",
+            "https://en.wikipedia.org/wiki/University_College_London",
+            "https://en.wikipedia.org/wiki/Physiology"
             };
             await convert.ConvertAsync(urls, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "TestBook");
-
-            
-           
         }   
 
         private async Task Test1()
