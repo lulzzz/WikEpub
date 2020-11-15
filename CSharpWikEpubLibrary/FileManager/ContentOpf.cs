@@ -17,7 +17,8 @@ namespace CSharpWikEpubLibrary.FileManager
         public async Task Create(Dictionary<HtmlDocument, string> htmlInfo, string inDirectory, string bookTitle)
         {
             var docTask =  GetXDocumentTask(htmlInfo, bookTitle);
-            await using Stream s = File.Create(inDirectory + "content.opf");
+            Directory.CreateDirectory(inDirectory);
+            await using Stream s = File.Create($"{inDirectory}content.opf");
             await docTask.Result.SaveAsync(s, SaveOptions.None, CancellationToken.None);
         }
 
