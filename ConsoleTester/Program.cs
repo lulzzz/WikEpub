@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CSharpWikEpubLibrary.FileManager;
@@ -16,19 +17,24 @@ namespace CSharpConsoleDebugger
         {
             HttpClient httpClient = new HttpClient();
             IConvertEpub convert = new ConvertEpub(
-                new ParseHtml(), 
-                new ProcessImages(new DownloadFiles(httpClient)), 
-                new ContentOpf(), 
-                new Toc());
+            new ParseHtml(), 
+            new ProcessImages(new DownloadFiles(httpClient)), 
+            new ContentOpf(), 
+            new Toc(),
+            new Container()
+            );
 
             List<string> urls = new List<string>
             {
-                "https://en.wikipedia.org/wiki/Sean_Connery",
-                "https://en.wikipedia.org/wiki/Christian_Stofer",
-                "https://en.wikipedia.org/wiki/Ken_McNaught",
-                "https://en.wikipedia.org/wiki/Charles_Christian_Nahl"
+            "https://en.wikipedia.org/wiki/Sean_Connery",
+            "https://en.wikipedia.org/wiki/Christian_Stofer",
+            "https://en.wikipedia.org/wiki/Ken_McNaught",
+            "https://en.wikipedia.org/wiki/Charles_Christian_Nahl"
             };
             await convert.ConvertAsync(urls, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "TestBook");
+
+            
+           
         }   
 
         private async Task Test1()
@@ -45,8 +51,8 @@ namespace CSharpConsoleDebugger
             IProcessImages images = new ProcessImages(new DownloadFiles(httpClient ));
             IProcessImages images2 = new ProcessImages(new DownloadFiles(httpClient ));
 
-            var processedEpubDoc1 =  images.ProcessDownloadLinks(epubDoc.Result, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\one\");
-            var processedEpubDoc2 = images.ProcessDownloadLinks(epubDoc2.Result,
+            var processedEpubDoc1 =  images.ProcessImageDownloadsAsync(epubDoc.Result, @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\one\");
+            var processedEpubDoc2 = images.ProcessImageDownloadsAsync(epubDoc2.Result,
                 @"C:\Users\User\Documents\Code\WikEpub\CSharpWikEpubLibrary\ProcessHtml\TestDlFolder\two\");
             Console.WriteLine(processedEpubDoc2.Result.DocumentNode.SelectSingleNode("/").OuterHtml);
 
@@ -59,8 +65,8 @@ namespace CSharpConsoleDebugger
             IContentOpf contentOpf = new ContentOpf();
             Toc toc = new Toc();
 
-            var getContentTask =  contentOpf.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
-            var getTocTask = toc.Create(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+            var getContentTask =  contentOpf.CreateAsync(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
+            var getTocTask = toc.CreateAsync(idDict, @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder\", "HarrysBook");
             await getContentTask;
             await getTocTask;
 
