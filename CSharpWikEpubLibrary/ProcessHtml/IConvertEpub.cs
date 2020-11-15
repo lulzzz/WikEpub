@@ -6,6 +6,6 @@ namespace CSharpWikEpubLibrary.ProcessHtml
 {
     public interface IConvertEpub
     {
-        Task ConvertAsync(IEnumerable<string> urls, string rootDirectory);
+        Task ConvertAsync(IEnumerable<string> urls, string rootDirectory, string bookTitle);
     }
 }

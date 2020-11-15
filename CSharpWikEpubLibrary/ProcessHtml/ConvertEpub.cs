@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
@@ -11,21 +12,19 @@ using HtmlAgilityPack;
 
 namespace CSharpWikEpubLibrary.ProcessHtml
 {
-    class ConvertEpub : IConvertEpub
+    public class ConvertEpub : IConvertEpub
     {
-        private IParseHtmlDoc _getEpubHtml;
-        private IProcessImages _processImages;
-        private IContentOpf _contentOpf;
-        private IToc _toc;
-        private HttpClient _httpClient;
+        private readonly IParseHtmlDoc _getEpubHtml;
+        private readonly IProcessImages _processImages;
+        private readonly IContentOpf _contentOpf;
+        private readonly IToc _toc;
 
-        public ConvertEpub(IParseHtmlDoc getEpubHtml, IProcessImages processImages, IContentOpf contentOpf, IToc toc, HttpClient httpClient)
+        public ConvertEpub(IParseHtmlDoc getEpubHtml, IProcessImages processImages, IContentOpf contentOpf, IToc toc)
         {
             _getEpubHtml = getEpubHtml;
             _processImages = processImages;
             _contentOpf = contentOpf;
             _toc = toc;
-            _httpClient = httpClient;
         }
 
         /// <summary>
@@ -33,23 +32,48 @@ namespace CSharpWikEpubLibrary.ProcessHtml
         /// </summary>
         /// <param name="urls">urls to fetch wikipedia html documents from</param>
         /// <param name="rootDirectory">root directory destination of epub document</param>
+        /// <param name="bookTitle"></param>
         /// <returns></returns>
-        public async Task ConvertAsync(IEnumerable<string> urls, string rootDirectory)
+        public async Task ConvertAsync(IEnumerable<string> urls, string rootDirectory, string bookTitle)
         {
             HtmlWeb htmlWeb = new HtmlWeb();
             var getInitialHtmlTasks = urls.Select(url => GetHtmlDocument(url, htmlWeb));
-            var initialHtmlDocs = Task.WhenAll(getInitialHtmlTasks);
+            var initialHtmlDocs = await Task.WhenAll(getInitialHtmlTasks);
 
-            
-
-            var initialEpubDocTasks = initialHtmlDocs.Result.Select( d => _getEpubHtml.TransformAsync(d));
+            var initialEpubDocTasks = initialHtmlDocs.Select(d => _getEpubHtml.TransformAsync(d));
             var initialEpubDocs = Task.WhenAll(initialEpubDocTasks);
-            var htmlIdDict = GetHtmlIdDict(initialHtmlDocs.Result);
 
+            int imgDirNum = 1;
+            string GetImgDir() => @$"img_dir{imgDirNum++}\";
 
+            await initialEpubDocs;
             var processImageDownloadTasks =
-                initialEpubDocs.Result.Select(d => _processImages.ProcessDownloadLinks(d, htmlIdDict.Result[d]));
+                initialEpubDocs.Result.Select(d => _processImages.ProcessDownloadLinks(d,  @$"{rootDirectory}{bookTitle}\OEBPS\" + GetImgDir()));
+            var htmlDocumentsAfterImageProcessing = Task.WhenAll(processImageDownloadTasks);
 
+            var htmlIdDict = await GetHtmlIdDict(htmlDocumentsAfterImageProcessing.Result);
+
+            string oebpsDir = @$"{rootDirectory}{bookTitle}\OEBPS\";
+            var saveDocumentTasks = SaveHtmlDocs(oebpsDir, htmlDocumentsAfterImageProcessing.Result, htmlIdDict);
+            var getContentTask = _contentOpf.Create(htmlIdDict,oebpsDir, bookTitle);
+            var getTocTask = _toc.Create(htmlIdDict,oebpsDir, bookTitle);
+
+            await Task.WhenAll(new List<Task>{getContentTask, getTocTask, saveDocumentTasks, CreatMimeType( @$"{rootDirectory}{bookTitle}\")});
+
+        }
+
+        private async Task SaveHtmlDocs(string oebpsDirectory, HtmlDocument[] documents, Dictionary<HtmlDocument, string> htmlId)
+        {
+            await documents.ForEachAsync(async d =>
+            {
+                await using var fileStream = File.Create(@$"{oebpsDirectory}\{htmlId[d]}.html");
+                await Task.Run(() => d.Save(fileStream));
+            });
+        }
+
+        private async Task CreatMimeType(string rootDirectory)
+        { 
+            await File.WriteAllTextAsync($@"{rootDirectory}mimetype", "application/epub+zip");
         }
 
 
@@ -69,7 +93,8 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 .InnerHtml
                 .Split('-')
                 .First()
-                .Trim();
+                .Trim()
+                .Replace(' ', '_');
 
 
 
