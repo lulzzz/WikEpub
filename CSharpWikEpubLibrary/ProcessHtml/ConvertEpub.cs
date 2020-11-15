@@ -54,24 +54,25 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             var processImageDownloadTasks =
                 initialEpubDocs
                     .Result
-                    .Select(doc => _processImages.ProcessImageDownloadsAsync(doc,  @$"{rootDirectory}{bookTitle}\OEBPS\" + GetImgDir()));
+                    .Select(doc => 
+                        _processImages.ProcessImageDownloadsAsync(doc,  @$"{rootDirectory}{bookTitle}\OEBPS\" + GetImgDir()));
             var finalHtmlDocs = Task.WhenAll(processImageDownloadTasks);
 
             var htmlIdDict = await GetHtmlIdDict(finalHtmlDocs.Result);
 
             await SaveFiles(rootDirectory, bookTitle, htmlIdDict, finalHtmlDocs);
 
-            await ZipFiles(@$"{rootDirectory}{bookTitle}", bookTitle);
+            await CompressFiles(@$"{rootDirectory}{bookTitle}", bookTitle);
+
+            Directory.Delete(@$"{rootDirectory}{bookTitle}", true);
         }
 
-        private async Task ZipFiles(string bookDirectory, string bookTitle)
-        {
+        private async Task CompressFiles(string bookDirectory, string bookTitle) =>  
             await Task.Run(() => 
                 ZipFile.CreateFromDirectory(
                     bookDirectory, 
                     @$"{string.Join(@"\",bookDirectory.Split('\\')[..^1])}\{bookTitle}.epub")
                 );
-        }
 
         private async Task SaveFiles(string rootDirectory, string bookTitle, Dictionary<HtmlDocument, string> htmlIdDict,
             Task<HtmlDocument[]> htmlDocumentsAfterImageProcessing)
@@ -88,19 +89,15 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             });
         }
 
-        private async Task SaveHtmlDocsAsync(string oebpsDirectory, HtmlDocument[] documents, Dictionary<HtmlDocument, string> htmlId)
-        {
+        private async Task SaveHtmlDocsAsync(string oebpsDirectory, HtmlDocument[] documents, Dictionary<HtmlDocument, string> htmlId) =>  
             await documents.ForEachAsync(async d =>
             {
                 await using var fileStream = File.Create(@$"{oebpsDirectory}\{htmlId[d]}.html");
                 await Task.Run(() => d.Save(fileStream));
             });
-        }
 
-        private async Task CreatMimeTypeAsync(string rootDirectory)
-        { 
+        private async Task CreatMimeTypeAsync(string rootDirectory) =>
             await File.WriteAllTextAsync($@"{rootDirectory}mimetype", "application/epub+zip");
-        }
 
 
         private Task<HtmlDocument> GetHtmlDocument(string url, HtmlWeb getHtml) =>
