@@ -16,6 +16,7 @@ namespace CSharpWikEpubLibrary.FileManager
         public async Task Create(Dictionary<HtmlDocument, string> htmlIds, string toDirectory, string bookTitle)
         {
             var tocDocTask = GetTocDocument(htmlIds, bookTitle);
+            Directory.CreateDirectory(toDirectory);
             await using Stream s = File.Create(toDirectory + "toc.ncx");
             await tocDocTask.Result.SaveAsync(s, SaveOptions.None, CancellationToken.None);
         }
