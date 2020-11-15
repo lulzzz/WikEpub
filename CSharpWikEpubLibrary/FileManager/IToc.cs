@@ -6,6 +6,6 @@ namespace CSharpWikEpubLibrary.FileManager
 {
     public interface IToc
     {
-        Task Create(Dictionary<HtmlDocument, string> htmlIds, string toDirectory, string bookTitle);
+        Task CreateAsync(Dictionary<HtmlDocument, string> htmlIds, string toDirectory, string bookTitle);
     }
 }
