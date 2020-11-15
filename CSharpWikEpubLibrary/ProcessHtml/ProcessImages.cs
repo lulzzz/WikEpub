@@ -31,7 +31,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
         /// <param name="inputDocument">Html document to transform</param>
         /// <param name="imageDirectory">Directory to save images to</param>
         /// <returns>Html document</returns>
-        public async Task<HtmlDocument> ProcessDownloadLinks(HtmlDocument inputDocument, string imageDirectory)
+        public async Task<HtmlDocument> ProcessImageDownloadsAsync(HtmlDocument inputDocument, string imageDirectory)
         {
             HtmlNode[] imageNodes = inputDocument
                     .DocumentNode
@@ -65,7 +65,6 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             await downloadFiles;
             ChangeFileNamesIn(imageDirectory, wikiTitle);
             
-            // TODO this could probably be achieved by using the full initial path as the key
             foreach (var node in imageNodes)
             {
                 var srcValue = node.Attributes.First(a => a.Name == "src").Value;
@@ -80,7 +79,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             node
                 .Attributes
                 .First(attribute => attribute.Name == attName)
-                .Value = newValue;
+                .Value = string.Join(@"\", newValue.Split(@"\")[^2..]);
         
         private int _fileNumber;
         private void ChangeFileNamesIn(string directory, string wikiTitle)
