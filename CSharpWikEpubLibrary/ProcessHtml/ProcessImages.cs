@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -51,19 +53,8 @@ namespace CSharpWikEpubLibrary.ProcessHtml
 
             var oldImageUrls = imageLinks.ToHashSet();
 
-            var wikiTitle = inputDocument
-                .DocumentNode
-                .Descendants()
-                .First(node => node.Name == "title")
-                .InnerHtml
-                .Split('-')
-                .First()
-                .Trim()
-                .Replace(' ','_');
-
-
             await downloadFiles;
-            ChangeFileNamesIn(imageDirectory, wikiTitle);
+            await Task.Run(() => ChangeFileNamesIn(imageDirectory));
             
             foreach (var node in imageNodes)
             {
@@ -82,7 +73,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
                 .Value = string.Join(@"\", newValue.Split(@"\")[^2..]);
         
         private int _fileNumber;
-        private void ChangeFileNamesIn(string directory, string wikiTitle)
+        private void ChangeFileNamesIn(string directory)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(directory);
             FileInfo[] info = directoryInfo.GetFiles();
@@ -92,7 +83,7 @@ namespace CSharpWikEpubLibrary.ProcessHtml
             {
                 var oldFileNameWithType = fileInfo.Name;
                 var oldFileNameWithoutType = oldFileNameWithType.Split('.').First();
-                var newFileName = fileInfo.FullName.Replace(oldFileNameWithoutType, $"{wikiTitle}_image_{_fileNumber}");
+                var newFileName = fileInfo.FullName.Replace(oldFileNameWithoutType, $"image_{_fileNumber}");
 
                 if (directoryHashSet.Contains(newFileName))
                 {
