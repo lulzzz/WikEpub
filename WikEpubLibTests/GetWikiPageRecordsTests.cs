@@ -61,6 +61,15 @@ namespace WikEpubLibTests
            });
         }
         
+        [TestMethod]
+        public void Src_Dict_Starts_With_Correct_Value()
+        {
+            seanRecord.SrcMap.ToList().ForEach(t =>
+            {
+                Assert.IsTrue(t.Value.StartsWith("image_"));
+            });
+        }
+        
 
 
 
