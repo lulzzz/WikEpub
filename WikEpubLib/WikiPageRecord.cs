@@ -4,8 +4,9 @@ namespace WikEpubLib
 {
     public record WikiPageRecord
     {
-        string Id { get; init; }
-        Dictionary<string, string> SrcMap { get; init; }
-        IEnumerable<string> SectionHeadings { get; init; }
+        public string Id;
+        public Dictionary<string, string> SrcMap;
+        public IEnumerable<(string id, string sectionName)> SectionHeadings;
     }
+
 }
