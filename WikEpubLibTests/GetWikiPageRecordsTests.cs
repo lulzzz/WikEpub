@@ -14,15 +14,26 @@ namespace WikEpubLibTests
     {
         HtmlWeb webGet = new HtmlWeb();
         GetWikiPageRecords GetWikiPageRecords = new GetWikiPageRecords();
-        string seanConnWiki = "https://en.wikipedia.org/wiki/Sean_Connery";
-        string seanImageDir = "image_dir1";
+        string imageDir = "image_dir1";
         WikiPageRecord seanRecord;
+        WikiPageRecord physioRecord;
+        WikiPageRecord physiologyRecord;
+
+        List<WikiPageRecord> wikiPages;
+
         
         [TestInitialize]
         public void InitialiseTest()
         {
-            var seanWikiDoc = webGet.Load(seanConnWiki);
-            seanRecord = GetWikiPageRecords.GetRecordsFrom(seanWikiDoc, seanImageDir);
+            var seanWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Sean_Connery");
+            var physioWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physical_therapy");
+            var physiologyWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physiology");
+ 
+            seanRecord = GetWikiPageRecords.GetRecordsFrom(seanWikiDoc, imageDir);
+            physioRecord = GetWikiPageRecords.GetRecordsFrom(physioWikiDoc, imageDir);
+            physiologyRecord = GetWikiPageRecords.GetRecordsFrom(physiologyWikiDoc, imageDir);
+
+            wikiPages = new() { seanRecord, physioRecord, physiologyRecord};
         }
 
         [TestMethod]
@@ -61,44 +72,47 @@ namespace WikEpubLibTests
            });
         }
         
+        
+        //TODO make these general purpose so they test every html page in a list
         [TestMethod]
         public void Src_Dict_Value_Starts_With_Correct_Value()
         {
-            seanRecord.SrcMap.ToList().ForEach(t =>
+            wikiPages.ForEach(page =>
             {
-                Assert.IsTrue(t.Value.StartsWith("image_"));
+                seanRecord.SrcMap.ToList().ForEach(t =>
+                {
+                    Assert.IsTrue(t.Value.StartsWith("image_"));
+                });
             });
-        }
+       }
         
         [TestMethod]
         public void Src_Dict_Value_Ends_With_Correct_FileType()
         {
             HashSet<string> fTypes = new () { ".png", ".jpeg", ".jpg", ".svg", ".apng", ".avif", ".gif", ".jfif", ".pjpeg", ".pjp", ".webp" };
 
-            seanRecord.SrcMap.ToList().ForEach(t =>
+            wikiPages.ForEach(page =>
             {
-               Assert.IsTrue(fTypes.Any(type => t.Value.EndsWith(type)));
-            });
+                page.SrcMap.ToList().ForEach(t =>
+                {
+                   Assert.IsTrue(fTypes.Any(type => t.Value.EndsWith(type)));
+                });
 
+            });
+            
         }
 
         [TestMethod]
         public void Src_Dict_Check_Value_Numeric_Between_Start_And_End()
         {
-            seanRecord.SrcMap.ToList().ForEach(t =>
+            wikiPages.ForEach(page =>
             {
-                Assert.IsTrue(int.TryParse(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", ""), out _));
+                page.SrcMap.ToList().ForEach(t =>
+                {
+                    Assert.IsTrue(int.TryParse(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", ""), out _));
+                });
+
             });
-        }
-        
-        
-        
-
-
-
-
-
-        
+        }       
     }
-
 }
