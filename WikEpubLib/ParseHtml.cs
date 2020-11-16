@@ -7,12 +7,27 @@ using System.Threading.Tasks;
 
 namespace WikEpubLib
 {
-    class ParseHtml
+    class ParseHtml: IParseHtml
     {
         public HtmlDocument Parse(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord)
         {
             var reducedDocument = ReduceDocument(htmlDocument);
-            throw new NotImplementedException();
+            if (wikiPageRecord.SrcMap is null)
+                return reducedDocument;
+            return ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
+
+        }
+
+        private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)
+        {
+            inputDocument.DocumentNode.Descendants().Where(n => n.Name == "img").ToList().ForEach(n =>
+            {
+                var oldSrcValue = n.GetAttributeValue("src", "null");
+                if (srcDict.ContainsKey(oldSrcValue))
+                    n.SetAttributeValue("src", srcDict[oldSrcValue]);
+            });
+
+            return inputDocument;
         }
 
         private HtmlDocument ReduceDocument(HtmlDocument inputDocument)
@@ -48,12 +63,9 @@ namespace WikEpubLib
             while (currentNode != null)
             {
                 if (nodePredicate(currentNode))
-                {
                     nodeStrings.Add(currentNode.OuterHtml);
-                }
                 currentNode = currentNode.NextSibling;
             }
-
             return string.Join("", nodeStrings.Prepend($"<{encapsulateWithNode}>").Append($"</{encapsulateWithNode}>"));
         }
 
