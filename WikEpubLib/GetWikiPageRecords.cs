@@ -8,28 +8,30 @@ namespace WikEpubLib
     {
         public WikiPageRecord GetRecordsFrom(HtmlDocument html, string imageDirectory)
         {
-            IEnumerable<HtmlNode> nodes = html.DocumentNode.Descendants();
-            IEnumerable<HtmlNode> imgNodes = GetImageNodes(nodes);
+            IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
+            IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").Descendants();
+            IEnumerable<HtmlNode> imgNodes = GetImageNodesFrom(contentNodes);
             return new WikiPageRecord
             {
-                Id = GetId(nodes),
-                SrcMap = imgNodes.Any() ? GetSrcMap(imgNodes, imageDirectory) : null,
-                SectionHeadings = GetSectionHeadings(nodes)
+                Id = GetIdFrom(allNodes),
+                SrcMap = imgNodes.Any() ? GetSrcMapFrom(imgNodes, imageDirectory) : null,
+                SectionHeadings = GetSectionHeadingsFrom(contentNodes)
             };
         }
 
-        private string GetId(IEnumerable<HtmlNode> nodes) =>
+        private string GetIdFrom(IEnumerable<HtmlNode> nodes) =>
             nodes.First(n => n.Name == "title").InnerHtml.Split('-').First().Trim().Replace(' ', '_').Replace(")", "").Replace("(", "");
 
-        private IEnumerable<HtmlNode> GetImageNodes(IEnumerable<HtmlNode> nodes) => nodes.Where(n => n.Name == "img");
+        private IEnumerable<HtmlNode> GetImageNodesFrom(IEnumerable<HtmlNode> nodes) => nodes.Where(n => n.Name == "img");
 
         private int _imageId = 1;
         private string GetImageId(string originalSrc) => $"image_{_imageId++}.{originalSrc.Split('.')[^1]}";
-        private Dictionary<string, string> GetSrcMap(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
+        private Dictionary<string, string> GetSrcMapFrom(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
             imageNodes.Select(n => n.GetAttributeValue("src", "null")).Distinct().ToDictionary(s => s, s => @$"{imageDirectory}\{GetImageId(s)}");
 
-        private IEnumerable<(string id, string sectionName)> GetSectionHeadings(IEnumerable<HtmlNode> nodes) =>
-            nodes.Where(n => n.Name == "h2")
+        private IEnumerable<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
+            nodes
+            .Where(n => n.Name == "h2")
             .Select(n => n.FirstChild)
             .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerHtml));
     }
