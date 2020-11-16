@@ -81,6 +81,16 @@ namespace WikEpubLibTests
             });
 
         }
+
+        [TestMethod]
+        public void Src_Dict_Check_Value_Numeric_Between_Start_And_End()
+        {
+            seanRecord.SrcMap.ToList().ForEach(t =>
+            {
+                Assert.IsTrue(int.TryParse(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", ""), out _));
+            });
+        }
+        
         
         
 
