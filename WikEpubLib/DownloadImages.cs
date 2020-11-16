@@ -10,6 +10,12 @@ namespace WikEpubLib
 {
     public class DownloadImages : IDownloadImages
     {
+        private readonly HttpClient _httpClient;
+
+        public DownloadImages(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
         public async Task From(WikiPageRecord pageRecord, string oepbsDirectory, HttpClient httpClient)=>
             await pageRecord.SrcMap.ToList().ForEachAsync(async src =>
             {
