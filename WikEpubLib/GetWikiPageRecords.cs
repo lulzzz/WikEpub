@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WikEpubLib
 {
-    public class GetWikiPageRecords
+    public class GetWikiPageRecords : IGetWikiPageRecords
     {
         public WikiPageRecord GetRecordsFrom(HtmlDocument html, string imageDirectory)
         {
