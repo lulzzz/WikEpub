@@ -44,6 +44,11 @@ namespace WikEpubLibTests
         {
             Assert.AreEqual("Sean_Connery", seanRecord.Id);
         }
+        [TestMethod]
+        public void Correct_ID_Paper()
+        {
+            Assert.AreEqual("Page_paper", paperRecord.Id);
+        }
 
         [TestMethod]
         public void Correct_Src_Dict_Key_Connery()
