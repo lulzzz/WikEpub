@@ -18,6 +18,7 @@ namespace WikEpubLibTests
         WikiPageRecord seanRecord;
         WikiPageRecord physioRecord;
         WikiPageRecord physiologyRecord;
+        WikiPageRecord paperRecord;
 
         List<WikiPageRecord> wikiPages;
 
@@ -28,12 +29,14 @@ namespace WikEpubLibTests
             var seanWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Sean_Connery");
             var physioWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physical_therapy");
             var physiologyWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physiology");
+            var paperWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Page_(paper)");
  
             seanRecord = GetWikiPageRecords.GetRecordsFrom(seanWikiDoc, imageDir);
             physioRecord = GetWikiPageRecords.GetRecordsFrom(physioWikiDoc, imageDir);
             physiologyRecord = GetWikiPageRecords.GetRecordsFrom(physiologyWikiDoc, imageDir);
+            paperRecord = GetWikiPageRecords.GetRecordsFrom(paperWikiDoc, imageDir);
 
-            wikiPages = new() { seanRecord, physioRecord, physiologyRecord};
+            wikiPages = new() { seanRecord, physioRecord, physiologyRecord, paperRecord};
         }
 
         [TestMethod]
