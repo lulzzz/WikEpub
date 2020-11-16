@@ -6,7 +6,7 @@ namespace WikEpubLib
 {
     public class GetWikiPageRecords : IGetWikiPageRecords
     {
-        public WikiPageRecord GetRecordsFrom(HtmlDocument html, string imageDirectory)
+        public WikiPageRecord From(HtmlDocument html, string imageDirectory)
         {
             IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
             IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants();
