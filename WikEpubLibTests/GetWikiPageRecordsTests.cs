@@ -62,13 +62,26 @@ namespace WikEpubLibTests
         }
         
         [TestMethod]
-        public void Src_Dict_Starts_With_Correct_Value()
+        public void Src_Dict_Value_Starts_With_Correct_Value()
         {
             seanRecord.SrcMap.ToList().ForEach(t =>
             {
                 Assert.IsTrue(t.Value.StartsWith("image_"));
             });
         }
+        
+        [TestMethod]
+        public void Src_Dict_Value_Ends_With_Correct_FileType()
+        {
+            HashSet<string> fTypes = new () { ".png", ".jpeg", ".jpg", ".svg", ".apng", ".avif", ".gif", ".jfif", ".pjpeg", ".pjp", ".webp" };
+
+            seanRecord.SrcMap.ToList().ForEach(t =>
+            {
+               Assert.IsTrue(fTypes.Any(type => t.Value.EndsWith(type)));
+            });
+
+        }
+        
         
 
 
