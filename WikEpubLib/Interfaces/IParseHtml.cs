@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WikEpubLib
+namespace WikEpubLib.Interfaces
 {
-    interface IGetWikiPageRecords
+    interface IParseHtml
     {
-        WikiPageRecord From(HtmlDocument html, string imageDirectory);
+        public HtmlDocument Parse(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord);
+
     }
 }
