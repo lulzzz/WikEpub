@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikEpub", "WikEpub\WikEpub.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpConsoleDebugger", "ConsoleTester\CSharpConsoleDebugger.csproj", "{653F9136-2848-439B-9866-E052B01CECAC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpWikEpubLibrary", "CSharpWikEpubLibrary\CSharpWikEpubLibrary.csproj", "{44604AD9-0626-4A0B-9E28-2F27C7559D21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrototypeLibrary", "CSharpWikEpubLibrary\PrototypeLibrary.csproj", "{44604AD9-0626-4A0B-9E28-2F27C7559D21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

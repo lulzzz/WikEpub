@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSharpWikEpubLibrary\CSharpWikEpubLibrary.csproj" />
+    <ProjectReference Include="..\CSharpWikEpubLibrary\PrototypeLibrary.csproj" />
   </ItemGroup>
 
 </Project>
