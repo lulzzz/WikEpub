@@ -19,6 +19,7 @@ namespace WikEpubLibTests
         WikiPageRecord physioRecord;
         WikiPageRecord physiologyRecord;
         WikiPageRecord paperRecord;
+        WikiPageRecord markLawrenceRecord;
 
         List<WikiPageRecord> wikiPages;
 
@@ -30,13 +31,15 @@ namespace WikEpubLibTests
             var physioWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physical_therapy");
             var physiologyWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physiology");
             var paperWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Page_(paper)");
+            var markWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Mark_Lawrence_(cricketer)");
  
-            seanRecord = GetWikiPageRecords.GetRecordsFrom(seanWikiDoc, imageDir);
-            physioRecord = GetWikiPageRecords.GetRecordsFrom(physioWikiDoc, imageDir);
-            physiologyRecord = GetWikiPageRecords.GetRecordsFrom(physiologyWikiDoc, imageDir);
-            paperRecord = GetWikiPageRecords.GetRecordsFrom(paperWikiDoc, imageDir);
+            seanRecord = GetWikiPageRecords.From(seanWikiDoc, imageDir);
+            physioRecord = GetWikiPageRecords.From(physioWikiDoc, imageDir);
+            physiologyRecord = GetWikiPageRecords.From(physiologyWikiDoc, imageDir);
+            paperRecord = GetWikiPageRecords.From(paperWikiDoc, imageDir);
+            markLawrenceRecord = GetWikiPageRecords.From(markWikiDoc, imageDir);
 
-            wikiPages = new() { seanRecord, physioRecord, physiologyRecord, paperRecord};
+            wikiPages = new() { seanRecord, physioRecord, physiologyRecord, paperRecord, markLawrenceRecord};
         }
 
         [TestMethod]
@@ -48,6 +51,11 @@ namespace WikEpubLibTests
         public void Correct_ID_Paper()
         {
             Assert.AreEqual("Page_paper", paperRecord.Id);
+        }
+        [TestMethod]
+        public void No_Pictures_Generates_Null_Value()
+        {
+            Assert.AreEqual(null, markLawrenceRecord.SrcMap);
         }
 
         [TestMethod]
