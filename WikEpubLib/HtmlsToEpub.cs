@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using WikEpubLib.Interfaces;
 
 namespace WikEpubLib
 {
-    class HtmlsToEpub
+    class HtmlsToEpub : IHtmlsToEpub
     {
         IParseHtml _parseHtml;
         IGetWikiPageRecords _getRecords;
