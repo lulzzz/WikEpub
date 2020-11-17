@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using WikEpubLib.Interfaces;
 using System.IO;
+using System.Xml.Linq;
 
 namespace WikEpubLib
 {
@@ -13,32 +14,29 @@ namespace WikEpubLib
     {
         IParseHtml _parseHtml;
         IGetWikiPageRecords _getRecords;
+        readonly IGetXmlDocs _getXmlDocs;
 
-        public HtmlsToEpub(IParseHtml parseHtml, IGetWikiPageRecords getRecords)
+        public HtmlsToEpub(IParseHtml parseHtml, IGetWikiPageRecords getRecords, IGetXmlDocs getXmlDocs)
         {
             _parseHtml = parseHtml;
             _getRecords = getRecords;
+            _getXmlDocs = getXmlDocs;
         }
 
-        public async Task Transform(IEnumerable<string> withUrls, string toRootDirectory, string asBookTitle)
+        public async Task Transform(IEnumerable<string> withUrls, string rootDirectory, string bookTitle)
         {
-            HtmlDocument[] initialDocs = await GetHtmlDocuments(withUrls, new HtmlWeb());
+            Task<HtmlDocument[]> initialDocs = GetHtmlDocuments(withUrls, new HtmlWeb());
 
-
-            // create directorys async
             Guid guid = Guid.NewGuid();
-            Task createDirectories = CreateDirectories(toRootDirectory, guid);
-            var directories = GetDirectoryDict(toRootDirectory, guid);
+            Task createDirectories = CreateDirectories(rootDirectory, guid);
+            var directories = GetDirectoryDict(rootDirectory, guid);
 
             IEnumerable<(HtmlDocument html, WikiPageRecord pageRecord)> htmlRecordTuple = 
-                initialDocs.AsParallel().Select(doc => (doc, _getRecords.From(doc, "image_directory")));
+                (await initialDocs).AsParallel().Select(doc => (doc, _getRecords.From(doc, "image_repo")));
 
+            var pageRecords = htmlRecordTuple.Select(t => t.pageRecord);
+            Task<Dictionary<XmlType, XDocument>> xmlDocs =  _getXmlDocs.From(pageRecords, bookTitle);   
 
-            // wait for directories
-            
-            // create xml files
-
-            // do IO bound work here
             IEnumerable<HtmlDocument> parsedDocuments = 
                 htmlRecordTuple.AsParallel().Select(t => _parseHtml.Parse(t.html, t.pageRecord));
             
@@ -61,7 +59,8 @@ namespace WikEpubLib
             {Directories.ROOT, rootDir},
             {Directories.OEBPS, @$"{rootDir}\{id}\OEBPS" },
             {Directories.METAINF, @$"{rootDir}\{id}\META-INF" },
-            {Directories.BOOKDIR,  @$"{rootDir}\{id}" }
+            {Directories.BOOKDIR,  @$"{rootDir}\{id}" },
+            {Directories.IMAGES, @$"{rootDir}\{id}\OEBPS\image_repo" }
         };
     }
 
@@ -70,6 +69,7 @@ namespace WikEpubLib
         ROOT,
         OEBPS,
         METAINF,
-        BOOKDIR
+        BOOKDIR,
+        IMAGES
     }
 }
