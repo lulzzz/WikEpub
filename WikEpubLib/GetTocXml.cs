@@ -5,12 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WikEpubLib.Interfaces;
-
 namespace WikEpubLib
 {
-    public class Container : IContainer
+    public class GetTocXml : IGetTocXml
     {
-        public XDocument GetContainerDoc()
+        public XDocument From(IEnumerable<WikiPageRecord> pageRecords, string bookTitle)
         {
             throw new NotImplementedException();
         }
