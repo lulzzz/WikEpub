@@ -25,10 +25,12 @@ namespace CSharpConsoleDebugger
             var record2 = getPageRecord.From(html2, "image_dir");
 
             GetContentXml getContentOpf = new GetContentXml();
+            GetTocXml getToxXml = new GetTocXml();
 
             var testXml = getContentOpf.From(new List<WikiPageRecord> { record , record2}, "TestBook");
+            var tocXml = getToxXml.From(new List<WikiPageRecord> { record, record2 },"TestBook");
 
-            Console.WriteLine(testXml.ToString());
+            Console.WriteLine(tocXml.ToString());
 
 
 
