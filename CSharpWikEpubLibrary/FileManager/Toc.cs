@@ -1,17 +1,14 @@
-﻿using System;
+﻿using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using HtmlAgilityPack;
 
 namespace CSharpWikEpubLibrary.FileManager
 {
-    public class Toc: IToc
+    public class Toc : IToc
     {
         public async Task CreateAsync(Dictionary<HtmlDocument, string> htmlIds, string toDirectory, string bookTitle)
         {
@@ -36,7 +33,7 @@ namespace CSharpWikEpubLibrary.FileManager
                 XNamespace defaultNs = "http://www.daisy.org/z3986/2005/ncx/";
                 XElement ncx = new XElement(
                     defaultNs + "ncx",
-                    new XAttribute("version","2005-1"),
+                    new XAttribute("version", "2005-1"),
                     new XElement(
                             defaultNs + "head",
                             new XElement(
@@ -92,28 +89,23 @@ namespace CSharpWikEpubLibrary.FileManager
                 ncx.Add(navMap);
                 return new XDocument(ncx);
             });
-                        
         }
 
-
-        IEnumerable<HtmlNode> GetDescendants(HtmlDocument doc) =>
+        private IEnumerable<HtmlNode> GetDescendants(HtmlDocument doc) =>
             doc.DocumentNode.Descendants();
 
-        string GetTitle(IEnumerable<HtmlNode> nodes) =>
+        private string GetTitle(IEnumerable<HtmlNode> nodes) =>
             nodes
                 .First(node => node.Name == "title")
                 .InnerHtml
                 .Split('-')
                 .First()
                 .Trim()
-                .Replace(' ','_');
+                .Replace(' ', '_');
 
-        IEnumerable<(string, string)> GetSectionHeaders(IEnumerable<HtmlNode> nodes) =>
+        private IEnumerable<(string, string)> GetSectionHeaders(IEnumerable<HtmlNode> nodes) =>
             nodes.Where(n => n.Name == "h2")
                 .Select(n => n.FirstChild)
                 .Select(n => (n.InnerHtml, $"#{n.GetAttributeValue("id", "none")}"));
-        
-
-
     }
 }
