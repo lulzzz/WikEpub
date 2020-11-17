@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace WikEpubLib.Interfaces
 {
-    public interface IDownloadImages
+    public interface IContent
     {
-        public Task From(WikiPageRecord pageRecord, string oepbsDirectory);
+        XDocument GetContentFrom(IEnumerable<WikiPageRecord> wikiPageRecords, string bookTitle);
     }
 }
