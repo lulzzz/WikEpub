@@ -55,7 +55,7 @@ namespace WikEpubLib
                 defaultNs + "navPoint",
                 new XAttribute("id", id),
                 new XAttribute("playOrder", playOrder),
-                new XElement(defaultNs + "text", id.Replace('_', ' ')),
+                new XElement(defaultNs + "navLabel", new XElement(defaultNs + "text", id.Replace('_', ' '))),
                 new XElement(defaultNs + "content", new XAttribute("src", $"{id}.html"))
                 );
 
@@ -64,8 +64,8 @@ namespace WikEpubLib
                 defaultNs + "navPoint",
                 new XAttribute("id", id),
                 new XAttribute("playOrder", playOrder),
-                new XElement(defaultNs + "text", sectionName),
-                new XElement(defaultNs + "content", new XAttribute("src", $"{id}.html{hashId}"))
+                new XElement(defaultNs + "naveLabel", new XElement(defaultNs + "text", sectionName)),
+                new XElement(defaultNs + "content", new XAttribute("src", $"{id}.html{(hashId == "#null" ? string.Empty : hashId)}"))
                 );
     }
 }
