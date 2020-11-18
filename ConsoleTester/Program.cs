@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CSharpWikEpubLibrary.FileManager;
-using CSharpWikEpubLibrary.ProcessHtml;
 using HtmlAgilityPack;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using WikEpubLib;
+using WikEpubLib.Interfaces;
 
 namespace CSharpConsoleDebugger
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             HtmlWeb webGet = new HtmlWeb();
-            var html = webGet.Load("https://en.wikipedia.org/wiki/Sean_Connery");
-            var html2 = webGet.Load("https://en.wikipedia.org/wiki/Physiology");
+            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology" };
+            string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder";
+            string bookTitle = "TestBook1";
+            Guid guid = Guid.NewGuid();
 
+            HtmlInput htmlInput = new HtmlInput();
+            ParseHtml parseHtml = new ParseHtml();
+            GetWikiPageRecords getWikiPageRecords = new GetWikiPageRecords();
+            GetXmlDocs getXmlDocs = new GetXmlDocs(new GetTocXml(), new GetContentXml(), new GetContainerXml());
+            EpubOutput epubOutput = new EpubOutput();
 
-            GetWikiPageRecords getPageRecord = new();
-            var record = getPageRecord.From(html, "image_dir");
-            var record2 = getPageRecord.From(html2, "image_dir");
+            HtmlsToEpub htmlsToEpub = new HtmlsToEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
 
-            GetContentXml getContentOpf = new GetContentXml();
-            GetTocXml getToxXml = new GetTocXml();
+            await htmlsToEpub.Transform(urls, rootDirectory, bookTitle, guid);
 
-            var testXml = getContentOpf.From(new List<WikiPageRecord> { record , record2}, "TestBook");
-            var tocXml = getToxXml.From(new List<WikiPageRecord> { record, record2 },"TestBook");
-
-            Console.WriteLine(tocXml.ToString());
 
 
 

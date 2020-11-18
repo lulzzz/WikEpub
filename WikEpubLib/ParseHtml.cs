@@ -8,15 +8,21 @@ using WikEpubLib.Interfaces;
 
 namespace WikEpubLib
 {
-    class ParseHtml: IParseHtml
+    public class ParseHtml: IParseHtml
     {
-        public HtmlDocument Parse(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord)
+        public async Task<HtmlDocument> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord)
         {
-            var reducedDocument = ReduceDocument(htmlDocument);
-            if (wikiPageRecord.SrcMap is null)
-                return reducedDocument;
-            return ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
-
+            return await Task.Run(()=> { 
+            
+                var reducedDocument = ReduceDocument(htmlDocument);
+                if (wikiPageRecord.SrcMap is null)
+                    return reducedDocument;
+                
+                var html = ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
+                Console.WriteLine("html parsed");
+                return html;
+            });
+           
         }
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)

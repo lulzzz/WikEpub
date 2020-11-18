@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSharpWikEpubLibrary\PrototypeLibrary.csproj" />
     <ProjectReference Include="..\WikEpubLib\WikEpubLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestFolder\" />
   </ItemGroup>
 
 </Project>

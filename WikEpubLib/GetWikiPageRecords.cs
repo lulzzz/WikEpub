@@ -1,23 +1,27 @@
 ﻿using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WikEpubLib.Interfaces;
 
 namespace WikEpubLib
 {
     public class GetWikiPageRecords : IGetWikiPageRecords
     {
-        public WikiPageRecord From(HtmlDocument html, string imageDirectory)
+        public async Task<WikiPageRecord> From(HtmlDocument html, string imageDirectory)
         {
-            IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
-            IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants();
-            IEnumerable<HtmlNode> imgNodes = GetImageNodesFrom(contentNodes);
-            return new WikiPageRecord
+            return await Task.Run(() =>
             {
-                Id = GetIdFrom(allNodes),
-                SrcMap = imgNodes.Any() ? GetSrcMapFrom(imgNodes, imageDirectory) : null,
-                SectionHeadings = GetSectionHeadingsFrom(contentNodes)
-            };
+                IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
+                IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants();
+                IEnumerable<HtmlNode> imgNodes = GetImageNodesFrom(contentNodes);
+                return new WikiPageRecord
+                {
+                    Id = GetIdFrom(allNodes),
+                    SrcMap = imgNodes.Any() ? GetSrcMapFrom(imgNodes, imageDirectory) : null,
+                    SectionHeadings = GetSectionHeadingsFrom(contentNodes)
+                };
+            });
         }
 
         private string GetIdFrom(IEnumerable<HtmlNode> nodes) =>
