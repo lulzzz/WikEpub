@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace WikEpubLib.Interfaces
 {
-    interface IParseHtml
+    public interface IParseHtml
     {
-        public HtmlDocument Parse(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord);
+        Task<HtmlDocument> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord);
 
     }
 }
