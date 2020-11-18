@@ -32,7 +32,7 @@ namespace WikEpubLib
         public async Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
             await pageRecord.SrcMap.ToList().ForEachAsync(async src =>
             {
-                HttpResponseMessage responseResult = await _httpClient.GetAsync(@$"https://{src.Key}");
+                HttpResponseMessage responseResult = await _httpClient.GetAsync(@$"https:{src.Key}");
                 using var memoryStream = await responseResult.Content.ReadAsStreamAsync();
                 await using var fileStream = File.Create($@"{directories[Directories.OEBPS]}\{src.Value}");
                 await memoryStream.CopyToAsync(fileStream);
