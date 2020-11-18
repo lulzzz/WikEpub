@@ -24,7 +24,7 @@ namespace CSharpConsoleDebugger
             ParseHtml parseHtml = new ParseHtml();
             GetWikiPageRecords getWikiPageRecords = new GetWikiPageRecords();
             GetXmlDocs getXmlDocs = new GetXmlDocs(new GetTocXml(), new GetContentXml(), new GetContainerXml());
-            EpubOutput epubOutput = new EpubOutput();
+            EpubOutput epubOutput = new EpubOutput(new HttpClient());
 
             HtmlsToEpub htmlsToEpub = new HtmlsToEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
 
