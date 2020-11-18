@@ -25,7 +25,7 @@ namespace WikEpubLibTests
 
         
         [TestInitialize]
-        public void InitialiseTest()
+        public async Task InitialiseTest()
         {
             var seanWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Sean_Connery");
             var physioWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physical_therapy");
@@ -33,11 +33,11 @@ namespace WikEpubLibTests
             var paperWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Page_(paper)");
             var markWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Mark_Lawrence_(cricketer)");
  
-            seanRecord = GetWikiPageRecords.From(seanWikiDoc, imageDir);
-            physioRecord = GetWikiPageRecords.From(physioWikiDoc, imageDir);
-            physiologyRecord = GetWikiPageRecords.From(physiologyWikiDoc, imageDir);
-            paperRecord = GetWikiPageRecords.From(paperWikiDoc, imageDir);
-            markLawrenceRecord = GetWikiPageRecords.From(markWikiDoc, imageDir);
+            seanRecord = await  GetWikiPageRecords.From(seanWikiDoc, imageDir);
+            physioRecord = await GetWikiPageRecords.From(physioWikiDoc, imageDir);
+            physiologyRecord = await GetWikiPageRecords.From(physiologyWikiDoc, imageDir);
+            paperRecord = await GetWikiPageRecords.From(paperWikiDoc, imageDir);
+            markLawrenceRecord = await GetWikiPageRecords.From(markWikiDoc, imageDir);
 
             wikiPages = new() { seanRecord, physioRecord, physiologyRecord, paperRecord, markLawrenceRecord};
         }
@@ -89,13 +89,12 @@ namespace WikEpubLibTests
         }
         
         
-        //TODO make these general purpose so they test every html page in a list
         [TestMethod]
         public void Src_Dict_Value_Starts_With_Correct_Value()
         {
             wikiPages.ForEach(page =>
             {
-                seanRecord.SrcMap.ToList().ForEach(t =>
+                page.SrcMap.ToList().ForEach(t =>
                 {
                     Assert.IsTrue(t.Value.StartsWith("image_"));
                 });
@@ -125,7 +124,9 @@ namespace WikEpubLibTests
             {
                 page.SrcMap.ToList().ForEach(t =>
                 {
-                    Assert.IsTrue(int.TryParse(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", ""), out _));
+                    Console.WriteLine(t.Value);
+                    Console.WriteLine(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", ""));
+                    Assert.IsTrue(int.TryParse(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", "").Trim(), out _));
                 });
 
             });
