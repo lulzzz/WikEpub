@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,18 +13,34 @@ namespace WikEpubLib
 {
     public class EpubOutput : IEpubOutput
     {
+        HttpClient _httpClient;
+
+        public EpubOutput(HttpClient httpClient)
+        {
+           _httpClient = httpClient;
+        }
+
         public async Task CreateDirectories(string rootDirectory, Guid folderID) =>
             await Task.Run(() =>
             {
                 Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS");
                 Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\META-INF");
+                Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS\image_repo");
                 Console.WriteLine("Directories Created");
             });
 
-        public async Task SaveToAsync(string rootDirectory, Guid folderId, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, 
+        public async Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
+            await pageRecord.SrcMap.ToList().ForEachAsync(async src =>
+            {
+                HttpResponseMessage responseResult = await _httpClient.GetAsync(@$"https://{src.Key}");
+                using var memoryStream = await responseResult.Content.ReadAsStreamAsync();
+                await using var fileStream = File.Create($@"{directories[Directories.OEBPS]}\{src.Value}");
+                await memoryStream.CopyToAsync(fileStream);
+            });
+
+        public async Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, 
             IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs)
         {
-            var directories = GetDirectoryDict(rootDirectory, folderId);
             await Task.WhenAll(
                 xmlDocs.Select(t => t.type switch
                 {
@@ -36,14 +53,7 @@ namespace WikEpubLib
                 )); 
         }
 
-        private Dictionary<Directories, string> GetDirectoryDict(string rootDir, Guid folderId) => new Dictionary<Directories, string> {
-            {Directories.ROOT, rootDir},
-            {Directories.OEBPS, @$"{rootDir}\{folderId}\OEBPS" },
-            {Directories.METAINF, @$"{rootDir}\{folderId}\META-INF" },
-            {Directories.BOOKDIR,  @$"{rootDir}\{folderId}" },
-            {Directories.IMAGES, @$"{rootDir}\{folderId}\OEBPS\image_repo" }
-        };
-
+        
         private async Task SaveTaskAsync(XDocument file, string toDirectory, string withFileName)
         {
             await using Stream stream = File.Create($"{toDirectory}/{withFileName}");
