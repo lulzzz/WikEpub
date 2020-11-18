@@ -46,6 +46,8 @@ namespace WikEpubLib
             
             Console.WriteLine("creating xml docs"); 
             var pageRecords = htmlRecordTuple.Select(t => t.record.Result);
+
+            Task downLoadImages = pageRecords.ForEachAsync(record => _epubOutput.DownLoadImagesAsync( record, directories));
             Task<IEnumerable<(XmlType type, XDocument doc)>> xmlDocs =  _getXmlDocs.FromAsync(pageRecords, bookTitle);
             
 
@@ -57,11 +59,11 @@ namespace WikEpubLib
             await createDirectories;
             Console.WriteLine("Saving files to directory");
             await _epubOutput.SaveToAsync(directories, xmlDocs.Result, parsedDocuments.Select(t => (t.doc.Result, t.record)));
+            await downLoadImages;
 
             Console.WriteLine("Saved");
             // save files here
             
-            throw new NotImplementedException();
         }
 
         private Dictionary<Directories, string> GetDirectoryDict(string rootDir, Guid folderId) => new Dictionary<Directories, string> {
