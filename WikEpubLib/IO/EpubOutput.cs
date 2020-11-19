@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using WikEpubLib.Enums;
 
-namespace WikEpubLib
+namespace WikEpubLib.IO
 {
     public class EpubOutput : IEpubOutput
     {
