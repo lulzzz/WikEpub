@@ -20,12 +20,12 @@ namespace WikEpubLib
             _httpClient = httpClient;
         }
 
-        public async Task CreateDirectories(string rootDirectory, Guid folderID) =>
+        public async Task CreateDirectories(Dictionary<Directories, string> directories) =>
             await Task.Run(() =>
             {
-                Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS");
-                Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\META-INF");
-                Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS\image_repo");
+                Directory.CreateDirectory(directories[Directories.OEBPS]);
+                Directory.CreateDirectory(directories[Directories.METAINF]);
+                Directory.CreateDirectory(directories[Directories.IMAGES]);
             });
 
         public async Task CreateMimeFile(Dictionary<Directories, string> directories) =>
