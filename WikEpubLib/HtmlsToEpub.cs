@@ -26,12 +26,12 @@ namespace WikEpubLib
             _epubOutput = epubOutput;
         }
 
-        public async Task Transform(IEnumerable<string> withUrls, string rootDirectory, string bookTitle, Guid folderID)
+        public async Task GetEpub(IEnumerable<string> fromUrls, string rootDirectory, string bookTitle, Guid folderID)
         {
-            Task<HtmlDocument[]> initialDocs = _htmlInput.GetHtmlDocuments(withUrls, new HtmlWeb());
+            Task<HtmlDocument[]> initialDocs = _htmlInput.GetHtmlDocuments(fromUrls, new HtmlWeb());
 
             var directories = GetDirectoryDict(rootDirectory, folderID);
-            Task createDirectories = _epubOutput.CreateDirectories(rootDirectory, folderID);
+            Task createDirectories = _epubOutput.CreateDirectories(directories);
 
             List<(HtmlDocument doc, WikiPageRecord record)> htmlRecordTuple =
                (await initialDocs).Select(doc => (doc, _getRecords.From(doc, "image_repo"))).ToList();
