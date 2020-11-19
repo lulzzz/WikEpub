@@ -30,10 +30,10 @@ namespace CSharpConsoleDebugger
             GetXmlDocs getXmlDocs = new GetXmlDocs(new GetTocXml(), new GetContentXml(), new GetContainerXml());
             EpubOutput epubOutput = new EpubOutput(new HttpClient());
 
-            HtmlsToEpub htmlsToEpub = new HtmlsToEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
+            GetEpub getEpub = new GetEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            await htmlsToEpub.GetEpub(urls, rootDirectory, bookTitle, guid);
+            await getEpub.FromAsync(urls, rootDirectory, bookTitle, guid);
             stopwatch.Stop();
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
