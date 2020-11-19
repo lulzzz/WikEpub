@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -27,10 +28,8 @@ namespace WikEpubLib
                 Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS\image_repo");
             });
 
-        public Task CreateMimeFile(Dictionary<Directories, string> directories)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task CreateMimeFile(Dictionary<Directories, string> directories) =>
+            await File.WriteAllTextAsync($@"{directories[Directories.BOOKDIR]}\mimetype", "application/epub+zip");
 
         public async Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
             await pageRecord.SrcMap.ToList().AsParallel().WithDegreeOfParallelism(10).ForEachAsync(async src =>
@@ -53,10 +52,14 @@ namespace WikEpubLib
                 }).Concat(htmlDocs.Select(t => SaveTaskAsync(t.doc, directories[Directories.OEBPS], $"{t.record.Id}.html"))
                 ));
 
-        public Task ZipFiles(Dictionary<Directories, string> directories)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task ZipFiles(Dictionary<Directories, string> directories, Guid bookId) =>
+            await Task.Run(() =>
+            {
+                ZipFile.CreateFromDirectory(
+                    directories[Directories.BOOKDIR],
+                    @$"{directories[Directories.BOOKDIR]}.epub");
+                Directory.Delete(directories[Directories.BOOKDIR], true);
+            });
 
         private async Task SaveTaskAsync(XDocument file, string toDirectory, string withFileName)
         {
