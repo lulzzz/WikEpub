@@ -26,7 +26,6 @@ namespace WikEpubLib
                 Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS");
                 Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\META-INF");
                 Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS\image_repo");
-                Console.WriteLine("Directories Created");
             });
 
         public async Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
@@ -39,8 +38,7 @@ namespace WikEpubLib
             });
 
         public async Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, 
-            IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs)
-        {
+            IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs) =>
             await Task.WhenAll(
                 xmlDocs.Select(t => t.type switch
                 {
@@ -51,7 +49,6 @@ namespace WikEpubLib
 
                 }).Concat(htmlDocs.Select(t => SaveTaskAsync(t.doc, directories[Directories.OEBPS], $"{t.record.Id}.html"))
                 )); 
-        }
 
         
         private async Task SaveTaskAsync(XDocument file, string toDirectory, string withFileName)
