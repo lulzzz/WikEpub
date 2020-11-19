@@ -22,7 +22,7 @@ namespace WikEpubLib.CreateDocs
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)
         {
-            inputDocument.DocumentNode.Descendants().AsParallel().Where(n => n.Name == "img").ToList().ForEach(n =>
+            inputDocument.DocumentNode.Descendants().Where(n => n.Name == "img").ToList().ForEach(n =>
             {
                 var oldSrcValue = n.GetAttributeValue("src", "null");
                 if (srcDict.ContainsKey(oldSrcValue))
