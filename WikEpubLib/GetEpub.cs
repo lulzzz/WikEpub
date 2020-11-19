@@ -31,7 +31,7 @@ namespace WikEpubLib
 
         public async Task FromAsync(IEnumerable<string> urls, string rootDirectory, string bookTitle, Guid folderID)
         {
-            Task<HtmlDocument[]> initialDocs = _htmlInput.GetHtmlDocumentsFromAsync(urls, new HtmlWeb());
+            Task<HtmlDocument[]> initialDocs =  _htmlInput.GetHtmlDocumentsFromAsync(urls, new HtmlWeb());
 
             var directories = GetDirectoryDict(rootDirectory, folderID);
             Task createDirectories = _epubOutput.CreateDirectoriesAsync(directories);
