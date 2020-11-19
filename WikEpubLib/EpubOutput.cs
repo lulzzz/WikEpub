@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -13,11 +12,11 @@ namespace WikEpubLib
 {
     public class EpubOutput : IEpubOutput
     {
-        HttpClient _httpClient;
+        private HttpClient _httpClient;
 
         public EpubOutput(HttpClient httpClient)
         {
-           _httpClient = httpClient;
+            _httpClient = httpClient;
         }
 
         public async Task CreateDirectories(string rootDirectory, Guid folderID) =>
@@ -37,7 +36,7 @@ namespace WikEpubLib
                 await memoryStream.CopyToAsync(fileStream);
             });
 
-        public async Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, 
+        public async Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs,
             IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs) =>
             await Task.WhenAll(
                 xmlDocs.Select(t => t.type switch
@@ -46,11 +45,9 @@ namespace WikEpubLib
                     XmlType.Content => SaveTaskAsync(t.doc, directories[Directories.OEBPS], "content.opf"),
                     XmlType.Toc => SaveTaskAsync(t.doc, directories[Directories.OEBPS], "toc.ncx"),
                     _ => throw new ArgumentException("Unknown XML type found in xml switch expression")
-
                 }).Concat(htmlDocs.Select(t => SaveTaskAsync(t.doc, directories[Directories.OEBPS], $"{t.record.Id}.html"))
-                )); 
+                ));
 
-        
         private async Task SaveTaskAsync(XDocument file, string toDirectory, string withFileName)
         {
             await using Stream stream = File.Create($"{toDirectory}/{withFileName}");
@@ -62,6 +59,5 @@ namespace WikEpubLib
             await using Stream stream = File.Create($"{toDirectory}/{withFileName}");
             await Task.Run(() => file.Save(stream));
         }
-
     }
 }
