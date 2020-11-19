@@ -17,7 +17,7 @@ namespace WikEpubLib
 
         Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories);
 
-        Task ZipFiles(Dictionary<Directories, string> directories);
+        Task ZipFiles(Dictionary<Directories, string> directories, Guid guid);
 
         Task CreateMimeFile(Dictionary<Directories, string> directories);
     }
