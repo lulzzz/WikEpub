@@ -51,7 +51,7 @@ namespace WikEpubLib
 
             Task createMime = _epubOutput.CreateMimeFile(directories);
             // this should be seperated into differnet calls so that they don't have to wait (one for xml, one for html)
-            await _epubOutput.SaveDocumentAsync(directories, xmlDocs.Result, parsedDocuments.Select(t => (t.doc.Result, t.record)));
+            await _epubOutput.SaveDocumentsAsync(directories, xmlDocs.Result, parsedDocuments.Select(t => (t.doc.Result, t.record)));
             await downloadImagesTask;
             await createMime;
 

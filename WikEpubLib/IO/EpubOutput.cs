@@ -43,7 +43,7 @@ namespace WikEpubLib.IO
                 await memoryStream.CopyToAsync(fileStream);
             });
 
-        public async Task SaveDocumentAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs,
+        public async Task SaveDocumentsAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs,
             IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs) =>
             await Task.WhenAll(
                 xmlDocs.Select(t => t.type switch
