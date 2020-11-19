@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Net.Http;
@@ -7,6 +8,7 @@ using HtmlAgilityPack;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using WikEpubLib;
 using WikEpubLib.Interfaces;
+using System.Diagnostics;
 
 namespace CSharpConsoleDebugger
 {
@@ -14,8 +16,7 @@ namespace CSharpConsoleDebugger
     {
         static async Task Main(string[] args)
         {
-            HtmlWeb webGet = new HtmlWeb();
-            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology" };
+            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery","https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
             string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder";
             string bookTitle = "TestBook1";
             Guid guid = Guid.NewGuid();
@@ -28,14 +29,16 @@ namespace CSharpConsoleDebugger
 
             HtmlsToEpub htmlsToEpub = new HtmlsToEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
 
+            Stopwatch stopwatch = Stopwatch.StartNew();
             await htmlsToEpub.Transform(urls, rootDirectory, bookTitle, guid);
-
-
-
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
         }
-    }
+
+           }
 }
+
 
 
 
