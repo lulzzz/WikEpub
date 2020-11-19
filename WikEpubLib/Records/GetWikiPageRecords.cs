@@ -41,6 +41,6 @@ namespace WikEpubLib.Records
             nodes.AsParallel().AsOrdered()
             .Where(n => n.Name == "h2")
             .Select(n => n.FirstChild)
-            .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerHtml)).ToList();
+            .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerText)).ToList();
     }
 }
