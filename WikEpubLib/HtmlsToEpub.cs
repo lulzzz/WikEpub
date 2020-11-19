@@ -37,7 +37,7 @@ namespace WikEpubLib
                (await initialDocs).Select(doc => (doc, _getRecords.From(doc, "image_repo"))).ToList();
 
             var pageRecords = htmlRecordTuple.Select(t => t.record);
-            Task downLoadImages = pageRecords.AsParallel().WithDegreeOfParallelism(10).ForEachAsync(record => _epubOutput.DownLoadImagesAsync(record, directories));
+            Task downLoadImages = pageRecords.ForEachAsync(record => _epubOutput.DownLoadImagesAsync(record, directories));
             Task<IEnumerable<(XmlType type, XDocument doc)>> xmlDocs = _getXmlDocs.FromAsync(pageRecords, bookTitle);
 
             IEnumerable<(Task<HtmlDocument> doc, WikiPageRecord record)> parsedDocuments =
