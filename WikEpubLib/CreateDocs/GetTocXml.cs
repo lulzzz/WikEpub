@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using WikEpubLib.Interfaces;
+using WikEpubLib.Records;
 
 namespace WikEpubLib.CreateDocs
 {

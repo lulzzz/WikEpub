@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using WikEpubLib.Enums;
 using WikEpubLib.Interfaces;
+using WikEpubLib.Records;
 
 namespace WikEpubLib.CreateDocs
 {

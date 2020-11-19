@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using WikEpubLib.Interfaces;
 
-namespace WikEpubLib
+namespace WikEpubLib.Records
 {
     public class GetWikiPageRecords : IGetWikiPageRecords
     {
-        public WikiPageRecord From(HtmlDocument html, string imageDirectory)            
+        public WikiPageRecord From(HtmlDocument html, string imageDirectory)
         {
             IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
             IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants();
@@ -20,7 +20,7 @@ namespace WikEpubLib
                 SectionHeadings = GetSectionHeadingsFrom(contentNodes)
             };
         }
-            
+
         private string GetIdFrom(IEnumerable<HtmlNode> nodes) =>
             nodes
             .First(n => n.Name == "title")

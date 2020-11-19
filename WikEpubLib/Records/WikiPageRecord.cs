@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WikEpubLib
+namespace WikEpubLib.Records
 {
     public record WikiPageRecord
     {
