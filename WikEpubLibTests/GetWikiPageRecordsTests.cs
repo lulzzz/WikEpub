@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WikEpubLib;
+using WikEpubLib.Records;
 
 namespace WikEpubLibTests
 {
