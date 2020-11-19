@@ -21,16 +21,12 @@ namespace WikEpubLib
         }
 
         public async Task<IEnumerable<(XmlType type, XDocument doc)>> FromAsync(IEnumerable<WikiPageRecord> pageRecords, string bookTitle) =>
-            await Task.Run(() => {
-                var list = new List<(XmlType type, XDocument doc)>()
+            await Task.Run(() => new List<(XmlType type, XDocument doc)>()
             {
                 ( XmlType.Container, _getContainerXml.GetContainer()),
                 ( XmlType.Content, _getContentXml.From(pageRecords, bookTitle)),
                 ( XmlType.Toc, _getTocXml.From(pageRecords, bookTitle) )
 
-            };
-                Console.WriteLine("Xml Docs Created");
-                return list;
             });
 
             
