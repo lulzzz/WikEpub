@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WikEpubLib.Enums;
-using WikEpubLib.Extensions;
 using WikEpubLib.Interfaces;
 using WikEpubLib.Records;
 
@@ -31,7 +30,7 @@ namespace WikEpubLib
 
         public async Task FromAsync(IEnumerable<string> urls, string rootDirectory, string bookTitle, Guid folderID)
         {
-            Task<HtmlDocument[]> initialDocs =  _htmlInput.GetHtmlDocumentsFromAsync(urls, new HtmlWeb());
+            Task<HtmlDocument[]> initialDocs = _htmlInput.GetHtmlDocumentsFromAsync(urls, new HtmlWeb());
 
             var directories = GetDirectoryDict(rootDirectory, folderID);
             Task createDirectories = _epubOutput.CreateDirectoriesAsync(directories);
@@ -40,8 +39,8 @@ namespace WikEpubLib
                (await initialDocs).Select(doc => (doc, _getRecords.From(doc, "image_repo"))).ToList();
 
             var pageRecords = htmlRecordTuple.Select(t => t.record);
-
             Task downloadImagesTask = Task.WhenAll(pageRecords.SelectMany(record => _epubOutput.DownLoadImagesAsync(record, directories)));
+            //convert to IEnumerable<Task> so can be run concurrently
             Task<IEnumerable<(XmlType type, XDocument doc)>> xmlDocs = _getXmlDocs.FromAsync(pageRecords, bookTitle);
 
             IEnumerable<(Task<HtmlDocument> doc, WikiPageRecord record)> parsedDocuments =
@@ -50,6 +49,7 @@ namespace WikEpubLib
             await createDirectories;
 
             Task createMime = _epubOutput.CreateMimeFile(directories);
+
             // this should be seperated into differnet calls so that they don't have to wait (one for xml, one for html)
             await _epubOutput.SaveDocumentsAsync(directories, xmlDocs.Result, parsedDocuments.Select(t => (t.doc.Result, t.record)));
             await downloadImagesTask;
