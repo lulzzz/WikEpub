@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WikEpubLib
+namespace WikEpubLib.Enums
 {
-    public enum XmlType
+    public enum Directories
     {
-        Container,
-        Toc,
-        Content
+        ROOT,
+        OEBPS,
+        METAINF,
+        BOOKDIR,
+        IMAGES
     }
 }

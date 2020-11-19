@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using WikEpubLib.Enums;
 
 namespace WikEpubLib
 {
