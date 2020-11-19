@@ -29,7 +29,7 @@ namespace WikEpubLib
             });
 
         public async Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
-            await pageRecord.SrcMap.ToList().ForEachAsync(async src =>
+            await pageRecord.SrcMap.ToList().AsParallel().WithDegreeOfParallelism(10).ForEachAsync(async src =>
             {
                 HttpResponseMessage responseResult = await _httpClient.GetAsync(@$"https:{src.Key}");
                 using var memoryStream = await responseResult.Content.ReadAsStreamAsync();
