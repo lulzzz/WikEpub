@@ -37,19 +37,24 @@ namespace WikEpubLib
                (await initialDocs).Select(doc => (doc, _getRecords.From(doc, "image_repo"))).ToList();
 
             var pageRecords = htmlRecordTuple.Select(t => t.record);
-            Task downLoadImages = pageRecords.ForEachAsync(record => _epubOutput.DownLoadImagesAsync(record, directories));
+            Task downloadImages = pageRecords.ForEachAsync(record => _epubOutput.DownLoadImagesAsync(record, directories));
             Task<IEnumerable<(XmlType type, XDocument doc)>> xmlDocs = _getXmlDocs.FromAsync(pageRecords, bookTitle);
 
             IEnumerable<(Task<HtmlDocument> doc, WikiPageRecord record)> parsedDocuments =
                 htmlRecordTuple.Select(t => (_parseHtml.ParseAsync(t.doc, t.record), t.record));
 
             await createDirectories;
-            await _epubOutput.SaveToAsync(directories, xmlDocs.Result, parsedDocuments.Select(t => (t.doc.Result, t.record)));
-            await downLoadImages;
 
-            // save files here
+            Task createMime = _epubOutput.CreateMimeFile(directories);
+            await _epubOutput.SaveToAsync(directories, xmlDocs.Result, parsedDocuments.Select(t => (t.doc.Result, t.record)));
+            await downloadImages;
+            await createMime;
+
+            await _epubOutput.ZipFiles(directories, folderID);
+
         }
 
+        
         private Dictionary<Directories, string> GetDirectoryDict(string rootDir, Guid folderId) => new Dictionary<Directories, string> {
             {Directories.ROOT, rootDir},
             {Directories.OEBPS, @$"{rootDir}\{folderId}\OEBPS" },
@@ -58,4 +63,5 @@ namespace WikEpubLib
             {Directories.IMAGES, @$"{rootDir}\{folderId}\OEBPS\image_repo" }
         };
     }
+
 }
