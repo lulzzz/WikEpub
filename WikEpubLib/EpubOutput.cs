@@ -27,6 +27,11 @@ namespace WikEpubLib
                 Directory.CreateDirectory(@$"{rootDirectory}\{folderID}\OEBPS\image_repo");
             });
 
+        public Task CreateMimeFile(Dictionary<Directories, string> directories)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
             await pageRecord.SrcMap.ToList().AsParallel().WithDegreeOfParallelism(10).ForEachAsync(async src =>
             {
@@ -47,6 +52,11 @@ namespace WikEpubLib
                     _ => throw new ArgumentException("Unknown XML type found in xml switch expression")
                 }).Concat(htmlDocs.Select(t => SaveTaskAsync(t.doc, directories[Directories.OEBPS], $"{t.record.Id}.html"))
                 ));
+
+        public Task ZipFiles(Dictionary<Directories, string> directories)
+        {
+            throw new NotImplementedException();
+        }
 
         private async Task SaveTaskAsync(XDocument file, string toDirectory, string withFileName)
         {
