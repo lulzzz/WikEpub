@@ -30,7 +30,7 @@ namespace CSharpConsoleDebugger
             HtmlsToEpub htmlsToEpub = new HtmlsToEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            await htmlsToEpub.Transform(urls, rootDirectory, bookTitle, guid);
+            await htmlsToEpub.GetEpub(urls, rootDirectory, bookTitle, guid);
             stopwatch.Stop();
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
