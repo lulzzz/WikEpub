@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WikEpubLib.Interfaces;
 using WikEpubLib.Records;
@@ -20,7 +19,6 @@ namespace WikEpubLib.CreateDocs
                 var html = ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
                 return html;
             });
-
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)
         {
@@ -72,6 +70,5 @@ namespace WikEpubLib.CreateDocs
             }
             return string.Join("", nodeStrings.Prepend($"<{encapsulateWithNode}>").Append($"</{encapsulateWithNode}>"));
         }
-
     }
 }

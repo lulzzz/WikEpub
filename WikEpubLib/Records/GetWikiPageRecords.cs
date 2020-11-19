@@ -1,7 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WikEpubLib.Interfaces;
 
 namespace WikEpubLib.Records
@@ -30,7 +29,9 @@ namespace WikEpubLib.Records
         private IEnumerable<HtmlNode> GetImageNodesFrom(IEnumerable<HtmlNode> nodes) => nodes.Where(n => n.Name == "img");
 
         private int _imageId = 1;
+
         private string GetImageId(string originalSrc) => $"image_{_imageId++}.{originalSrc.Split('.')[^1]}";
+
         private Dictionary<string, string> GetSrcMapFrom(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
             imageNodes.AsParallel()
             .Select(n => n.GetAttributeValue("src", "null"))

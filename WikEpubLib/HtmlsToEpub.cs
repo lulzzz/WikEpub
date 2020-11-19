@@ -54,10 +54,8 @@ namespace WikEpubLib
             await createMime;
 
             await _epubOutput.ZipFiles(directories, folderID);
-
         }
 
-        
         private Dictionary<Directories, string> GetDirectoryDict(string rootDir, Guid folderId) => new Dictionary<Directories, string> {
             {Directories.ROOT, rootDir},
             {Directories.OEBPS, @$"{rootDir}\{folderId}\OEBPS" },
@@ -66,5 +64,4 @@ namespace WikEpubLib
             {Directories.IMAGES, @$"{rootDir}\{folderId}\OEBPS\image_repo" }
         };
     }
-
 }

@@ -8,5 +8,4 @@ namespace WikEpubLib.Records
         public Dictionary<string, string> SrcMap;
         public List<(string id, string sectionName)> SectionHeadings;
     }
-
 }

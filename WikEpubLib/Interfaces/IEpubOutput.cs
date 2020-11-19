@@ -1,8 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WikEpubLib.Enums;
@@ -12,7 +10,6 @@ namespace WikEpubLib
 {
     public interface IEpubOutput
     {
-
         Task CreateDirectories(Dictionary<Directories, string> directories);
 
         Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocuments);
@@ -24,4 +21,3 @@ namespace WikEpubLib
         Task CreateMimeFile(Dictionary<Directories, string> directories);
     }
 }
-
