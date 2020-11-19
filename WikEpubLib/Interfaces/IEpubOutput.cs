@@ -10,7 +10,7 @@ namespace WikEpubLib
 {
     public interface IEpubOutput
     {
-        Task CreateDirectories(Dictionary<Directories, string> directories);
+        Task CreateDirectoriesAsync(Dictionary<Directories, string> directories);
 
         Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocuments);
 

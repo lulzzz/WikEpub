@@ -11,7 +11,7 @@ using WikEpubLib.Records;
 
 namespace WikEpubLib
 {
-    public class HtmlsToEpub : IHtmlsToEpub
+    public class GetEpub : IHtmlsToEpub
     {
         private readonly IHtmlInput _htmlInput;
         private readonly IParseHtml _parseHtml;
@@ -19,7 +19,7 @@ namespace WikEpubLib
         private readonly IGetXmlDocs _getXmlDocs;
         private readonly IEpubOutput _epubOutput;
 
-        public HtmlsToEpub(IParseHtml parseHtml, IGetWikiPageRecords getRecords,
+        public GetEpub(IParseHtml parseHtml, IGetWikiPageRecords getRecords,
             IGetXmlDocs getXmlDocs, IHtmlInput htmlInput, IEpubOutput epubOutput)
         {
             _parseHtml = parseHtml;
@@ -29,12 +29,12 @@ namespace WikEpubLib
             _epubOutput = epubOutput;
         }
 
-        public async Task GetEpub(IEnumerable<string> fromUrls, string rootDirectory, string bookTitle, Guid folderID)
+        public async Task FromAsync(IEnumerable<string> urls, string rootDirectory, string bookTitle, Guid folderID)
         {
-            Task<HtmlDocument[]> initialDocs = _htmlInput.GetHtmlDocuments(fromUrls, new HtmlWeb());
+            Task<HtmlDocument[]> initialDocs = _htmlInput.GetHtmlDocumentsFromAsync(urls, new HtmlWeb());
 
             var directories = GetDirectoryDict(rootDirectory, folderID);
-            Task createDirectories = _epubOutput.CreateDirectories(directories);
+            Task createDirectories = _epubOutput.CreateDirectoriesAsync(directories);
 
             List<(HtmlDocument doc, WikiPageRecord record)> htmlRecordTuple =
                (await initialDocs).Select(doc => (doc, _getRecords.From(doc, "image_repo"))).ToList();

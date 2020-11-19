@@ -6,6 +6,6 @@ namespace WikEpubLib.Interfaces
 {
     public interface IHtmlsToEpub
     {
-        public Task GetEpub(IEnumerable<string> urls, string toRootDirectory, string asBookTitle, Guid guid);
+        public Task FromAsync(IEnumerable<string> urls, string toRootDirectory, string asBookTitle, Guid guid);
     }
 }

@@ -23,7 +23,7 @@ namespace WikEpubLib.IO
             _httpClient = httpClient;
         }
 
-        public async Task CreateDirectories(Dictionary<Directories, string> directories) =>
+        public async Task CreateDirectoriesAsync(Dictionary<Directories, string> directories) =>
             await Task.Run(() =>
             {
                 Directory.CreateDirectory(directories[Directories.OEBPS]);

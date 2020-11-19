@@ -7,7 +7,7 @@ namespace WikEpubLib.IO
 {
     public class HtmlInput : IHtmlInput
     {
-        public async Task<HtmlDocument[]> GetHtmlDocuments(IEnumerable<string> urls, HtmlWeb htmlWeb) =>
+        public async Task<HtmlDocument[]> GetHtmlDocumentsFromAsync(IEnumerable<string> urls, HtmlWeb htmlWeb) =>
             await Task.WhenAll(urls.Select(url => htmlWeb.LoadFromWebAsync(url)));
     }
 }
