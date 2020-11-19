@@ -6,7 +6,7 @@ namespace WikEpubLib
     {
         public string Id;
         public Dictionary<string, string> SrcMap;
-        public IEnumerable<(string id, string sectionName)> SectionHeadings;
+        public List<(string id, string sectionName)> SectionHeadings;
     }
 
 }
