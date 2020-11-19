@@ -9,6 +9,6 @@ namespace WikEpubLib.Interfaces
 {
     public interface IGetWikiPageRecords
     {
-        Task<WikiPageRecord> From(HtmlDocument html, string imageDirectory);
+        WikiPageRecord From(HtmlDocument html, string imageDirectory);
     }
 }

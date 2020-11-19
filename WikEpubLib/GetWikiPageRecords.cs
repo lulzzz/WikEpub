@@ -8,22 +8,19 @@ namespace WikEpubLib
 {
     public class GetWikiPageRecords : IGetWikiPageRecords
     {
-        public async Task<WikiPageRecord> From(HtmlDocument html, string imageDirectory)
+        public WikiPageRecord From(HtmlDocument html, string imageDirectory)            
         {
-            return await Task.Run(() =>
+            IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
+            IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants();
+            IEnumerable<HtmlNode> imgNodes = GetImageNodesFrom(contentNodes);
+            return new WikiPageRecord
             {
-                IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
-                IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants();
-                IEnumerable<HtmlNode> imgNodes = GetImageNodesFrom(contentNodes);
-                return new WikiPageRecord
-                {
-                    Id = GetIdFrom(allNodes),
-                    SrcMap = imgNodes.Any() ? GetSrcMapFrom(imgNodes, imageDirectory) : null,
-                    SectionHeadings = GetSectionHeadingsFrom(contentNodes)
-                };
-            });
+                Id = GetIdFrom(allNodes),
+                SrcMap = imgNodes.Any() ? GetSrcMapFrom(imgNodes, imageDirectory) : null,
+                SectionHeadings = GetSectionHeadingsFrom(contentNodes)
+            };
         }
-
+            
         private string GetIdFrom(IEnumerable<HtmlNode> nodes) =>
             nodes
             .First(n => n.Name == "title")
@@ -39,10 +36,10 @@ namespace WikEpubLib
             .Select(n => n.GetAttributeValue("src", "null"))
             .Distinct().ToDictionary(s => s, s => @$"{imageDirectory}\{GetImageId(s)}");
 
-        private IEnumerable<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
-            nodes.AsParallel()
+        private List<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
+            nodes.AsParallel().AsOrdered()
             .Where(n => n.Name == "h2")
             .Select(n => n.FirstChild)
-            .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerHtml));
+            .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerHtml)).ToList();
     }
 }
