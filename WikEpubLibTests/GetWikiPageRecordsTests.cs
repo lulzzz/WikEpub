@@ -1,45 +1,43 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WikEpubLib;
-using HtmlAgilityPack;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WikEpubLibTests
 {
     [TestClass]
     public class GetWikiPageRecordsTests
     {
-        HtmlWeb webGet = new HtmlWeb();
-        GetWikiPageRecords GetWikiPageRecords = new GetWikiPageRecords();
-        string imageDir = "image_dir1";
-        WikiPageRecord seanRecord;
-        WikiPageRecord physioRecord;
-        WikiPageRecord physiologyRecord;
-        WikiPageRecord paperRecord;
-        WikiPageRecord markLawrenceRecord;
+        private HtmlWeb webGet = new HtmlWeb();
+        private GetWikiPageRecords GetWikiPageRecords = new GetWikiPageRecords();
+        private string imageDir = "image_dir";
+        private WikiPageRecord seanRecord;
+        private WikiPageRecord physioRecord;
+        private WikiPageRecord physiologyRecord;
+        private WikiPageRecord paperRecord;
+        private WikiPageRecord markLawrenceRecord;
 
-        List<WikiPageRecord> wikiPages;
+        private List<WikiPageRecord> wikiPages;
 
-        
         [TestInitialize]
-        public async Task InitialiseTest()
+        public void InitialiseTest()
         {
             var seanWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Sean_Connery");
             var physioWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physical_therapy");
             var physiologyWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Physiology");
             var paperWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Page_(paper)");
             var markWikiDoc = webGet.Load("https://en.wikipedia.org/wiki/Mark_Lawrence_(cricketer)");
- 
-            seanRecord = await  GetWikiPageRecords.From(seanWikiDoc, imageDir);
-            physioRecord = await GetWikiPageRecords.From(physioWikiDoc, imageDir);
-            physiologyRecord = await GetWikiPageRecords.From(physiologyWikiDoc, imageDir);
-            paperRecord = await GetWikiPageRecords.From(paperWikiDoc, imageDir);
-            markLawrenceRecord = await GetWikiPageRecords.From(markWikiDoc, imageDir);
 
-            wikiPages = new() { seanRecord, physioRecord, physiologyRecord, paperRecord, markLawrenceRecord};
+            seanRecord = GetWikiPageRecords.From(seanWikiDoc, imageDir);
+            physioRecord = GetWikiPageRecords.From(physioWikiDoc, imageDir);
+            physiologyRecord = GetWikiPageRecords.From(physiologyWikiDoc, imageDir);
+            paperRecord =  GetWikiPageRecords.From(paperWikiDoc, imageDir);
+            markLawrenceRecord = GetWikiPageRecords.From(markWikiDoc, imageDir);
+
+            wikiPages = new() { seanRecord, physioRecord, physiologyRecord, paperRecord, markLawrenceRecord };
+            //wikiPages.ForEach(page => page.SrcMap.ToList().ForEach(item => Console.WriteLine($"{item.Key} -- {item.Value}")));
         }
 
         [TestMethod]
@@ -47,11 +45,13 @@ namespace WikEpubLibTests
         {
             Assert.AreEqual("Sean_Connery", seanRecord.Id);
         }
+
         [TestMethod]
         public void Correct_ID_Paper()
         {
             Assert.AreEqual("Page_paper", paperRecord.Id);
         }
+
         [TestMethod]
         public void No_Pictures_Generates_Null_Value()
         {
@@ -61,9 +61,9 @@ namespace WikEpubLibTests
         [TestMethod]
         public void Correct_Src_Dict_Key_Connery()
         {
-            List<string> keys = new ()
+            List<string> keys = new()
             {
-                 "//upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sean_Connery_1964.png/220px-Sean_Connery_1964.png",
+                "//upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sean_Connery_1964.png/220px-Sean_Connery_1964.png",
                 "//upload.wikimedia.org/wikipedia/commons/thumb/2/26/Signature_of_Sean_Connery.svg/150px-Signature_of_Sean_Connery.svg.png",
                 "//upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Sean_Connery_plaque%2C_Fountainbridge_Edinburgh.jpg/220px-Sean_Connery_plaque%2C_Fountainbridge_Edinburgh.jpg",
                 "//upload.wikimedia.org/wikipedia/commons/thumb/0/07/Lana_Turner_and_Sean_Connery_%E2%80%94_Another_Time%2C_Another_Place.jpg/170px-Lana_Turner_and_Sean_Connery_%E2%80%94_Another_Time%2C_Another_Place.jpg",
@@ -85,36 +85,35 @@ namespace WikEpubLibTests
             {
                 Assert.IsTrue(seanRecord.SrcMap.ContainsKey(key));
                 Assert.AreEqual(seanRecord.SrcMap.Count, keys.Count);
-           });
+            });
         }
-        
-        
+
         [TestMethod]
         public void Src_Dict_Value_Starts_With_Correct_Value()
         {
             wikiPages.ForEach(page =>
             {
-                page.SrcMap.ToList().ForEach(t =>
-                {
-                    Assert.IsTrue(t.Value.StartsWith("image_"));
-                });
+                if (page.SrcMap is not null)
+                    page.SrcMap.ToList().ForEach(t =>
+                    {
+                        Assert.IsTrue(t.Value.StartsWith("image_"));
+                    });
             });
-       }
-        
+        }
+
         [TestMethod]
         public void Src_Dict_Value_Ends_With_Correct_FileType()
         {
-            HashSet<string> fTypes = new () { ".png", ".jpeg", ".jpg", ".svg", ".apng", ".avif", ".gif", ".jfif", ".pjpeg", ".pjp", ".webp" };
+            HashSet<string> fTypes = new() { ".png", ".jpeg", ".jpg", ".svg", ".apng", ".avif", ".gif", ".jfif", ".pjpeg", ".pjp", ".webp" };
 
             wikiPages.ForEach(page =>
             {
-                page.SrcMap.ToList().ForEach(t =>
-                {
-                   Assert.IsTrue(fTypes.Any(type => t.Value.EndsWith(type)));
-                });
-
+                if (page.SrcMap is not null)
+                    page.SrcMap.ToList().ForEach(t =>
+                    {
+                        Assert.IsTrue(fTypes.Any(type => t.Value.EndsWith(type)));
+                    });
             });
-            
         }
 
         [TestMethod]
@@ -122,14 +121,21 @@ namespace WikEpubLibTests
         {
             wikiPages.ForEach(page =>
             {
-                page.SrcMap.ToList().ForEach(t =>
+                if (page.SrcMap is not null)
                 {
-                    Console.WriteLine(t.Value);
-                    Console.WriteLine(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", ""));
-                    Assert.IsTrue(int.TryParse(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", "").Trim(), out _));
-                });
-
+                    page.SrcMap.ToList().ForEach(t =>
+                    Assert.AreEqual(true, int.TryParse(t.Value.Split('\\')[1].Split('.')[0].Replace("image_", string.Empty).Trim(), out _)));
+                }
             });
-        }       
+        }
+        [TestMethod]
+        public void Access_Record_Multiple_Times_Same_Values_Src()
+        {
+            var t1 = seanRecord.SrcMap.Select(v => v.Value);
+            var t2 = seanRecord.SrcMap.Select(v => v.Value);
+
+            t1.Zip(t2).ToList().ForEach(t => Assert.AreEqual(t.First, t.Second));
+
+        }
     }
 }
