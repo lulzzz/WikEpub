@@ -9,6 +9,9 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using WikEpubLib;
 using WikEpubLib.Interfaces;
 using System.Diagnostics;
+using WikEpubLib.CreateDocs;
+using WikEpubLib.IO;
+using WikEpubLib.Records;
 
 namespace CSharpConsoleDebugger
 {
