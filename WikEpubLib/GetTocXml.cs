@@ -64,7 +64,7 @@ namespace WikEpubLib
                 defaultNs + "navPoint",
                 new XAttribute("id", id),
                 new XAttribute("playOrder", playOrder),
-                new XElement(defaultNs + "naveLabel", new XElement(defaultNs + "text", sectionName)),
+                new XElement(defaultNs + "navLabel", new XElement(defaultNs + "text", sectionName)),
                 new XElement(defaultNs + "content", new XAttribute("src", $"{id}.html{(hashId == "#null" ? string.Empty : hashId)}"))
                 );
     }
