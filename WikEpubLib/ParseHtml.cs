@@ -10,24 +10,19 @@ namespace WikEpubLib
 {
     public class ParseHtml: IParseHtml
     {
-        public async Task<HtmlDocument> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord)
-        {
-            return await Task.Run(()=> { 
-            
+        public async Task<HtmlDocument> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord) =>
+            await Task.Run(()=> { 
                 var reducedDocument = ReduceDocument(htmlDocument);
                 if (wikiPageRecord.SrcMap is null)
                     return reducedDocument;
-                
                 var html = ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
-                Console.WriteLine("html parsed");
                 return html;
             });
            
-        }
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)
         {
-            inputDocument.DocumentNode.Descendants().Where(n => n.Name == "img").ToList().ForEach(n =>
+            inputDocument.DocumentNode.Descendants().AsParallel().Where(n => n.Name == "img").ToList().ForEach(n =>
             {
                 var oldSrcValue = n.GetAttributeValue("src", "null");
                 if (srcDict.ContainsKey(oldSrcValue))
