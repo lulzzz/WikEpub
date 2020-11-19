@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using WikEpubLib.Interfaces;
 
-namespace WikEpubLib
+namespace WikEpubLib.CreateDocs
 {
     public class GetContentXml : IGetContentXml
     {

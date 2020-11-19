@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using WikEpubLib.Interfaces;
 
-namespace WikEpubLib
+namespace WikEpubLib.CreateDocs
 {
     public class GetXmlDocs : IGetXmlDocs
     {
@@ -29,6 +29,6 @@ namespace WikEpubLib
 
             });
 
-            
+
     }
 }

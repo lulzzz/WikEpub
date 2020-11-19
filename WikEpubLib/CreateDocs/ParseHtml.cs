@@ -6,19 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using WikEpubLib.Interfaces;
 
-namespace WikEpubLib
+namespace WikEpubLib.CreateDocs
 {
-    public class ParseHtml: IParseHtml
+    public class ParseHtml : IParseHtml
     {
         public async Task<HtmlDocument> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord) =>
-            await Task.Run(()=> { 
+            await Task.Run(() =>
+            {
                 var reducedDocument = ReduceDocument(htmlDocument);
                 if (wikiPageRecord.SrcMap is null)
                     return reducedDocument;
                 var html = ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
                 return html;
             });
-           
+
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)
         {
@@ -35,7 +36,7 @@ namespace WikEpubLib
         private HtmlDocument ReduceDocument(HtmlDocument inputDocument)
         {
             bool HeadPredicate(HtmlNode node) =>
-                (node.Name == "meta" & node.Attributes.Any(attribute => attribute.Name == "charset")) 
+                node.Name == "meta" & node.Attributes.Any(attribute => attribute.Name == "charset")
                 | node.Name == "title";
 
             bool BodyPredicate(HtmlNode node) =>
@@ -45,10 +46,10 @@ namespace WikEpubLib
 
             var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
             var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
-            var htmlString = 
+            var htmlString =
                 string.Join(
-                    "", 
-                    new List<string>{headString, bodyString}
+                    "",
+                    new List<string> { headString, bodyString }
                         .Prepend("<!DOCTYPE html><html>")
                         .Append("</html>")
                     );

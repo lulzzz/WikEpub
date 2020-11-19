@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using WikEpubLib.Interfaces;
 
-namespace WikEpubLib
+namespace WikEpubLib.CreateDocs
 {
     public class GetTocXml : IGetTocXml
     {
@@ -34,7 +34,7 @@ namespace WikEpubLib
         private XElement GetNavMap(IEnumerable<WikiPageRecord> pageRecords, XNamespace defaultNs)
         {
             int playOrder = 1;
-            string GetPlayOrder() => (playOrder++).ToString();
+            string GetPlayOrder() => playOrder++.ToString();
             XElement navMap = new XElement(defaultNs + "navMap");
 
             foreach (var record in pageRecords)
