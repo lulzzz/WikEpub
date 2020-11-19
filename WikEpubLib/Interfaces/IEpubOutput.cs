@@ -12,9 +12,9 @@ namespace WikEpubLib
     {
         Task CreateDirectoriesAsync(Dictionary<Directories, string> directories);
 
-        Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocuments);
+        Task SaveDocumentAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs, IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocuments);
 
-        Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories);
+        IEnumerable<Task> DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories);
 
         Task ZipFiles(Dictionary<Directories, string> directories, Guid guid);
 

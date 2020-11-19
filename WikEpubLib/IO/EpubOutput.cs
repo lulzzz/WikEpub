@@ -34,8 +34,8 @@ namespace WikEpubLib.IO
         public async Task CreateMimeFile(Dictionary<Directories, string> directories) =>
             await File.WriteAllTextAsync($@"{directories[Directories.BOOKDIR]}\mimetype", "application/epub+zip");
 
-        public async Task DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
-            await pageRecord.SrcMap.ToList().AsParallel().WithDegreeOfParallelism(10).ForEachAsync(async src =>
+        public IEnumerable<Task> DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
+            pageRecord.SrcMap.ToList().AsParallel().WithDegreeOfParallelism(10).Select(async src =>
             {
                 HttpResponseMessage responseResult = await _httpClient.GetAsync(@$"https:{src.Key}");
                 using var memoryStream = await responseResult.Content.ReadAsStreamAsync();
@@ -43,7 +43,7 @@ namespace WikEpubLib.IO
                 await memoryStream.CopyToAsync(fileStream);
             });
 
-        public async Task SaveToAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs,
+        public async Task SaveDocumentAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs,
             IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs) =>
             await Task.WhenAll(
                 xmlDocs.Select(t => t.type switch
