@@ -34,6 +34,7 @@ namespace WikEpubLib.CreateDocs
 
         private HtmlDocument ReduceDocument(HtmlDocument inputDocument)
         {
+            // TODO These predicates are probs really innefficient as every attribute of every node is being checked
             bool HeadPredicate(HtmlNode node) =>
                 node.Name == "meta" & node.Attributes.Any(attribute => attribute.Name == "charset")
                 | node.Name == "title";
