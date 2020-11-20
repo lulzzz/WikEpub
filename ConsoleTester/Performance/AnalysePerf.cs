@@ -16,26 +16,41 @@ namespace CSharpConsoleDebugger.Performance
     {
         public static void GetRunTime()
         {
-            Console.WriteLine("Enter a log message: ");
-            var userLogMessage = Console.ReadLine();
-
-            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
-            string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\EpubRepo";
-            string bookTitle = "TestBook1";
-
-            int num_iterations = 5;
-            var avg_time = Enumerable.Range(0, num_iterations).Sum(x =>
+            try
             {
-                GetEpub getEpub = GetEpubClass();
-                return TimeCreateBook(getEpub, urls, rootDirectory, bookTitle).Result;
-            }) / num_iterations;
+                Console.WriteLine("Enter a log message: ");
+                var userLogMessage = Console.ReadLine();
 
-            string logMessage = $"{DateTime.Now} \n \n " +
-                $"Most recent change: {userLogMessage} \n \n " +
-                $"average run-time over {num_iterations} iterations: {Math.Round(avg_time, 3)} seconds \n \n" +
-                $"---------------------------------------------- " +
-                $"\n \n";
-            File.AppendAllText(@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\RunTimeLog.txt", logMessage);
+                List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
+                string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\EpubRepo";
+                string bookTitle = "TestBook1";
+
+                Directory.CreateDirectory(@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\EpubRepo");
+                int num_iterations = 5;
+                var avg_time = Enumerable.Range(0, num_iterations).Sum(x =>
+                {
+                    GetEpub getEpub = GetEpubClass();
+                    return TimeCreateBook(getEpub, urls, rootDirectory, bookTitle).Result;
+                }) / num_iterations;
+
+                string logMessage = $"{DateTime.Now} \n \n " +
+                    $"Most recent change: {userLogMessage} \n \n " +
+                    $"average run-time over {num_iterations} iterations: {Math.Round(avg_time, 3)} seconds \n \n" +
+                    $"---------------------------------------------- " +
+                    $"\n \n";
+                File.AppendAllText(@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\RunTimeLog.txt", logMessage);
+            }
+            catch (Exception e)
+            {
+                var exceptionMessage = $"Exception occured: \n \n " +
+                    $"{e.Message} \n \n " +
+                    $"---------------------------------------------- ";
+                File.AppendAllText(@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\RunTimeLog.txt", exceptionMessage);
+            }
+            finally
+            {
+                Directory.Delete(@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\EpubRepo", true);
+            }
         }
 
         private static GetEpub GetEpubClass()
