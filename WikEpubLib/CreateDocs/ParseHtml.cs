@@ -13,16 +13,23 @@ namespace WikEpubLib.CreateDocs
         public async Task<(HtmlDocument doc, WikiPageRecord record)> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord) =>
             await Task.Run(() =>
             {
-                var reducedDocument = ReduceDocument(htmlDocument);
+                HtmlDocument withContentOnly = ReduceDocument(htmlDocument);
                 if (wikiPageRecord.SrcMap is null)
-                    return (reducedDocument, wikiPageRecord);
-                var html = ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
-                return (html, wikiPageRecord);
+                    return (withContentOnly, wikiPageRecord);
+                HtmlDocument withAlteredDlLinks = ChangeDownloadLinks(withContentOnly, wikiPageRecord.SrcMap);
+                return (withAlteredDlLinks, wikiPageRecord);
+                
+            });
+
+        private void RemoveLinks(HtmlDocument inputDocument) =>
+            inputDocument.DocumentNode.Descendants("a").Distinct().ToList().ForEach(node => { 
+                 
+            
             });
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)
         {
-            inputDocument.DocumentNode.Descendants().Where(n => n.Name == "img").ToList().ForEach(n =>
+            inputDocument.DocumentNode.Descendants("img").ToList().ForEach(n =>
             {
                 var oldSrcValue = n.GetAttributeValue("src", "null");
                 if (srcDict.ContainsKey(oldSrcValue))
@@ -40,12 +47,9 @@ namespace WikEpubLib.CreateDocs
 
             bool BodyPredicate(HtmlNode node) =>
                 node.Name != "style"
-                && (node.Descendants().Distinct().All(d => d.Attributes.All(attribute => attribute.Name != "role")));
+                && !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Name == "role")));
 
-            bool inversePredicate(HtmlNode node) =>
-                !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Name == "role")));
-            
-            var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", inversePredicate, "body");
+            var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
             var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
             var htmlString =
                 string.Join(
