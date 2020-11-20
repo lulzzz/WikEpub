@@ -167,3 +167,27 @@
  
 ---------------------------------------------- 
  
+20/11/2020 13:23:15 
+ 
+ Most recent change: asdasd 
+ 
+ average run-time over 5 iterations: 3.08 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:24:19 
+ 
+ Most recent change: hello 
+ 
+ average run-time over 5 iterations: 3.432 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:27:42 
+ 
+ Most recent change: asdasd 
+ 
+ average run-time over 5 iterations: 2.423 seconds 
+ 
+---------------------------------------------- 
+ 
