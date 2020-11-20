@@ -20,13 +20,12 @@ namespace WikEpubLib.CreateDocs
             _getContainerXml = getContainerXml;
         }
 
-        // Todo Convert to IEnumerable<Task>
-        public async Task<IEnumerable<(XmlType type, XDocument doc)>> FromAsync(IEnumerable<WikiPageRecord> pageRecords, string bookTitle) =>
-            await Task.Run(() => new List<(XmlType type, XDocument doc)>()
+        public IEnumerable<Task<(XmlType type, XDocument doc)>> From(IEnumerable<WikiPageRecord> pageRecords, string bookTitle) =>
+            new List<Task<(XmlType type, XDocument doc)>>()
             {
-                ( XmlType.Container, _getContainerXml.GetContainer()),
-                ( XmlType.Content, _getContentXml.From(pageRecords, bookTitle)),
-                ( XmlType.Toc, _getTocXml.From(pageRecords, bookTitle) )
-            });
+                _getContainerXml.GetContainer(),
+                _getContentXml.From(pageRecords, bookTitle),
+                _getTocXml.From(pageRecords, bookTitle)
+            };
     }
 }

@@ -8,6 +8,6 @@ namespace WikEpubLib
 {
     public interface IGetXmlDocs
     {
-        Task<IEnumerable<(XmlType type, XDocument doc)>> FromAsync(IEnumerable<WikiPageRecord> pageRecords, string bookTitle);
+        IEnumerable<Task<(XmlType type, XDocument doc)>> From(IEnumerable<WikiPageRecord> pageRecords, string bookTitle);
     }
 }

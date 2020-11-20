@@ -33,12 +33,12 @@ namespace WikEpubLib.Records
         private string GetImageId(string originalSrc) => $"image_{_imageId++}.{originalSrc.Split('.')[^1]}";
 
         private Dictionary<string, string> GetSrcMapFrom(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
-            imageNodes.AsParallel()
+            imageNodes
             .Select(n => n.GetAttributeValue("src", "null"))
             .Distinct().ToDictionary(s => s, s => @$"{imageDirectory}\{GetImageId(s)}");
 
         private List<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
-            nodes.AsParallel().AsOrdered()
+            nodes
             .Where(n => n.Name == "h2")
             .Select(n => n.FirstChild)
             .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerText)).ToList();

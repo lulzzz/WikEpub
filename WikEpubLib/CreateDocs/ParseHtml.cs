@@ -10,14 +10,14 @@ namespace WikEpubLib.CreateDocs
 {
     public class ParseHtml : IParseHtml
     {
-        public async Task<HtmlDocument> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord) =>
+        public async Task<(HtmlDocument doc, WikiPageRecord record)> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord) =>
             await Task.Run(() =>
             {
                 var reducedDocument = ReduceDocument(htmlDocument);
                 if (wikiPageRecord.SrcMap is null)
-                    return reducedDocument;
+                    return (reducedDocument, wikiPageRecord);
                 var html = ChangeDownloadLinks(reducedDocument, wikiPageRecord.SrcMap);
-                return html;
+                return (html, wikiPageRecord);
             });
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)

@@ -1,9 +1,11 @@
-﻿using System.Xml.Linq;
+﻿using System.Threading.Tasks;
+using System.Xml.Linq;
+using WikEpubLib.Enums;
 
 namespace WikEpubLib.Interfaces
 {
     public interface IGetContainerXml
     {
-        XDocument GetContainer();
+        Task<(XmlType, XDocument)> GetContainer();
     }
 }

@@ -7,3 +7,163 @@
  
 ---------------------------------------------- 
  
+20/11/2020 12:15:18 
+ 
+ Most recent change: Task.WhenAll in GetXmlDocs  
+ 
+ average run-time over 5 iterations: 3.318 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:16:47 
+ 
+ Most recent change: Same test as above  
+ 
+ average run-time over 5 iterations: 2.742 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:24:54 
+ 
+ Most recent change: move WhenAll up the call stack 
+ 
+ average run-time over 5 iterations: 2.866 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:37:02 
+ 
+ Most recent change: separate saving xml with saving html  
+ 
+ average run-time over 5 iterations: 2.683 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:39:49 
+ 
+ Most recent change: Unite many tasks into a when all 
+ 
+ average run-time over 5 iterations: 3.269 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:41:27 
+ 
+ Most recent change: Exclude downloads from when all 
+ 
+ average run-time over 5 iterations: 2.966 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:51:47 
+ 
+ Most recent change: Separate xml and html parse, streamline parsing  
+ 
+ average run-time over 5 iterations: 3.105 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:54:27 
+ 
+ Most recent change: same as above 
+ 
+ average run-time over 5 iterations: 3.275 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 12:58:23 
+ 
+ Most recent change: Seperate when all 
+ 
+ average run-time over 5 iterations: 2.76 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:00:59 
+ 
+ Most recent change: using wait all 
+ 
+ average run-time over 5 iterations: 2.921 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:07:58 
+ 
+ Most recent change: move create dir 
+ 
+ average run-time over 5 iterations: 2.843 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:09:01 
+ 
+ Most recent change: move dir again 
+ 
+ average run-time over 5 iterations: 3.142 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:12:56 
+ 
+ Most recent change: remove parr from record creation 
+ 
+ average run-time over 5 iterations: 2.783 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:13:57 
+ 
+ Most recent change: xx 
+ 
+ average run-time over 5 iterations: 3.205 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:14:29 
+ 
+ Most recent change: remove parr again 
+ 
+ average run-time over 5 iterations: 2.488 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:15:35 
+ 
+ Most recent change: remove dl parr 
+ 
+ average run-time over 5 iterations: 3.619 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:16:23 
+ 
+ Most recent change: final debug for now 
+ 
+ average run-time over 5 iterations: 2.817 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:18:04 
+ 
+ Most recent change: without degree of parallelism 
+ 
+ average run-time over 5 iterations: 2.94 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:18:49 
+ 
+ Most recent change: 20 deg of parr 
+ 
+ average run-time over 5 iterations: 2.846 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:20:05 
+ 
+ Most recent change: without to list in downloads 
+ 
+ average run-time over 5 iterations: 2.843 seconds 
+ 
+---------------------------------------------- 
+ 

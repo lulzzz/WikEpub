@@ -33,8 +33,8 @@ namespace WikEpubLib.IO
         public async Task CreateMimeFile(Dictionary<Directories, string> directories) =>
             await File.WriteAllTextAsync($@"{directories[Directories.BOOKDIR]}\mimetype", "application/epub+zip");
 
-        public IEnumerable<Task> DownLoadImagesAsync(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
-            pageRecord.SrcMap.ToList().AsParallel().WithDegreeOfParallelism(10).Select(async src =>
+        public IEnumerable<Task> DownLoadImages(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
+            pageRecord.SrcMap.AsParallel().WithDegreeOfParallelism(10).Select(async src =>
             {
                 HttpResponseMessage responseResult = await _httpClient.GetAsync(@$"https:{src.Key}");
                 using var memoryStream = await responseResult.Content.ReadAsStreamAsync();
@@ -42,8 +42,7 @@ namespace WikEpubLib.IO
                 await memoryStream.CopyToAsync(fileStream);
             });
 
-        public async Task SaveDocumentsAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs,
-            IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs) =>
+        public async Task SaveDocumentsAsync(Dictionary<Directories, string> directories, IEnumerable<(XmlType type, XDocument doc)> xmlDocs) =>
             await Task.WhenAll(
                 xmlDocs.Select(t => t.type switch
                 {
@@ -51,8 +50,12 @@ namespace WikEpubLib.IO
                     XmlType.Content => SaveTaskAsync(t.doc, directories[Directories.OEBPS], "content.opf"),
                     XmlType.Toc => SaveTaskAsync(t.doc, directories[Directories.OEBPS], "toc.ncx"),
                     _ => throw new ArgumentException("Unknown XML type found in xml switch expression")
-                }).Concat(htmlDocs.Select(t => SaveTaskAsync(t.doc, directories[Directories.OEBPS], $"{t.record.Id}.html"))
-                ));
+                })
+                );
+
+        public async Task SaveDocumentsAsync(Dictionary<Directories, string> directories,
+            IEnumerable<(HtmlDocument doc, WikiPageRecord record)> htmlDocs) =>
+            await Task.WhenAll(htmlDocs.Select(t => SaveTaskAsync(t.doc, directories[Directories.OEBPS], $"{t.record.Id}.html")));
 
         public async Task ZipFiles(Dictionary<Directories, string> directories, Guid bookId) =>
             await Task.Run(() =>

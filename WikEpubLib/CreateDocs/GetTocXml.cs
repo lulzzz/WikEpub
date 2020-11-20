@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using WikEpubLib.Enums;
 using WikEpubLib.Interfaces;
 using WikEpubLib.Records;
 
@@ -7,29 +9,32 @@ namespace WikEpubLib.CreateDocs
 {
     public class GetTocXml : IGetTocXml
     {
-        public XDocument From(IEnumerable<WikiPageRecord> pageRecords, string bookTitle)
+        public async Task<(XmlType, XDocument)> From(IEnumerable<WikiPageRecord> pageRecords, string bookTitle)
         {
             XNamespace defaultNs = "http://www.daisy.org/z3986/2005/ncx/";
+            return await Task.Run(() =>
+            {
+                XElement ncx = new XElement(
+                    defaultNs + "ncx",
+                    new XAttribute("version", "2005-1"),
+                    new XElement(
+                            defaultNs + "head",
+                            new XElement(
+                                defaultNs + "meta",
+                                new XAttribute("name", "cover"),
+                                new XAttribute("content", "cover")
+                                )));
 
-            XElement ncx = new XElement(
-                defaultNs + "ncx",
-                new XAttribute("version", "2005-1"),
-                new XElement(
-                        defaultNs + "head",
-                        new XElement(
-                            defaultNs + "meta",
-                            new XAttribute("name", "cover"),
-                            new XAttribute("content", "cover")
-                            )));
+                XElement docTitle = new XElement(
+                    defaultNs + "docTitle",
+                    new XElement(defaultNs + "text", bookTitle)
+                    );
 
-            XElement docTitle = new XElement(
-                defaultNs + "docTitle",
-                new XElement(defaultNs + "text", bookTitle)
-                );
-
-            ncx.Add(docTitle);
-            ncx.Add(GetNavMap(pageRecords, defaultNs));
-            return new XDocument(ncx);
+                ncx.Add(docTitle);
+                ncx.Add(GetNavMap(pageRecords, defaultNs));
+                return (XmlType.Toc, new XDocument(ncx));
+            }
+            );
         }
 
         private XElement GetNavMap(IEnumerable<WikiPageRecord> pageRecords, XNamespace defaultNs)

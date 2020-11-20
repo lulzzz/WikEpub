@@ -6,6 +6,6 @@ namespace WikEpubLib.Interfaces
 {
     public interface IParseHtml
     {
-        Task<HtmlDocument> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord);
+        Task<(HtmlDocument doc, WikiPageRecord record)> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord);
     }
 }

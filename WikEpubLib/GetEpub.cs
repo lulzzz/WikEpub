@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using WikEpubLib.Enums;
 using WikEpubLib.Interfaces;
 using WikEpubLib.Records;
@@ -39,22 +38,15 @@ namespace WikEpubLib
                (await initialDocs).Select(doc => (doc, _getRecords.From(doc, "image_repo"))).ToList();
 
             var pageRecords = htmlRecordTuple.Select(t => t.record);
-            Task downloadImagesTask = Task.WhenAll(pageRecords.SelectMany(record => _epubOutput.DownLoadImagesAsync(record, directories)));
-            //convert to IEnumerable<Task> so can be run concurrently
-            Task<IEnumerable<(XmlType type, XDocument doc)>> xmlDocs = _getXmlDocs.FromAsync(pageRecords, bookTitle);
-
-            IEnumerable<(Task<HtmlDocument> doc, WikiPageRecord record)> parsedDocuments =
-                htmlRecordTuple.Select(t => (_parseHtml.ParseAsync(t.doc, t.record), t.record));
+            Task downloadImages = Task.WhenAll(pageRecords.SelectMany(record => _epubOutput.DownLoadImages(record, directories)));
+            var getXmlDocs = Task.WhenAll(_getXmlDocs.From(pageRecords, bookTitle));
+            var getParsedDocuments = Task.WhenAll(htmlRecordTuple.Select(t => (_parseHtml.ParseAsync(t.doc, t.record))));
 
             await createDirectories;
-
             Task createMime = _epubOutput.CreateMimeFile(directories);
-
-            // this should be seperated into differnet calls so that they don't have to wait (one for xml, one for html)
-            await _epubOutput.SaveDocumentsAsync(directories, xmlDocs.Result, parsedDocuments.Select(t => (t.doc.Result, t.record)));
-            await downloadImagesTask;
-            await createMime;
-
+            Task saveXml = _epubOutput.SaveDocumentsAsync(directories, (await getXmlDocs));
+            Task saveHtml = _epubOutput.SaveDocumentsAsync(directories, (await getParsedDocuments));
+            Task.WaitAll(saveXml, saveHtml, createMime, downloadImages);
             await _epubOutput.ZipFiles(directories, folderID);
         }
 
