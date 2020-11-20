@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using WikEpubLib;
 using WikEpubLib.CreateDocs;
@@ -25,11 +24,11 @@ namespace CSharpConsoleDebugger.Performance
             string bookTitle = "TestBook1";
 
             int num_iterations = 5;
-            var avg_time = Enumerable.Range(0, num_iterations).Sum(x => 
+            var avg_time = Enumerable.Range(0, num_iterations).Sum(x =>
             {
                 GetEpub getEpub = GetEpubClass();
                 return TimeCreateBook(getEpub, urls, rootDirectory, bookTitle).Result;
-            })/num_iterations;
+            }) / num_iterations;
 
             string logMessage = $"{DateTime.Now} \n \n " +
                 $"Most recent change: {userLogMessage} \n \n " +
@@ -51,15 +50,14 @@ namespace CSharpConsoleDebugger.Performance
             return getEpub;
         }
 
-        async static Task<double> TimeCreateBook(GetEpub getEpub, List<string>urls, string directory, string bookTitle)
+        private static async Task<double> TimeCreateBook(GetEpub getEpub, List<string> urls, string directory, string bookTitle)
         {
             Guid guid = Guid.NewGuid();
             Stopwatch stopwatch = Stopwatch.StartNew();
             await getEpub.FromAsync(urls, directory, bookTitle, guid);
             stopwatch.Stop();
-            File.Delete(@$"{directory}\{guid}.epub"); 
+            File.Delete(@$"{directory}\{guid}.epub");
             return stopwatch.Elapsed.TotalSeconds;
-
         }
     }
 }

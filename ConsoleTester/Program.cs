@@ -18,7 +18,6 @@ namespace CSharpConsoleDebugger
             AnalysePerf.GetRunTime();
         }
 
-
         private static async Task OldMainExtract()
         {
             List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
