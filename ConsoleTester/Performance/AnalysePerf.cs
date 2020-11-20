@@ -26,7 +26,7 @@ namespace CSharpConsoleDebugger.Performance
                 string bookTitle = "TestBook1";
 
                 Directory.CreateDirectory(@"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\Performance\EpubRepo");
-                int num_iterations = 5;
+                int num_iterations = 20;
                 var avg_time = Enumerable.Range(0, num_iterations).Sum(x =>
                 {
                     GetEpub getEpub = GetEpubClass();

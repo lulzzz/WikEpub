@@ -191,3 +191,67 @@
  
 ---------------------------------------------- 
  
+20/11/2020 13:58:28 
+ 
+ Most recent change: without predicate for node selection 
+ 
+ average run-time over 5 iterations: 2.751 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 13:59:51 
+ 
+ Most recent change: more iterations  
+ 
+ average run-time over 20 iterations: 2.501 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 14:01:26 
+ 
+ Most recent change: with body pred 
+ 
+ average run-time over 20 iterations: 2.55 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 14:03:44 
+ 
+ Most recent change: without pred 
+ 
+ average run-time over 20 iterations: 2.406 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 14:10:42 
+ 
+ Most recent change: remove predicate keeping toc nav 
+ 
+ average run-time over 20 iterations: 2.49 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 15:53:46 
+ 
+ Most recent change: testing class creation times 
+ 
+ average run-time over 20 iterations: 2.725 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 16:53:00 
+ 
+ Most recent change: Add descendants check in body pred 
+ 
+ average run-time over 20 iterations: 2.759 seconds 
+ 
+---------------------------------------------- 
+ 
+20/11/2020 16:55:18 
+ 
+ Most recent change: double && 
+ 
+ average run-time over 20 iterations: 2.743 seconds 
+ 
+---------------------------------------------- 
+ 

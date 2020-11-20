@@ -15,10 +15,12 @@ namespace CSharpConsoleDebugger
     {
         private static void Main(string[] args)
         {
-            AnalysePerf.GetRunTime();
+            //AnalysePerf.GetRunTime();
+            CreateEpub();
+           
         }
 
-        private static async Task OldMainExtract()
+        private static void CreateEpub()
         {
             List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
             string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder";
@@ -33,10 +35,7 @@ namespace CSharpConsoleDebugger
 
             GetEpub getEpub = new GetEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            await getEpub.FromAsync(urls, rootDirectory, bookTitle, guid);
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            getEpub.FromAsync(urls, rootDirectory, bookTitle, guid).Wait();
         }
     }
 }
