@@ -41,9 +41,8 @@ namespace WikEpubLib.CreateDocs
 
             bool BodyPredicate(HtmlNode node) =>
                 node.Name != "style"
-                & (node.Attributes.All(attribute => attribute.Name != "role")
-                | node.Attributes.Any(attribute => attribute.Value == "toc"));
-
+                & (node.Attributes.All(attribute => attribute.Name != "role"));
+            
             var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
             var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
             var htmlString =
