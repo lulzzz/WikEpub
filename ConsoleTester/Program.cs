@@ -1,25 +1,27 @@
-﻿using System;
-using System.Linq;
+﻿using CSharpConsoleDebugger.Performance;
+using System;
 using System.Collections.Generic;
-using System.IO.Compression;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using WikEpubLib;
-using WikEpubLib.Interfaces;
-using System.Diagnostics;
 using WikEpubLib.CreateDocs;
 using WikEpubLib.IO;
 using WikEpubLib.Records;
 
 namespace CSharpConsoleDebugger
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static void Main(string[] args)
         {
-            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery","https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
+            AnalysePerf.GetRunTime();
+        }
+
+
+        private static async Task OldMainExtract()
+        {
+            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
             string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder";
             string bookTitle = "TestBook1";
             Guid guid = Guid.NewGuid();
@@ -36,13 +38,6 @@ namespace CSharpConsoleDebugger
             await getEpub.FromAsync(urls, rootDirectory, bookTitle, guid);
             stopwatch.Stop();
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
-
         }
-
-           }
+    }
 }
-
-
-
-
-

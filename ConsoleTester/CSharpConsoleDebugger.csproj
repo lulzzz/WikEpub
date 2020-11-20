@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Performance\EpubRepo\" />
     <Folder Include="TestFolder\" />
   </ItemGroup>
 
