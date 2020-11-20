@@ -34,16 +34,18 @@ namespace WikEpubLib.CreateDocs
 
         private HtmlDocument ReduceDocument(HtmlDocument inputDocument)
         {
-            // TODO These predicates are probs really innefficient as every attribute of every node is being checked
             bool HeadPredicate(HtmlNode node) =>
                 node.Name == "meta" & node.Attributes.Any(attribute => attribute.Name == "charset")
                 | node.Name == "title";
 
             bool BodyPredicate(HtmlNode node) =>
                 node.Name != "style"
-                & (node.Attributes.All(attribute => attribute.Name != "role"));
+                && (node.Descendants().Distinct().All(d => d.Attributes.All(attribute => attribute.Name != "role")));
+
+            bool inversePredicate(HtmlNode node) =>
+                !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Name == "role")));
             
-            var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", BodyPredicate, "body");
+            var bodyString = GetHtmlString(inputDocument, "//*[@id='mw-content-text']/div[1]", inversePredicate, "body");
             var headString = GetHtmlString(inputDocument, "//html/head", HeadPredicate, "head");
             var htmlString =
                 string.Join(

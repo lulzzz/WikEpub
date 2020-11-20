@@ -39,7 +39,7 @@ namespace WikEpubLib.Records
 
         private List<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
             nodes
-            .Where(n => n.Name == "h2")
+            .Where(n => n.Name == "h2" && n.InnerText != "Contents")
             .Select(n => n.FirstChild)
             .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerText)).ToList();
     }
