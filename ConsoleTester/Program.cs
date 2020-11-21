@@ -1,4 +1,5 @@
-﻿using CSharpConsoleDebugger.Performance;
+﻿using CSharpConsoleDebugger.Performance.DebugMainConversion;
+using CSharpConsoleDebugger.Performance.DebugParseHtml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,11 +14,11 @@ namespace CSharpConsoleDebugger
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private async static Task Main(string[] args)
         {
             //AnalysePerf.GetRunTime();
-            CreateEpub();
-           
+            //CreateEpub();
+            await DebugHtmlParser.DebugParser();
         }
 
         private static void CreateEpub()
