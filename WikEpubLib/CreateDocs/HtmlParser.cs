@@ -45,7 +45,7 @@ namespace WikEpubLib.CreateDocs
                     bodyNode.AppendChild(node);
 
                 }
-                                }
+            }
             return newDocument;
         }
         
