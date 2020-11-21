@@ -41,6 +41,10 @@ namespace WikEpubLib.CreateDocs
             {
                 if (nodePredicate(node))
                 {
+                    if (node.Name == "a")
+                    {
+                       
+                    }
                     ChangeDownloadLinks(node, wikiPageRecord.SrcMap);
                     bodyNode.AppendChild(node);
 
@@ -59,6 +63,15 @@ namespace WikEpubLib.CreateDocs
                 var oldSrcValue = node.GetAttributeValue("src", "null");
                 if (srcMap.ContainsKey(oldSrcValue))
                     imgNode.SetAttributeValue("src", srcMap[oldSrcValue]);
+            }
+        }
+
+        private void RemoveHyperLinks(HtmlNode node)
+        {
+            if (node.Name == "a")
+            {
+                HtmlNode newNode = HtmlNode.CreateNode($"<span>{node.InnerText}</span>");
+                node.ParentNode.ReplaceChild(newNode, node);
             }
         }
     }
