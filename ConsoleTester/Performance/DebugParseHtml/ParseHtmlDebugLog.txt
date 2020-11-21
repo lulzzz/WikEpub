@@ -1,1 +1,12 @@
-﻿
+﻿Most recent change: Init 
+ 
+ run-time: 0.2695634 seconds 
+ 
+ -------------------------------------------------
+
+Most recent change: Remove hyperlinks from document 
+ 
+ run-time: 0.3627453 seconds 
+ 
+ ------------------------------------------------- 
+ 
