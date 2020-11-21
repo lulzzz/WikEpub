@@ -14,6 +14,7 @@ namespace WikEpubLib.CreateDocs
             await Task.Run(() =>
             {
                 HtmlDocument withContentOnly = ReduceDocument(htmlDocument);
+                RemoveLinks(withContentOnly);
                 if (wikiPageRecord.SrcMap is null)
                     return (withContentOnly, wikiPageRecord);
                 HtmlDocument withAlteredDlLinks = ChangeDownloadLinks(withContentOnly, wikiPageRecord.SrcMap);
@@ -22,9 +23,10 @@ namespace WikEpubLib.CreateDocs
             });
 
         private void RemoveLinks(HtmlDocument inputDocument) =>
-            inputDocument.DocumentNode.Descendants("a").Distinct().ToList().ForEach(node => { 
-                 
-            
+            inputDocument.DocumentNode.Descendants("a").Distinct().ToList().ForEach(node => {
+                HtmlNode newNode = HtmlNode.CreateNode($"<span>{node.InnerText}</span>");
+                if (!node.ParentNode.HasClass("reference"))
+                    node.ParentNode.ReplaceChild(newNode, node);
             });
 
         private HtmlDocument ChangeDownloadLinks(HtmlDocument inputDocument, Dictionary<string, string> srcDict)
