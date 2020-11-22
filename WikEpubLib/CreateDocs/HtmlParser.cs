@@ -41,16 +41,24 @@ namespace WikEpubLib.CreateDocs
             {
                 if (nodePredicate(node))
                 {
-                    if (node.Name == "a")
-                    {
-                       
-                    }
+                    ChangeHyperLinks(node);
                     ChangeDownloadLinks(node, wikiPageRecord.SrcMap);
                     bodyNode.AppendChild(node);
-
                 }
             }
             return newDocument;
+        }
+
+        private void ChangeHyperLinks(HtmlNode node)
+        {
+            if(node.Name == "a" && !(node.ParentNode.HasClass("reference")))
+                ReplaceNode(node);
+        }
+
+        private void ReplaceNode(HtmlNode node)
+        {
+            HtmlNode newNode = HtmlNode.CreateNode($"<span>{node.InnerText}</span>");
+            node.ParentNode.ReplaceChild(newNode, node);
         }
         
         private void ChangeDownloadLinks(HtmlNode node, Dictionary<string, string> srcMap)
