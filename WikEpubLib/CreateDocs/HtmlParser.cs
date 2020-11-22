@@ -28,6 +28,7 @@ namespace WikEpubLib.CreateDocs
             newDocument.DocumentNode.AppendChild(initNode);
             var bodyNode = newDocument.DocumentNode.SelectSingleNode("/html/body");
             
+            // this exludes images
             bool nodePredicate(HtmlNode node) => node.Name != "style"
                 && !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Name == "role")));
 
@@ -36,8 +37,7 @@ namespace WikEpubLib.CreateDocs
                 .SelectSingleNode("//*[@id='mw-content-text']/div[1]")
                 .ChildNodes;
 
-            
-            foreach (var node in childNodes)
+            childNodes.AsParallel().AsOrdered().ToList().ForEach(node =>
             {
                 if (nodePredicate(node))
                 {
@@ -45,7 +45,8 @@ namespace WikEpubLib.CreateDocs
                     ChangeDownloadLinks(node, wikiPageRecord.SrcMap);
                     bodyNode.AppendChild(node);
                 }
-            }
+            });
+            
             return newDocument;
         }
 
@@ -53,6 +54,7 @@ namespace WikEpubLib.CreateDocs
         {
             if(node.Name == "a" && !(node.ParentNode.HasClass("reference")))
                 ReplaceNode(node);
+            node.Descendants("a").AsParallel().ToList().ForEach(n => { if (!n.ParentNode.HasClass("reference")) ReplaceNode(n); });
         }
 
         private void ReplaceNode(HtmlNode node)
@@ -63,24 +65,16 @@ namespace WikEpubLib.CreateDocs
         
         private void ChangeDownloadLinks(HtmlNode node, Dictionary<string, string> srcMap)
         {
-            // and self returns the parent node regardless of match, juse use descendants and check if the parent node is img
-            var imgNodes = node.DescendantsAndSelf("img");
+            var imgNodes = node.Descendants("img");
+            if (node.Name == "img") imgNodes.Append(node);
             if (!imgNodes.Any()) return;
-            foreach (var imgNode in imgNodes)
+            imgNodes.AsParallel().ToList().ForEach(imgNode =>
             {
                 var oldSrcValue = node.GetAttributeValue("src", "null");
                 if (srcMap.ContainsKey(oldSrcValue))
                     imgNode.SetAttributeValue("src", srcMap[oldSrcValue]);
-            }
+            });
         }
 
-        private void RemoveHyperLinks(HtmlNode node)
-        {
-            if (node.Name == "a")
-            {
-                HtmlNode newNode = HtmlNode.CreateNode($"<span>{node.InnerText}</span>");
-                node.ParentNode.ReplaceChild(newNode, node);
-            }
-        }
     }
 }
