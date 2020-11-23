@@ -263,3 +263,27 @@
  
 ---------------------------------------------- 
  
+23/11/2020 14:00:25 
+ 
+ Most recent change: rest api for html  
+ 
+ average run-time over 20 iterations: 2.83 seconds 
+ 
+---------------------------------------------- 
+ 
+23/11/2020 14:40:34 
+ 
+ Most recent change: changes to html parser post-rest api change 
+ 
+ average run-time over 20 iterations: 2.599 seconds 
+ 
+---------------------------------------------- 
+ 
+23/11/2020 15:51:27 
+ 
+ Most recent change: check for vert nav box 
+ 
+ average run-time over 20 iterations: 2.791 seconds 
+ 
+---------------------------------------------- 
+ 

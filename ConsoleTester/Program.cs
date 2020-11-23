@@ -17,18 +17,26 @@ namespace CSharpConsoleDebugger
     {
         private async static Task Main(string[] args)
         {
-            //AnalysePerf.GetRunTime();
-            await CreateEpub();
+            AnalysePerf.GetRunTime();
+            //await CreateEpub();
             //await DebugHtmlParser.DebugParser();
-            //HtmlWeb webGet = new HtmlWeb();
-            //var doc = webGet.Load("https://en.wikipedia.org/api/rest_v1/page/html/Sean_Connery");
-            //Console.WriteLine(doc.DocumentNode.SelectSingleNode("/html/body").OuterHtml);
-
+            
         }
 
         private static async Task CreateEpub()
         {
-            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery" };
+            List<string> urls = new() {
+                "https://en.wikipedia.org/wiki/Sean_Connery", 
+                "https://en.wikipedia.org/wiki/Physiology", 
+                "https://en.wikipedia.org/wiki/YouTube",
+                "https://en.wikipedia.org/wiki/Eukaryote#Animal_cell",
+                "https://en.wikipedia.org/wiki/Cell_(biology)",
+                "https://en.wikipedia.org/wiki/Matrix_(mathematics)",
+                "https://en.wikipedia.org/wiki/Mathematics",
+                "https://en.wikipedia.org/wiki/Computer_science",
+                "https://en.wikipedia.org/wiki/Automata_theory",
+                "https://en.wikipedia.org/wiki/Computational_problem"
+            };
             string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder";
             string bookTitle = "TestBook1";
             Guid guid = Guid.NewGuid();

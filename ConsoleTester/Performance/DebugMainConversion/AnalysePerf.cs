@@ -55,7 +55,6 @@ namespace CSharpConsoleDebugger.Performance.DebugMainConversion
 
         private static GetEpub GetEpubClass()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             HtmlInput htmlInput = new HtmlInput();
             HtmlParser parseHtml = new HtmlParser();
             GetWikiPageRecords getWikiPageRecords = new GetWikiPageRecords();
@@ -63,8 +62,6 @@ namespace CSharpConsoleDebugger.Performance.DebugMainConversion
             EpubOutput epubOutput = new EpubOutput(new HttpClient());
 
             GetEpub getEpub = new GetEpub(parseHtml, getWikiPageRecords, getXmlDocs, htmlInput, epubOutput);
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.Elapsed.TotalSeconds);
             return getEpub;
         }
 
