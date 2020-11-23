@@ -31,12 +31,19 @@ namespace WikEpubLib.Records
 
         private int _imageId = 1;
         // need to handle svg files too once they are being converted
-        //private string GetImageId(string originalSrc) => $"image_{_imageId++}.{originalSrc.Split('.')[^1]}";
-        private string GetImageId() => $"image_{_imageId++}.png";
+        private string GetImageId(string originalSrc) => $"image_{_imageId++}.{GetExtension(originalSrc)}";
+        private string GetExtension(string originalSrc) => originalSrc switch
+        {
+            // this can be more efficient instead of checking svg every time
+            // maybe create hashset of expected formats, then check
+            string when originalSrc.Contains("svg") => "svg",
+            _ => originalSrc.Split('.')[^1]    
+        };
+        //private string GetImageId() => $"image_{_imageId++}.png";
         private Dictionary<string, string> GetSrcMapFrom(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
             imageNodes
             .Select(n => n.GetAttributeValue("src", "null"))
-            .Distinct().ToDictionary(s => s, s => @$"{imageDirectory}\{GetImageId()}");
+            .Distinct().ToDictionary(src => src, src => @$"{imageDirectory}\{GetImageId(src)}");
 
         private List<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
             nodes
