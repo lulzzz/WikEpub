@@ -10,7 +10,7 @@ namespace WikEpubLib.Records
         public WikiPageRecord From(HtmlDocument html, string imageDirectory)
         {
             IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
-            IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants();
+            IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants().Distinct();
             IEnumerable<HtmlNode> imgNodes = GetImageNodesFrom(contentNodes);
             return new WikiPageRecord
             {
@@ -30,11 +30,11 @@ namespace WikEpubLib.Records
 
         private int _imageId = 1;
         //private string GetImageId(string originalSrc) => $"image_{_imageId++}.{originalSrc.Split('.')[^1]}";
-        private string GetImageId(string originalSrc) => $"image_{_imageId++}.png";
+        private string GetImageId() => $"image_{_imageId++}.png";
         private Dictionary<string, string> GetSrcMapFrom(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
             imageNodes
             .Select(n => n.GetAttributeValue("src", "null"))
-            .Distinct().ToDictionary(s => s, s => @$"{imageDirectory}\{GetImageId(s)}");
+            .Distinct().ToDictionary(s => s, s => @$"{imageDirectory}\{GetImageId()}");
 
         private List<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
             nodes
