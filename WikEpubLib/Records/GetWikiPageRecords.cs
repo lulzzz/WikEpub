@@ -30,6 +30,7 @@ namespace WikEpubLib.Records
         private IEnumerable<HtmlNode> GetImageNodesFrom(IEnumerable<HtmlNode> nodes) => nodes.Where(n => n.Name == "img");
 
         private int _imageId = 1;
+        // need to handle svg files too once they are being converted
         //private string GetImageId(string originalSrc) => $"image_{_imageId++}.{originalSrc.Split('.')[^1]}";
         private string GetImageId() => $"image_{_imageId++}.png";
         private Dictionary<string, string> GetSrcMapFrom(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
