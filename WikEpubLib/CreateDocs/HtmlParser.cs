@@ -13,7 +13,7 @@ namespace WikEpubLib.CreateDocs
     {
 
         public async Task<(HtmlDocument doc, WikiPageRecord record)> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord) =>
-            await Task.Run(() => (CreateHtml(htmlDocument, wikiPageRecord), wikiPageRecord)); 
+            await Task.Run(() => (CreateHtml(htmlDocument, wikiPageRecord), wikiPageRecord) ); 
 
         public HtmlDocument CreateHtml(HtmlDocument inputDocument, WikiPageRecord wikiPageRecord)
         {
@@ -28,7 +28,7 @@ namespace WikEpubLib.CreateDocs
 
             var childNodes = inputDocument
                 .DocumentNode
-                .SelectSingleNode("//*[@id='mw-content-text']/div[1]")
+                .SelectSingleNode("//html/body")
                 .ChildNodes;
 
             childNodes.AsParallel().AsOrdered().ToList().ForEach(node =>
@@ -46,12 +46,12 @@ namespace WikEpubLib.CreateDocs
 
         private void ChangeHyperLinks(HtmlNode node)
         {
-            if(node.Name == "a" && !node.ParentNode.HasClass("reference"))
+            if(node.Name == "a" && !node.ParentNode.HasClass("mw-ref"))
                 ReplaceNode(node);
             node.Descendants("a")
                 .AsParallel()
                 .ToList()
-                .ForEach(n => { if (!n.ParentNode.HasClass("reference") & !n.HasClass("image")) ReplaceNode(n); });
+                .ForEach(n => { if (!n.ParentNode.HasClass("mw-ref") & n.FirstChild.Name != "img") ReplaceNode(n); });
 
         }
 

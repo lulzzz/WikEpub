@@ -10,7 +10,7 @@ namespace WikEpubLib.Records
         public WikiPageRecord From(HtmlDocument html, string imageDirectory)
         {
             IEnumerable<HtmlNode> allNodes = html.DocumentNode.Descendants();
-            IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.GetAttributeValue("id", "null") == "mw-content-text").FirstChild.Descendants().Distinct();
+            IEnumerable<HtmlNode> contentNodes = allNodes.First(n => n.Name == "body").Descendants().Distinct();
             IEnumerable<HtmlNode> imgNodes = GetImageNodesFrom(contentNodes);
             return new WikiPageRecord
             {
@@ -18,6 +18,7 @@ namespace WikEpubLib.Records
                 SrcMap = imgNodes.Any() ? GetSrcMapFrom(imgNodes, imageDirectory) : null,
                 SectionHeadings = GetSectionHeadingsFrom(contentNodes)
             };
+
         }
 
         private string GetIdFrom(IEnumerable<HtmlNode> nodes) =>
@@ -38,8 +39,7 @@ namespace WikEpubLib.Records
 
         private List<(string id, string sectionName)> GetSectionHeadingsFrom(IEnumerable<HtmlNode> nodes) =>
             nodes
-            .Where(n => n.Name == "h2" && n.InnerText != "Contents")
-            .Select(n => n.FirstChild)
+            .Where(n => n.Name == "h2")
             .Select(n => ($"#{n.GetAttributeValue("id", "null")}", n.InnerText)).ToList();
     }
 }
