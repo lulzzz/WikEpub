@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Performance\DebugParseHtml\HtmlProducts\" />
-    <Folder Include="TestFolder\" />
+    <Folder Include="TestFolder\TestBook\" />
   </ItemGroup>
 
 </Project>
