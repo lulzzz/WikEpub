@@ -12,13 +12,8 @@ namespace WikEpubLib.CreateDocs
     public class HtmlParser : IParseHtml
     {
 
-        public async Task<(HtmlDocument doc, WikiPageRecord record)> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord)
-        {
-            return await Task.Run(() =>
-            {
-                return (CreateHtml(htmlDocument, wikiPageRecord), wikiPageRecord);
-            });
-        }
+        public async Task<(HtmlDocument doc, WikiPageRecord record)> ParseAsync(HtmlDocument htmlDocument, WikiPageRecord wikiPageRecord) =>
+            await Task.Run(() => (CreateHtml(htmlDocument, wikiPageRecord), wikiPageRecord)); 
 
         public HtmlDocument CreateHtml(HtmlDocument inputDocument, WikiPageRecord wikiPageRecord)
         {
