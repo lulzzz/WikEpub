@@ -1,5 +1,6 @@
 ﻿using CSharpConsoleDebugger.Performance.DebugMainConversion;
 using CSharpConsoleDebugger.Performance.DebugParseHtml;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,11 +20,15 @@ namespace CSharpConsoleDebugger
             //AnalysePerf.GetRunTime();
             //await CreateEpub();
             //await DebugHtmlParser.DebugParser();
+            HtmlWeb webGet = new HtmlWeb();
+            var doc = webGet.Load("https://en.wikipedia.org/api/rest_v1/page/html/Wikipedia");
+            Console.WriteLine(doc.DocumentNode.OuterHtml);
+
         }
 
         private static async Task CreateEpub()
         {
-            List<string> urls = new() { "https://en.wikipedia.org/wiki/Sean_Connery", "https://en.wikipedia.org/wiki/Physiology", "https://en.wikipedia.org/wiki/YouTube" };
+            List<string> urls = new() { "https://en.wikipedia.org/wiki/Wikipedia" };
             string rootDirectory = @"C:\Users\User\Documents\Code\WikEpub\ConsoleTester\TestFolder";
             string bookTitle = "TestBook1";
             Guid guid = Guid.NewGuid();

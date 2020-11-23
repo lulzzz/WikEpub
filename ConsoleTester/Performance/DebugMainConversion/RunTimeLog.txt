@@ -255,3 +255,11 @@
  
 ---------------------------------------------- 
  
+23/11/2020 11:42:19 
+ 
+ Most recent change: Change html parser 
+ 
+ average run-time over 20 iterations: 2.667 seconds 
+ 
+---------------------------------------------- 
+ 
