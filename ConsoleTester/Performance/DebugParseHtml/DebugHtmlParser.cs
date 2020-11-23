@@ -40,10 +40,7 @@ namespace CSharpConsoleDebugger.Performance.DebugParseHtml
 #endif
             var docs = urls.Select(url => webGetter.Load(url)).ToList();
             IEnumerable<(HtmlDocument doc, WikiPageRecord record)> docRecs = docs.Select(doc => (doc, getRecords.From(doc, "image_repo")));
-            Dictionary<string, IParseHtml> parserDict = new Dictionary<string, IParseHtml>() {
-                {"new", new HtmlParser() },
-                {"original", new ParseHtml()}
-            };
+            Dictionary<string, IParseHtml> parserDict = new Dictionary<string, IParseHtml>() {{"new", new HtmlParser() }};
             IParseHtml parseHtml = parserDict["new"];
             Stopwatch stopwatch = Stopwatch.StartNew();
             var parsedHtml = await Task.WhenAll(docRecs.Select(docRec => parseHtml.ParseAsync(docRec.doc, docRec.record)));
