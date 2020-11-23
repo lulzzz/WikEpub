@@ -24,7 +24,7 @@ namespace WikEpubLib.CreateDocs
             var bodyNode = newDocument.DocumentNode.SelectSingleNode("/html/body");
 
             bool nodePredicate(HtmlNode node) => node.Name != "style"
-                && !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Name == "role")));
+                && !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Value == "navigation" | a.Value == "vertical-navbox nowraplinks hlist")));
 
             var childNodes = inputDocument
                 .DocumentNode
@@ -51,8 +51,18 @@ namespace WikEpubLib.CreateDocs
             node.Descendants("a")
                 .AsParallel()
                 .ToList()
-                .ForEach(n => { if (!n.ParentNode.HasClass("mw-ref") & n.FirstChild.Name != "img") ReplaceNode(n); });
+                .ForEach(n => { 
+                    if (!n.ParentNode.HasClass("mw-ref") & n.HasChildNodes && n.FirstChild.Name != "img") ReplaceNode(n);
+                    ChangeReferenceLink(n);
+                });
 
+        }
+
+        private void ChangeReferenceLink(HtmlNode node)
+        {
+            var oldHref = node.GetAttributeValue("href", "null");
+            if (oldHref != "null")
+                node.SetAttributeValue("href", $"#{oldHref.Split("#").Last()}");
         }
 
         private void ReplaceNode(HtmlNode node)
