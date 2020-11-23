@@ -100,3 +100,9 @@ Most recent change: ordered again
  
  ------------------------------------------------- 
  
+Most recent change: Check after everything is working 
+ 
+ run-time: 0.2065307 seconds 
+ 
+ ------------------------------------------------- 
+ 

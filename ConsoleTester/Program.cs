@@ -17,8 +17,8 @@ namespace CSharpConsoleDebugger
         private async static Task Main(string[] args)
         {
             //AnalysePerf.GetRunTime();
-            await CreateEpub();
-            //await DebugHtmlParser.DebugParser();
+            //await CreateEpub();
+            await DebugHtmlParser.DebugParser();
         }
 
         private static async Task CreateEpub()

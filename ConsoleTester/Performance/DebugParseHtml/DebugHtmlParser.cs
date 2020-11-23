@@ -1,6 +1,6 @@
 ﻿//#define DL
-#define PRINT
-//#define LOG
+//#define PRINT
+#define LOG
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
