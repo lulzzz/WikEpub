@@ -36,8 +36,9 @@ namespace WikEpubLib.IO
         public IEnumerable<Task> DownLoadImages(WikiPageRecord pageRecord, Dictionary<Directories, string> directories) =>
             pageRecord.SrcMap.AsParallel().WithDegreeOfParallelism(10).Select(async src =>
             {
-                HttpResponseMessage responseResult = await _httpClient.GetAsync(@$"https:{src.Key}");
-                using var memoryStream = await responseResult.Content.ReadAsStreamAsync();
+                var srcKey = src.Key.StartsWith(@"/api") ? $"https://en.wikipedia.org{src.Key}" : @$"https:{src.Key}";
+                HttpResponseMessage response = await _httpClient.GetAsync(srcKey);
+                using var memoryStream = await response.Content.ReadAsStreamAsync();
                 await using var fileStream = File.Create($@"{directories[Directories.OEBPS]}\{src.Value}");
                 await memoryStream.CopyToAsync(fileStream);
             });
