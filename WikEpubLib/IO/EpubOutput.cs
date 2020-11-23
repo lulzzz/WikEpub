@@ -38,14 +38,14 @@ namespace WikEpubLib.IO
             {
                 var srcKey = src.Key switch
                 {
-                    string when src.Key.StartsWith("https://") => src.Key,
-                    string when src.Key.StartsWith(@"/api") => $"https://en.wikipedia.org{src.Key}",
-                    string when src.Key.StartsWith(@"//") => @$"https:{src.Key}",
+                    _ when src.Key.StartsWith("https://") => src.Key,
+                    _ when src.Key.StartsWith(@"/api") => $"https://en.wikipedia.org{src.Key}",
+                    _ when src.Key.StartsWith(@"//") => @$"https:{src.Key}",
                     _ => "unknown" 
                 };
                 if (srcKey == "unknown")
                 {
-                    Console.WriteLine("Unknown image href encountered: \n" + src.Key);
+                    Console.WriteLine($"Unknown image href encountered in {pageRecord.Id} wiki: \n" + src.Key);
                     return;
                 }
                 HttpResponseMessage response = await _httpClient.GetAsync(srcKey);
