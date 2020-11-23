@@ -57,7 +57,7 @@ namespace CSharpConsoleDebugger.Performance.DebugMainConversion
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             HtmlInput htmlInput = new HtmlInput();
-            ParseHtml parseHtml = new ParseHtml();
+            HtmlParser parseHtml = new HtmlParser();
             GetWikiPageRecords getWikiPageRecords = new GetWikiPageRecords();
             GetXmlDocs getXmlDocs = new GetXmlDocs(new GetTocXml(), new GetContentXml(), new GetContainerXml());
             EpubOutput epubOutput = new EpubOutput(new HttpClient());
