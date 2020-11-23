@@ -24,7 +24,8 @@ namespace WikEpubLib.CreateDocs
             var bodyNode = newDocument.DocumentNode.SelectSingleNode("/html/body");
 
             bool nodePredicate(HtmlNode node) => node.Name != "style"
-                && !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Value == "navigation" | a.Value == "vertical-navbox nowraplinks hlist")));
+                && !(node.Name == "style" || 
+                node.Descendants().Any(d => d.Attributes.Any(a => a.Value == "navigation" | a.Value == "vertical-navbox nowraplinks hlist")));
 
             var childNodes = inputDocument
                 .DocumentNode
