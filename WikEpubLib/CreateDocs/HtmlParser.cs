@@ -27,8 +27,7 @@ namespace WikEpubLib.CreateDocs
                 HtmlNode.CreateNode($"<html><head><meta charset=\"utf-8\"><title>{wikiPageRecord.Id.Replace('_', ' ')}</title></head><body></body></html>");
             newDocument.DocumentNode.AppendChild(initNode);
             var bodyNode = newDocument.DocumentNode.SelectSingleNode("/html/body");
-            
-            // this exludes images
+
             bool nodePredicate(HtmlNode node) => node.Name != "style"
                 && !(node.Name == "style" || node.Descendants().Any(d => d.Attributes.Any(a => a.Name == "role")));
 
@@ -52,9 +51,13 @@ namespace WikEpubLib.CreateDocs
 
         private void ChangeHyperLinks(HtmlNode node)
         {
-            if(node.Name == "a" && !(node.ParentNode.HasClass("reference")))
+            if(node.Name == "a" && !node.ParentNode.HasClass("reference"))
                 ReplaceNode(node);
-            node.Descendants("a").AsParallel().ToList().ForEach(n => { if (!n.ParentNode.HasClass("reference")) ReplaceNode(n); });
+            node.Descendants("a")
+                .AsParallel()
+                .ToList()
+                .ForEach(n => { if (!n.ParentNode.HasClass("reference") & !n.HasClass("image")) ReplaceNode(n); });
+
         }
 
         private void ReplaceNode(HtmlNode node)
@@ -68,9 +71,9 @@ namespace WikEpubLib.CreateDocs
             var imgNodes = node.Descendants("img");
             if (node.Name == "img") imgNodes.Append(node);
             if (!imgNodes.Any()) return;
-            imgNodes.AsParallel().ToList().ForEach(imgNode =>
+            imgNodes.Distinct().AsParallel().ToList().ForEach(imgNode =>
             {
-                var oldSrcValue = node.GetAttributeValue("src", "null");
+                var oldSrcValue = imgNode.GetAttributeValue("src", "null");
                 if (srcMap.ContainsKey(oldSrcValue))
                     imgNode.SetAttributeValue("src", srcMap[oldSrcValue]);
             });
