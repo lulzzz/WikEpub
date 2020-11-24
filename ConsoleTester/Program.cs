@@ -29,7 +29,7 @@ namespace CSharpConsoleDebugger
                 "https://en.wikipedia.org/wiki/Sean_Connery", 
                 "https://en.wikipedia.org/wiki/Physiology", 
                 "https://en.wikipedia.org/wiki/YouTube",
-                "https://en.wikipedia.org/wiki/Eukaryote#Animal_cell",
+                "https://en.wikipedia.org/wiki/Eukaryote",
                 "https://en.wikipedia.org/wiki/Cell_(biology)",
                 "https://en.wikipedia.org/wiki/Matrix_(mathematics)",
                 "https://en.wikipedia.org/wiki/Mathematics",
