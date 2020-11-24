@@ -36,8 +36,8 @@ namespace WikEpubLib.Records
         {
             // this can be more efficient instead of checking svg every time
             // maybe create hashset of expected formats, then check
-            string when originalSrc.Contains("svg") => "svg",
-            _ => originalSrc.Split('.')[^1]    
+            string when originalSrc.Contains("svg") => "svg.png",
+            _ => originalSrc.Split('.')[^1] + ".png"    
         };
         //private string GetImageId() => $"image_{_imageId++}.png";
         private Dictionary<string, string> GetSrcMapFrom(IEnumerable<HtmlNode> imageNodes, string imageDirectory) =>
