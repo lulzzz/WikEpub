@@ -2,17 +2,24 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{ 
+@{
     ViewData["Title"] = "Create Epub Book";
 }
 <div id="main-input-container">
-    <form asp-controller="Home" asp-action="CreateEpub" >
+    <form asp-controller="Home" asp-action="CreateEpub">
         <p id="title-input">
             Book Title: <input asp-for="BookTitle" name="bookTitle" />
         </p>
-        <p id="url-input">
-            Wiki-urls: <input asp-for="WikiPages" /> <button type="submit">submit</button>
+        <p>
+            Wikipedia url: <input name="WikiPages" id="1" /> <button type="button">Add url</button><button type="button" id="add-button">Remove url</button>
+
+        </p>
+            
+        <p>
+            <button type="submit">Submit</button>
         </p>
     </form>
+
 </div>
+
 
