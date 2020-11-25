@@ -26,37 +26,48 @@ namespace WikEpub.Controllers
             _logger = logger;
             _webHostEnvironment = webHostEnv;
             _getEpub = getEpub;
-            _downloadRoot =  $@"{_webHostEnvironment.ContentRootPath}\Downloads\";
+            _downloadRoot = $@"{_webHostEnvironment.ContentRootPath}\Downloads\";
         }
-
-        public async Task<IActionResult> Index(Guid guid)
+        
+        public IActionResult Index() => RedirectToAction("CreateEpub");
+        
+        [HttpGet] 
+        [Route("")]
+        public IActionResult CreateEpub() => View();
+        
+        
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> CreateEpub(EpubFile epubFile)
         {
-            await ClearGuidFile(guid);
-            return View();
-        }
-
-        public IActionResult DownloadPage(Guid guid, string urls, string bookTitle)
-        {
-            return View(new DownloadModel { BookTitle = bookTitle, WikiPages = urls.Split(' '), guid = guid});
-        }
-
-
-        public IActionResult BadUrls()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> DownloadAction(string urls, string bookTitle)
-        {
+            epubFile.guid = Guid.NewGuid();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             // validation of urls here, and checks for exceptions thrown by converter too (try/catch)
-            if (urls is null | bookTitle is null) return RedirectToAction("BadUrls");
-            Guid guid = Guid.NewGuid();
-            if (await GetEpub(guid, urls, bookTitle))
-                return RedirectToAction("DownloadPage", new {guid = guid, urls = urls, bookTitle = bookTitle});
+            if (epubFile.WikiPages is null | epubFile.BookTitle is null) return RedirectToAction("BadUrls");
+            if (await GetEpub(epubFile))
+                return RedirectToAction("DownloadPage", epubFile);
             return RedirectToAction("BadUrls");
         }
+        
+        [Route("Download")]
+        public IActionResult DownloadPage(EpubFile epubFile) => View(epubFile);
 
-        public async Task ClearGuidFile(Guid guid) =>
+        [Route("ConversionFail")]
+        public IActionResult BadUrls() => View();
+
+        [Route("FileNotFound")]
+        public IActionResult FileNotFound() => View();
+
+        public async Task<IActionResult> GoBackAndDelete(EpubFile epubFile)
+        {
+            await ClearEpubFile(epubFile.guid);
+            return RedirectToAction("CreateEpub");
+        }
+        
+        public async Task ClearEpubFile(Guid guid) =>
             await Task.Run(() =>
             {
                 var filePath = $@"{_downloadRoot}{guid}.epub";
@@ -64,26 +75,25 @@ namespace WikEpub.Controllers
                     System.IO.File.Delete(filePath);
             });
 
-        public async Task<bool> GetEpub(Guid guid, string urls, string bookTitle)
+        public async Task<bool> GetEpub(EpubFile EpubFile)
         {
-            bookTitle = bookTitle is null ? "WikiBook" : bookTitle;
-            await _getEpub.FromAsync(urls.Split(' '), _downloadRoot, bookTitle, guid);
+            await _getEpub.FromAsync(EpubFile.WikiPages.Split(' '), _downloadRoot, EpubFile.BookTitle, EpubFile.guid);
             return true;
         }
-        
-        public async Task<FileResult> DownloadFile(Guid guid, string bookTitle)
+
+        public async Task<IActionResult> DownloadFile(EpubFile epubFile)
         {
-            var fullDownloadPath = $"{_downloadRoot}{guid}.epub";
-            byte[] epubFile = await System.IO.File.ReadAllBytesAsync(fullDownloadPath);
-            await ClearGuidFile(guid);
-            return File(epubFile, "application/epub+zip", $"{bookTitle}.epub");
+            var fullDownloadPath = $"{_downloadRoot}{epubFile.guid}.epub";
+            if (!System.IO.File.Exists(fullDownloadPath))
+                return RedirectToAction("FileNotFound");
+            byte[] byteFile = await System.IO.File.ReadAllBytesAsync(fullDownloadPath);
+            await ClearEpubFile(epubFile.guid);
+            return File(byteFile, "application/epub+zip", $"{epubFile.BookTitle}.epub");
         }
 
        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() =>
+             View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
