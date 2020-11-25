@@ -1,0 +1,18 @@
+﻿@model WikEpub.Models.DownloadModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h2>Book details</h2>
+<dl>
+    <dt>Title</dt>
+    <dd>@Model.BookTitle</dd>
+    <dt>Wikipedia pages</dt>
+    @foreach (string p in Model.WikiPages)
+    {
+        <dd>@p.Split('/')[^1].Replace('_', ' ')</dd>
+    }
+</dl>
+<input type="button" value="Download" onclick="location.href='@Url.Action("DownloadFile","Home", new {guid = Model.guid, bookTitle = Model.BookTitle })'" />
+<input  type="button" value="Back", onclick="location.href='@Url.Action("Index","Home", new {guid = Model.guid})'" />
