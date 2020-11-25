@@ -12,7 +12,7 @@ namespace WikEpub.Models
         [Required]
         public string BookTitle { get; set; }
         [Required]
-        public string WikiPages { get; set; }
+        public IEnumerable<string> WikiPages { get; set; }
         public Guid guid { get; set; }
 
         
