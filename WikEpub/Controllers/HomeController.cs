@@ -11,6 +11,7 @@ using WikEpub.Models;
 using Microsoft.AspNetCore.Http;
 using WikEpubLib.Interfaces;
 using WikEpubLib;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WikEpub.Controllers
 {
@@ -31,13 +32,11 @@ namespace WikEpub.Controllers
         
         public IActionResult Index() => RedirectToAction("CreateEpub");
         
-        [HttpGet] 
-        [Route("")]
+        [HttpGet, Route("")]
         public IActionResult CreateEpub() => View();
         
         
-        [HttpPost]
-        [Route("")]
+        [HttpPost, Route("")]
         public async Task<IActionResult> CreateEpub(EpubFile epubFile)
         {
             epubFile.guid = Guid.NewGuid();
@@ -49,9 +48,9 @@ namespace WikEpub.Controllers
             if (epubFile.WikiPages is null | epubFile.BookTitle is null) return RedirectToAction("BadUrls");
             if (await GetEpub(epubFile))
                 return RedirectToAction("DownloadPage", epubFile);
-            return RedirectToAction("BadUrls");
+            return Redirect("/ConversionFail");
         }
-        
+         
         [Route("Download")]
         public IActionResult DownloadPage(EpubFile epubFile) => View(epubFile);
 
@@ -77,7 +76,7 @@ namespace WikEpub.Controllers
 
         public async Task<bool> GetEpub(EpubFile EpubFile)
         {
-            await _getEpub.FromAsync(EpubFile.WikiPages.Split(' '), _downloadRoot, EpubFile.BookTitle, EpubFile.guid);
+            await _getEpub.FromAsync(EpubFile.WikiPages, _downloadRoot, EpubFile.BookTitle, EpubFile.guid);
             return true;
         }
 
@@ -85,7 +84,7 @@ namespace WikEpub.Controllers
         {
             var fullDownloadPath = $"{_downloadRoot}{epubFile.guid}.epub";
             if (!System.IO.File.Exists(fullDownloadPath))
-                return RedirectToAction("FileNotFound");
+                return Redirect("/FileNotFound");
             byte[] byteFile = await System.IO.File.ReadAllBytesAsync(fullDownloadPath);
             await ClearEpubFile(epubFile.guid);
             return File(byteFile, "application/epub+zip", $"{epubFile.BookTitle}.epub");
