@@ -9,7 +9,7 @@
     <dt>Title</dt>
     <dd>@Model.BookTitle</dd>
     <dt>Wikipedia pages</dt>
-    @foreach (string p in Model.WikiPages.Split(' '))
+    @foreach (string p in Model.WikiPages)
     {
         <dd>@p.Split('/')[^1].Replace('_', ' ')</dd>
     }
