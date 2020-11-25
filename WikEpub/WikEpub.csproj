@@ -15,4 +15,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Downloads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WikEpubLib\WikEpubLib.csproj" />
+  </ItemGroup>
+
 </Project>
