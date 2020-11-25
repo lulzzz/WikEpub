@@ -1,15 +1,17 @@
-﻿@*
+﻿@model WikEpub.Models.EpubFile
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{ 
+    ViewData["Title"] = "Create Epub Book";
 }
 <div id="main-input-container">
-    <form asp-controller="Home" asp-action="DownloadAction" method="post">
+    <form asp-controller="Home" asp-action="CreateEpub" >
         <p id="title-input">
-            Book Title: <input type="text" name="bookTitle" />
+            Book Title: <input asp-for="BookTitle" name="bookTitle" />
         </p>
         <p id="url-input">
-            Wiki-urls: <input type="text" name="urls" /> <input type="submit" value="submit" />
+            Wiki-urls: <input asp-for="WikiPages" /> <button type="submit">submit</button>
         </p>
     </form>
 </div>
