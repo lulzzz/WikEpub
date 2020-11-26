@@ -6,15 +6,13 @@
     ViewData["Title"] = "Create Epub Book";
 }
 <div id="main-input-container">
-    <form asp-controller="Home" asp-action="CreateEpub">
+    <form id="main-form" asp-controller="Home" asp-action="CreateEpub">
         <p id="title-input">
             Book Title: <input asp-for="BookTitle" name="bookTitle" />
         </p>
         <p>
-            Wikipedia url: <input name="WikiPages" id="1" /> <button type="button">Add url</button><button type="button" id="add-button">Remove url</button>
-
+            Wikipedia url: <input name="WikiPages" id="input1" class="url-input" /> <button id="add-button" type="button">Add wikipage</button><button id ="remove-button" type="button" >Remove wikipage</button>
         </p>
-            
         <p>
             <button type="submit">Submit</button>
         </p>

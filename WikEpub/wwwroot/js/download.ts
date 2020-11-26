@@ -1,6 +1,12 @@
-﻿let button = document.getElementById("add-button");
+﻿
 
-button.addEventListener("click", () => {
-    console.log("button clicked");
-});
+
+let urlInputEventHandler = new AddRemoveInput(document.getElementById("main-form"), 3);
+let urlValidator = new ValidateUrls(document.getElementsByClassName("url-input"));
+
+
+ 
+
+
+
 
