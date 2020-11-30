@@ -1,4 +1,7 @@
-﻿class AddRemoveInput implements IAddRemoveInput{
+﻿
+import { IAddRemoveInput } from "./Interfaces/IAddRemoveInput";
+
+export class AddRemoveInput implements IAddRemoveInput {
     private nodeNum = 1;
     private inputChangeEvent: Event;
     constructor(
