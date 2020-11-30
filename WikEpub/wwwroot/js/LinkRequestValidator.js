@@ -1,6 +1,9 @@
-var LinkRequestValidator = /** @class */ (function () {
-    function LinkRequestValidator() {
+class LinkRequestValidator {
+    constructor(parentNode, nodeIndex) {
+        this.parentNode = parentNode;
+        this.nodeIndex = nodeIndex;
+        this.nodeNum = 1;
+        addEventListener;
     }
-    return LinkRequestValidator;
-}());
+}
 //# sourceMappingURL=LinkRequestValidator.js.map
