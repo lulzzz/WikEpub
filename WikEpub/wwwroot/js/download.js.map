@@ -1,1 +1,1 @@
-{"version":3,"file":"download.js","sourceRoot":"","sources":["download.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,qBAAqB,CAAC;AAGrD,IAAI,oBAAoB,GAAmB,IAAI,cAAc,CAAC,QAAQ,CAAC,cAAc,CAAC,WAAW,CAAC,EAAE,CAAC,CAAC,CAAC;AAMvG,oFAAoF"}
+{"version":3,"file":"download.js","sourceRoot":"","sources":["download.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,qBAAqB,CAAC;AAGnD,IAAI,oBAAoB,GAAiB,IAAI,YAAY,CAAC,QAAQ,CAAC,cAAc,CAAC,WAAW,CAAC,EAAE,CAAC,CAAC,CAAC;AAMnG,oFAAoF"}

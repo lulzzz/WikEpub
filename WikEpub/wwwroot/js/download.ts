@@ -1,7 +1,7 @@
-﻿import { AddRemoveInput } from "./AddRemoveInput.js";
+﻿import { InputManager } from "./AddRemoveInput.js";
 
 
-let urlInputEventHandler: AddRemoveInput = new AddRemoveInput(document.getElementById("main-form"), 3);
+let urlInputEventHandler: InputManager = new InputManager(document.getElementById("main-form"), 3);
 
 
 
