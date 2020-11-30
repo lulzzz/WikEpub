@@ -1,10 +1,8 @@
-var ValidateUrls = /** @class */ (function () {
-    function ValidateUrls(inputNodes, requestValidator) {
-        var _this = this;
+class ValidateUrls {
+    constructor(inputNodes, requestValidator) {
         this.inputNodes = inputNodes;
         this.requestValidator = requestValidator;
-        document.addEventListener('inputChange', function () { _this.inputNodes = document.getElementsByClassName("url-input"); });
+        document.addEventListener('inputChange', () => { this.inputNodes = document.getElementsByClassName("url-input"); });
     }
-    return ValidateUrls;
-}());
+}
 //# sourceMappingURL=ValidateUrls.js.map
