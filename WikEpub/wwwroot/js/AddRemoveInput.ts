@@ -1,9 +1,10 @@
 ﻿
-import { IAddRemoveInput } from "./Interfaces/IAddRemoveInput";
+import { IManageInputs } from "./Interfaces/IAddRemoveInput";
 
-export class AddRemoveInput implements IAddRemoveInput {
+export class InputManager implements IManageInputs {
     private nodeNum = 1;
     private inputChangeEvent: Event;
+
     constructor(
         private parentNode: Node,
         private nodeIndex: number
@@ -14,7 +15,7 @@ export class AddRemoveInput implements IAddRemoveInput {
         removeButton.addEventListener("click", () => this.removeInput());
         this.inputChangeEvent = new Event('inputChange');
     }
-    
+
     public insertInput(enclosingNodeType: string): void {
         if (this.nodeNum > 9) return;
         this.nodeIndex++;

@@ -1,4 +1,4 @@
-export class AddRemoveInput {
+export class InputManager {
     constructor(parentNode, nodeIndex) {
         this.parentNode = parentNode;
         this.nodeIndex = nodeIndex;
