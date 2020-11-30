@@ -1,23 +1,17 @@
-﻿
-import { IManageInputs } from "./Interfaces/IAddRemoveInput";
-
-export class InputManager implements IManageInputs {
-    private nodeNum = 1;
-    private inputChangeEvent: Event;
-
-    constructor(
-        private parentNode: Node,
-        private nodeIndex: number
-    ) {
+export class InputManager {
+    constructor(parentNode, nodeIndex) {
+        this.parentNode = parentNode;
+        this.nodeIndex = nodeIndex;
+        this.nodeNum = 1;
         let addButton = document.getElementById("add-button");
         let removeButton = document.getElementById("remove-button");
         addButton.addEventListener("click", () => this.insertInput("p"));
         removeButton.addEventListener("click", () => this.removeInput());
         this.inputChangeEvent = new Event('inputChange');
     }
-
-    public insertInput(enclosingNodeType: string): void {
-        if (this.nodeNum > 9) return;
+    insertInput(enclosingNodeType) {
+        if (this.nodeNum > 9)
+            return;
         this.nodeIndex++;
         this.nodeNum++;
         let insertNode = this.createInputNode(enclosingNodeType);
@@ -26,22 +20,20 @@ export class InputManager implements IManageInputs {
         this.addButtons(this.parentNode.childNodes[this.nodeIndex]);
         document.dispatchEvent(this.inputChangeEvent);
     }
-
-    public removeInput() : void {
-        if (this.nodeNum === 1) return;
+    removeInput() {
+        if (this.nodeNum === 1)
+            return;
         this.parentNode.childNodes[this.nodeIndex].remove();
         this.nodeIndex--;
         this.nodeNum--;
         this.addButtons(this.parentNode.childNodes[this.nodeIndex]);
         document.dispatchEvent(this.inputChangeEvent);
     }
-
-    private insertAfter(newSiblingNode: Node, newNode: Node): Node {
+    insertAfter(newSiblingNode, newNode) {
         newSiblingNode.parentNode.insertBefore(newNode, newSiblingNode);
         return newSiblingNode;
     }
-
-    private createInputNode(enclosingNodeType: string): Node {
+    createInputNode(enclosingNodeType) {
         let enclosingNode = document.createElement(enclosingNodeType);
         let inputNode = document.createElement("input");
         inputNode.setAttribute("name", "WikiPages");
@@ -51,8 +43,7 @@ export class InputManager implements IManageInputs {
         enclosingNode.appendChild(inputNode);
         return enclosingNode;
     }
-
-    private addButtons(node: Node): void {
+    addButtons(node) {
         let addButton = this.createButton("add-button", "button", "Add wikipage");
         let removeButton = this.createButton("remove-button", "button", "Remove wikipage");
         node.appendChild(addButton);
@@ -60,14 +51,11 @@ export class InputManager implements IManageInputs {
         addButton.addEventListener("click", () => this.insertInput("p"));
         removeButton.addEventListener("click", () => this.removeInput());
     }
-
-    private removeButtons(node: Node): void {
-        
+    removeButtons(node) {
         node.removeChild(document.getElementById("add-button"));
         node.removeChild(document.getElementById("remove-button"));
     }
-
-    private createButton(id: string, type: string, text: string): Node {
+    createButton(id, type, text) {
         let button = document.createElement("button");
         button.textContent = text;
         button.id = id;
@@ -75,3 +63,4 @@ export class InputManager implements IManageInputs {
         return button;
     }
 }
+//# sourceMappingURL=InputManager.js.map
