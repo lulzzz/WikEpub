@@ -1,4 +1,4 @@
-﻿import { InputManager } from "./AddRemoveInput.js";
+﻿import { InputManager } from "./InputManager.js";
 
 
 let urlInputEventHandler: InputManager = new InputManager(document.getElementById("main-form"), 3);
