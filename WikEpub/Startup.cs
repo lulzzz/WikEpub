@@ -59,6 +59,7 @@ namespace WikEpub
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseDefaultFiles();
             app.UseRouting();
 
             app.UseAuthorization();
