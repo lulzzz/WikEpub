@@ -35,6 +35,7 @@ class DownloadPageManager {
     private addNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
+            this.nodeMap.set(newNode, false);
             this.nodes.push(newNode);
         }
         console.log(this.nodes.length.toString());
