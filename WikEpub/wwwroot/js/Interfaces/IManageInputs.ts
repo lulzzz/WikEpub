@@ -1,4 +1,4 @@
 ﻿export interface IManageInputs {
-    insertInput(enclosingNodeType: string): void;
-    removeInput(): void;
+    insertInput(enclosingNodeType: string): Node;
+    removeInput(): boolean;
 }
