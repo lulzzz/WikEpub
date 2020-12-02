@@ -2,6 +2,7 @@ import { InputManager } from "./InputManager.js";
 class DownloadPageManager {
     constructor(inputManager) {
         this.nodes = [];
+        this.nodeMap = new Map();
         this.inputManager = inputManager;
         this.inputValidator = this.inputValidator;
         this.nodes.push(document.getElementById("input-frame-1")); // first node

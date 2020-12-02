@@ -15,6 +15,7 @@ class DownloadPageManager {
 
     constructor(inputManager: IManageInputs) {
         this.nodes = [];
+        this.nodeMap = new Map();
         this.inputManager = inputManager;
         this.inputValidator = this.inputValidator;
         this.nodes.push(document.getElementById("input-frame-1")); // first node
