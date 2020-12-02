@@ -36,9 +36,16 @@ class DownloadPageManager {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
             this.nodeMap.set(newNode, false);
+            newNode.firstChild.addEventListener('change', () => this.ValidateNode());
             this.nodes.push(newNode);
         }
         console.log(this.nodes.length.toString());
+    }
+
+    private ValidateNode() {
+        //validate input
+        // if valid, check all others for validation + change ui
+        // if all are valid -> enable accept button
     }
 }
 
