@@ -11,6 +11,7 @@ class DownloadPageManager {
     inputManager: IManageInputs;
     inputValidator: ILinkRequestValidator; 
     nodes: Node[];
+    nodeMap: Map<Node, boolean>
 
     constructor(inputManager: IManageInputs) {
         this.nodes = [];
@@ -23,18 +24,23 @@ class DownloadPageManager {
     private SetUpButtons(): void{
         let addButton = document.getElementById("add-button");
         let removeButton = document.getElementById("remove-button");
-        addButton.addEventListener('click', () => {
-            let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
-            if (newNode !== null) {
-                this.nodes.push(newNode);
-            }
-            console.log(this.nodes.length.toString())
-        });
-        removeButton.addEventListener('click', () => {
-            if (this.inputManager.removeInput()) this.nodes.pop(); // side-effect on DOM
-            console.log(this.nodes.length.toString())
-        });
+        addButton.addEventListener('click',() => this.addNewInputNode());
+        removeButton.addEventListener('click', () => this.removeInputNode());
 
+    }
+
+    private removeInputNode() {
+        if (this.inputManager.removeInput())
+            this.nodes.pop(); // side-effect on DOM
+        console.log(this.nodes.length.toString());
+    }
+
+    private addNewInputNode() {
+        let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
+        if (newNode !== null) {
+            this.nodes.push(newNode);
+        }
+        console.log(this.nodes.length.toString());
     }
 }
 
