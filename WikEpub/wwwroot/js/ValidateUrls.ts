@@ -1,4 +1,6 @@
-﻿class ValidateUrls {
+﻿import { ILinkRequestValidator } from "./Interfaces/ILinkRequestValidator"
+
+export class ValidateUrls {
     private requestValidator: ILinkRequestValidator;
     private nodesAreValid: Event;
     private nodesAreInvalid: Event;

@@ -1,4 +1,4 @@
-class ValidateUrls {
+export class ValidateUrls {
     constructor(requestValidator) {
         this.requestValidator = requestValidator;
         this.nodesAreValid = new Event('nodesAreValid');
