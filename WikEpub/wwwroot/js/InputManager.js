@@ -3,6 +3,7 @@ export class InputManager {
         this.parentNode = parentNode;
         this.nodeIndex = nodeIndex;
         this.nodeNum = 1;
+        // this will be extracted into the class using this one
         let addButton = document.getElementById("add-button");
         let removeButton = document.getElementById("remove-button");
         addButton.addEventListener("click", () => this.insertInput("p"));
@@ -16,8 +17,6 @@ export class InputManager {
         this.nodeNum++;
         let insertNode = this.createInputNode(enclosingNodeType);
         this.insertAfter(this.parentNode.childNodes[this.nodeIndex], insertNode);
-        this.removeButtons(this.parentNode.childNodes[this.nodeIndex - 1]);
-        this.addButtons(this.parentNode.childNodes[this.nodeIndex]);
         document.dispatchEvent(this.inputChangeEvent);
     }
     removeInput() {
@@ -26,7 +25,6 @@ export class InputManager {
         this.parentNode.childNodes[this.nodeIndex].remove();
         this.nodeIndex--;
         this.nodeNum--;
-        this.addButtons(this.parentNode.childNodes[this.nodeIndex]);
         document.dispatchEvent(this.inputChangeEvent);
     }
     insertAfter(newSiblingNode, newNode) {
@@ -42,25 +40,6 @@ export class InputManager {
         enclosingNode.textContent = "Wikipedia url: ";
         enclosingNode.appendChild(inputNode);
         return enclosingNode;
-    }
-    addButtons(node) {
-        let addButton = this.createButton("add-button", "button", "Add wikipage");
-        let removeButton = this.createButton("remove-button", "button", "Remove wikipage");
-        node.appendChild(addButton);
-        node.appendChild(removeButton);
-        addButton.addEventListener("click", () => this.insertInput("p"));
-        removeButton.addEventListener("click", () => this.removeInput());
-    }
-    removeButtons(node) {
-        node.removeChild(document.getElementById("add-button"));
-        node.removeChild(document.getElementById("remove-button"));
-    }
-    createButton(id, type, text) {
-        let button = document.createElement("button");
-        button.textContent = text;
-        button.id = id;
-        button.type = type;
-        return button;
     }
 }
 //# sourceMappingURL=InputManager.js.map
