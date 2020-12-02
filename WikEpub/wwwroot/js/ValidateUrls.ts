@@ -1,29 +1,27 @@
 ﻿import { ILinkRequestValidator } from "./Interfaces/ILinkRequestValidator"
+import { IValidateUrls } from "./Interfaces/IValidateUrls";
 
-export class ValidateUrls {
+export class ValidateUrls implements IValidateUrls {
     private requestValidator: ILinkRequestValidator;
 
     constructor(requestValidator: ILinkRequestValidator) {
         this.requestValidator = requestValidator;
     }
 
-    public async NodeIsValid(node: Node): Promise<boolean> {
+    public async UrlIsValidInInput(node: Node): Promise<boolean> {
         let urlString = node.nodeValue;
-        if (this.urlIsValid(urlString)) {
+        if (this.urlStringIsValid(urlString)) {
             return await this.CheckUrlResponse(urlString)
         }
         return false;
     }
 
-    private urlIsValid(url: string): boolean {
+    private urlStringIsValid(url: string): boolean {
         return true 
     }
 
     private async CheckUrlResponse(url: string): Promise<boolean> {
-        return true
+        return await this.requestValidator.ValidateLink(url);
     }
-
-
-
 }
 

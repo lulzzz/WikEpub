@@ -2,18 +2,18 @@ export class ValidateUrls {
     constructor(requestValidator) {
         this.requestValidator = requestValidator;
     }
-    async NodeIsValid(node) {
+    async UrlIsValidInInput(node) {
         let urlString = node.nodeValue;
-        if (this.urlIsValid(urlString)) {
+        if (this.urlStringIsValid(urlString)) {
             return await this.CheckUrlResponse(urlString);
         }
         return false;
     }
-    urlIsValid(url) {
+    urlStringIsValid(url) {
         return true;
     }
     async CheckUrlResponse(url) {
-        return true;
+        return await this.requestValidator.ValidateLink(url);
     }
 }
 //# sourceMappingURL=ValidateUrls.js.map
