@@ -1,1 +1,1 @@
-{"version":3,"file":"LinkRequestValidator.js","sourceRoot":"","sources":["LinkRequestValidator.ts"],"names":[],"mappings":"AAAA,MAAM,oBAAoB;CAEzB"}
+{"version":3,"file":"LinkRequestValidator.js","sourceRoot":"","sources":["LinkRequestValidator.ts"],"names":[],"mappings":"AACA,MAAM,OAAO,oBAAoB;IACtB,KAAK,CAAC,YAAY,CAAC,GAAW;QACjC,MAAM,IAAI,KAAK,CAAC,yBAAyB,CAAC,CAAC;IAC/C,CAAC;CAEJ"}
