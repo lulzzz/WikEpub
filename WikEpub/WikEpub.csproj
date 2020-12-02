@@ -4,6 +4,14 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <TypeScriptCompile Remove="wwwroot\js\Interfaces\IValidateUrls.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\js\Interfaces\IValidateUrls.ts" />
+  </ItemGroup>
+
   
   <ItemGroup>
     <Folder Include="Downloads\" />
