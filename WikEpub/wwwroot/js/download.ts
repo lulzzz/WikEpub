@@ -2,19 +2,23 @@
 import { ValidateUrls } from "./ValidateUrls.js";
 import { IManageInputs } from "./Interfaces/IManageInputs"
 import { ILinkRequestValidator } from "./Interfaces/ILinkRequestValidator";
+import { IValidateUrls } from "./Interfaces/IValidateUrls.js";
 
 class DownloadPageManager {
     inputManager: IManageInputs;
-    inputValidator: ILinkRequestValidator; 
+    inputValidator: IValidateUrls; 
     nodes: Node[];
     nodeMap: Map<Node, boolean>
 
-    constructor(inputManager: IManageInputs) {
+    constructor(inputManager: IManageInputs, inputValidator: IValidateUrls) {
         this.nodes = [];
         this.nodeMap = new Map();
         this.inputManager = inputManager;
-        this.inputValidator = this.inputValidator;
-        this.nodes.push(document.getElementById("input-frame-1")); // first node
+        this.inputValidator = inputValidator;
+        this.inputValidator = inputValidator;
+        let firstInput = document.getElementById("input1");
+        this.nodes.push(firstInput); // first node
+        firstInput.addEventListener('change', () => this.Validate(firstInput))
         this.SetUpButtons();
     }
 
@@ -29,29 +33,45 @@ class DownloadPageManager {
     private removeInputNode() {
         if (this.inputManager.removeInput())
             this.nodes.pop(); // side-effect on DOM
-        console.log(this.nodes.length.toString());
     }
 
     private addNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
             this.nodeMap.set(newNode, false);
-            newNode.firstChild.addEventListener('change', () => this.ValidateNode());
-            this.nodes.push(newNode);
+            let inputNode = newNode.childNodes[1];
+            inputNode.addEventListener('change', () => this.Validate(inputNode));
+            this.nodes.push(inputNode);
         }
-        console.log(this.nodes.length.toString());
     }
 
-    private ValidateNode() {
-        //validate input
-        // if valid, check all others for validation + change ui
+    private async Validate(node: Node) {
+        if (await this.inputValidator.UrlIsValidInInput(node)) {
+            this.nodeMap.set(node, true);
+            if (this.AllNodesAreValid(this.nodeMap)) {
+            // enable submit
+            } else {
+            //disable submit
+            }
+
+        } else {
+            this.nodeMap.set(node, false);
+            //disable submit
+        }
+        // validate input
+        // if valid, check all others with false in map for validation + change ui
         // if all are valid -> enable accept button
+    }
+
+    private AllNodesAreValid(nodeMap: Map<Node, boolean>): boolean{
+        return true;
+
     }
 }
 
-let urlInputEventHandler: InputManager = new InputManager(document.getElementById("main-form"), 3);
+let inputChangeManager: InputManager = new InputManager(document.getElementById("main-form"), 3);
 
-let pageManager = new DownloadPageManager(urlInputEventHandler);
+//let pageManager = new DownloadPageManager(inputChangeManager);
 
 
  
