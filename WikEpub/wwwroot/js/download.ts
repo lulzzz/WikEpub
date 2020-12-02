@@ -3,10 +3,6 @@ import { ValidateUrls } from "./ValidateUrls.js";
 import { IManageInputs } from "./Interfaces/IManageInputs"
 import { ILinkRequestValidator } from "./Interfaces/ILinkRequestValidator";
 
-
-
-
-
 class DownloadPageManager {
     inputManager: IManageInputs;
     inputValidator: ILinkRequestValidator; 
