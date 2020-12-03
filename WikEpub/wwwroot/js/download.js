@@ -6,6 +6,7 @@ class DownloadPageManager {
         this.inputManager = inputManager;
         this.inputValidator = inputValidator;
         this.inputValidator = inputValidator;
+        this.submitButton = document.getElementById("submit-button");
         let firstInput = document.getElementById("input1");
         this.nodes.push(firstInput); // first node
         firstInput.addEventListener('change', () => this.Validate(firstInput));
@@ -34,22 +35,25 @@ class DownloadPageManager {
         if (await this.inputValidator.UrlIsValidInInput(node)) {
             this.nodeMap.set(node, true);
             if (this.AllNodesAreValid(this.nodeMap)) {
-                // enable submit
+                this.submitButton.disabled = false;
             }
             else {
-                //disable submit
+                this.submitButton.disabled = true;
             }
         }
         else {
             this.nodeMap.set(node, false);
-            //disable submit
+            this.submitButton.disabled = true;
         }
-        // validate input
-        // if valid, check all others with false in map for validation + change ui
-        // if all are valid -> enable accept button
     }
     AllNodesAreValid(nodeMap) {
-        return true;
+        let numNodes = nodeMap.values.length;
+        let numValidatedNodes = 0;
+        nodeMap.forEach((nodeIsValid, node) => {
+            if (nodeIsValid)
+                numValidatedNodes++;
+        });
+        return numNodes === numValidatedNodes;
     }
 }
 let inputChangeManager = new InputManager(document.getElementById("main-form"), 3);
