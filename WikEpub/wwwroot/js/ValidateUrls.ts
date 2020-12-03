@@ -17,11 +17,10 @@ export class ValidateUrls implements IValidateUrls {
     }
 
     private urlStringIsValid(url: string): boolean {
-        return true 
+        return true
     }
 
     private async CheckUrlResponse(url: string): Promise<boolean> {
         return await this.requestValidator.ValidateLink(url);
     }
 }
-

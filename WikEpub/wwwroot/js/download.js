@@ -1,4 +1,6 @@
 import { InputManager } from "./InputManager.js";
+import { ValidateUrls } from "./ValidateUrls.js";
+import { LinkRequestValidator } from "./LinkRequestValidator.js";
 class DownloadPageManager {
     constructor(inputManager, inputValidator) {
         this.nodes = [];
@@ -10,6 +12,7 @@ class DownloadPageManager {
         let firstInput = document.getElementById("input1");
         this.nodes.push(firstInput); // first node
         firstInput.addEventListener('change', () => this.Validate(firstInput));
+        this.nodeMap.set(firstInput, false);
         this.SetUpButtons();
     }
     SetUpButtons() {
@@ -19,8 +22,10 @@ class DownloadPageManager {
         removeButton.addEventListener('click', () => this.removeInputNode());
     }
     removeInputNode() {
-        if (this.inputManager.removeInput())
-            this.nodes.pop(); // side-effect on DOM
+        if (this.inputManager.removeInput()) {
+            let removedNode = this.nodes.pop(); // side-effect on DOM
+            this.nodeMap.delete(removedNode);
+        }
     }
     addNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
@@ -47,7 +52,7 @@ class DownloadPageManager {
         }
     }
     AllNodesAreValid(nodeMap) {
-        let numNodes = nodeMap.values.length;
+        let numNodes = this.nodes.length;
         let numValidatedNodes = 0;
         nodeMap.forEach((nodeIsValid, node) => {
             if (nodeIsValid)
@@ -57,5 +62,7 @@ class DownloadPageManager {
     }
 }
 let inputChangeManager = new InputManager(document.getElementById("main-form"), 3);
-//let pageManager = new DownloadPageManager(inputChangeManager);
+let linkRequestValidator = new LinkRequestValidator();
+let validateUrls = new ValidateUrls(linkRequestValidator);
+let pageManager = new DownloadPageManager(inputChangeManager, validateUrls);
 //# sourceMappingURL=Download.js.map

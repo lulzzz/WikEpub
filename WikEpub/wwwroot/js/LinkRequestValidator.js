@@ -1,6 +1,6 @@
 export class LinkRequestValidator {
     async ValidateLink(url) {
-        throw new Error("Method not implemented.");
+        return await true;
     }
 }
 //# sourceMappingURL=LinkRequestValidator.js.map

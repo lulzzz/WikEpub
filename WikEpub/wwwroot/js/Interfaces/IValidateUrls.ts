@@ -1,3 +1,3 @@
-﻿export interface IValidateUrls{
-	UrlIsValidInInput(node: Node): Promise<boolean>; 
+﻿export interface IValidateUrls {
+    UrlIsValidInInput(node: Node): Promise<boolean>;
 }

@@ -1,5 +1,4 @@
-﻿
-import { IManageInputs } from "./Interfaces/IManageInputs";
+﻿import { IManageInputs } from "./Interfaces/IManageInputs";
 
 export class InputManager implements IManageInputs {
     private nodeNum = 1;
@@ -7,9 +6,9 @@ export class InputManager implements IManageInputs {
     constructor(
         private parentNode: Node,
         private nodeIndex: number
-    ){}
+    ) { }
 
-    public insertInput(enclosingNodeType: string): Node{
+    public insertInput(enclosingNodeType: string): Node {
         if (this.nodeNum > 9) return null;
         this.nodeIndex++;
         this.nodeNum++;
@@ -42,5 +41,4 @@ export class InputManager implements IManageInputs {
         enclosingNode.appendChild(inputNode);
         return enclosingNode;
     }
-
 }

@@ -7,7 +7,7 @@ import { ILinkRequestValidator } from "./Interfaces/ILinkRequestValidator";
 
 class DownloadPageManager {
     private inputManager: IManageInputs;
-    private inputValidator: IValidateUrls; 
+    private inputValidator: IValidateUrls;
     private nodes: Node[];
     private nodeMap: Map<Node, boolean>;
     private submitButton: HTMLInputElement;
@@ -22,20 +22,22 @@ class DownloadPageManager {
         let firstInput = document.getElementById("input1");
         this.nodes.push(firstInput); // first node
         firstInput.addEventListener('change', () => this.Validate(firstInput))
+        this.nodeMap.set(firstInput, false);
         this.SetUpButtons();
     }
 
-    private SetUpButtons(): void{
+    private SetUpButtons(): void {
         let addButton = document.getElementById("add-button");
         let removeButton = document.getElementById("remove-button");
-        addButton.addEventListener('click',() => this.addNewInputNode());
+        addButton.addEventListener('click', () => this.addNewInputNode());
         removeButton.addEventListener('click', () => this.removeInputNode());
-
     }
 
     private removeInputNode() {
-        if (this.inputManager.removeInput())
-            this.nodes.pop(); // side-effect on DOM
+        if (this.inputManager.removeInput()) {
+            let removedNode = this.nodes.pop(); // side-effect on DOM
+            this.nodeMap.delete(removedNode);
+        }
     }
 
     private addNewInputNode() {
@@ -56,15 +58,14 @@ class DownloadPageManager {
             } else {
                 this.submitButton.disabled = true;
             }
-
         } else {
             this.nodeMap.set(node, false);
-            this.submitButton.disabled = true; 
+            this.submitButton.disabled = true;
         }
     }
 
-    private AllNodesAreValid(nodeMap: Map<Node, boolean>): boolean{
-        let numNodes = nodeMap.values.length;
+    private AllNodesAreValid(nodeMap: Map<Node, boolean>): boolean {
+        let numNodes = this.nodes.length;
         let numValidatedNodes = 0;
         nodeMap.forEach((nodeIsValid, node) => {
             if (nodeIsValid) numValidatedNodes++;
@@ -74,13 +75,6 @@ class DownloadPageManager {
 }
 
 let inputChangeManager: InputManager = new InputManager(document.getElementById("main-form"), 3);
-
-//let pageManager = new DownloadPageManager(inputChangeManager);
-
-
- 
-
-
-
-
-
+let linkRequestValidator = new LinkRequestValidator();
+let validateUrls = new ValidateUrls(linkRequestValidator);
+let pageManager = new DownloadPageManager(inputChangeManager, validateUrls);
