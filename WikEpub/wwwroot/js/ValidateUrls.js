@@ -11,7 +11,6 @@ export class ValidateUrls {
     }
     UrlStringIsValid(url) {
         const regex = new RegExp('(https:\\/\\/)?(en\\.)?wikipedia\\.org\\/[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=,]*)');
-        console.log(regex.test(url.trim()));
         return regex.test(url.trim());
     }
     async CheckUrlResponse(url) {
