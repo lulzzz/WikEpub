@@ -4,14 +4,12 @@ import { LinkRequestValidator } from "./LinkRequestValidator.js";
 class DownloadPageManager {
     constructor(inputManager, inputValidator) {
         this.nodes = [];
-        this.nodeMap = new Map();
+        this.validNodeMap = new Map();
         this.inputManager = inputManager;
         this.urlValidator = inputValidator;
         this.submitButton = document.getElementById("submit-button");
         let firstInput = document.getElementById("input1");
-        this.nodes.push(firstInput); // first node
-        firstInput.addEventListener('change', () => this.ValidateNode(firstInput));
-        this.nodeMap.set(firstInput, false);
+        this.AddNode(firstInput, this.validNodeMap, this.nodes);
         this.SetUpButtons();
     }
     SetUpButtons() {
@@ -23,45 +21,46 @@ class DownloadPageManager {
     removeInputNode() {
         if (this.inputManager.removeInput()) {
             let removedNode = this.nodes.pop(); // side-effect on DOM
-            this.nodeMap.delete(removedNode);
-            if (this.AllNodesAreValid(this.nodeMap))
-                this.submitButton.disabled = false;
+            this.validNodeMap.delete(removedNode);
+            this.CheckSubmitStatus();
         }
     }
     addNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
-            let inputNode = newNode.childNodes[1];
-            this.nodeMap.set(inputNode, false);
-            inputNode.addEventListener('change', () => this.ValidateNode(inputNode));
-            this.nodes.push(inputNode);
-            this.submitButton.disabled = true;
+            let inputElement = newNode.childNodes[1]; // get actual input element
+            this.AddNode(inputElement, this.validNodeMap, this.nodes);
         }
+    }
+    AddNode(inputElement, validNodeMap, nodes) {
+        validNodeMap.set(inputElement, false);
+        nodes.push(inputElement);
+        console.log(inputElement);
+        inputElement.addEventListener('change', () => this.ValidateNode(inputElement));
+        this.submitButton.disabled = true;
     }
     async ValidateNode(node) {
         if (await this.urlValidator.UrlIsValidInInput(node)) {
-            this.nodeMap.set(node, true);
-            if (this.AllNodesAreValid(this.nodeMap)) {
-                this.submitButton.disabled = false;
-            }
-            else {
-                this.submitButton.disabled = true;
-            }
+            this.validNodeMap.set(node, true);
         }
         else {
-            this.nodeMap.set(node, false);
+            this.validNodeMap.set(node, false);
+        }
+        this.CheckSubmitStatus();
+    }
+    CheckSubmitStatus() {
+        if (this.AllNodesAreValidIn(this.validNodeMap)) {
+            this.submitButton.disabled = false;
+        }
+        else {
             this.submitButton.disabled = true;
         }
     }
-    // this can be changed: the method will return false if any node is not valid, otherwise true
-    AllNodesAreValid(nodeMap) {
-        let numNodes = this.nodes.length;
-        let numValidatedNodes = 0;
-        nodeMap.forEach((nodeIsValid, node) => {
-            if (nodeIsValid)
-                numValidatedNodes++;
-        });
-        return numNodes === numValidatedNodes;
+    AllNodesAreValidIn(nodeMap) {
+        for (let [node, valid] of nodeMap)
+            if (!valid)
+                return false;
+        return true;
     }
 }
 let inputChangeManager = new InputManager(document.getElementById("main-form"), 3);
