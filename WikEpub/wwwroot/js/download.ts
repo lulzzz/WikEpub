@@ -27,15 +27,20 @@ class DownloadPageManager {
     private SetUpButtons(): void {
         let addButton = document.getElementById("add-button");
         let removeButton = document.getElementById("remove-button");
-        addButton.addEventListener('click', () => this.addNewInputNode());
-        removeButton.addEventListener('click', () => this.removeInputNode());
+        addButton.addEventListener('click', () => {
+            this.addNewInputNode();
+            this.CheckSubmitStatus();
+        });
+        removeButton.addEventListener('click', () => {
+            this.removeInputNode();
+            this.CheckSubmitStatus();
+        });
     }
 
     private removeInputNode() {
         if (this.inputManager.removeInput()) {
             let removedNode = this.nodes.pop(); // side-effect on DOM
             this.validNodeMap.delete(removedNode);
-            this.CheckSubmitStatus();
         }
     }
 
@@ -50,8 +55,10 @@ class DownloadPageManager {
     private AddNode(inputElement: Node, validNodeMap: Map<Node, boolean>, nodes: Node[]) {
         validNodeMap.set(inputElement, false);
         nodes.push(inputElement);
-        console.log(inputElement);
-        inputElement.addEventListener('change', () => this.ValidateNode(inputElement));
+        inputElement.addEventListener('change', () => {
+            this.ValidateNode(inputElement)
+                .then(() => this.CheckSubmitStatus());
+        });
         this.submitButton.disabled = true;
     }
 
@@ -61,7 +68,6 @@ class DownloadPageManager {
         } else {
             this.validNodeMap.set(node, false);
         }
-        this.CheckSubmitStatus();
     }
 
     private CheckSubmitStatus() {
@@ -71,6 +77,8 @@ class DownloadPageManager {
             this.submitButton.disabled = true;
         }
     }
+
+    
 
     private AllNodesAreValidIn(nodeMap: Map<Node, boolean>): boolean {
         for (let [node, valid] of nodeMap)
