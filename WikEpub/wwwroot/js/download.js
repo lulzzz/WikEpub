@@ -55,14 +55,20 @@ class DownloadPageManager {
         }
     }
     CheckSubmitStatus() {
-        if (this.AllNodesAreValidIn(this.validNodeMap)) {
+        if (this.AllNodesAreValid(this.validNodeMap)
+            && this.DoesNotContainDuplicates(this.nodes)) {
             this.submitButton.disabled = false;
         }
         else {
             this.submitButton.disabled = true;
         }
     }
-    AllNodesAreValidIn(nodeMap) {
+    DoesNotContainDuplicates(nodes) {
+        let values = nodes.map(x => x.value);
+        let setValues = new Set(values);
+        return values.length === setValues.size;
+    }
+    AllNodesAreValid(nodeMap) {
         for (let [node, valid] of nodeMap)
             if (!valid)
                 return false;

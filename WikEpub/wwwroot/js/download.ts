@@ -71,16 +71,22 @@ class DownloadPageManager {
     }
 
     private CheckSubmitStatus() {
-        if (this.AllNodesAreValidIn(this.validNodeMap)) {
+        if (this.AllNodesAreValid(this.validNodeMap)
+            && this.DoesNotContainDuplicates(this.nodes)) {
             this.submitButton.disabled = false;
         } else {
             this.submitButton.disabled = true;
         }
     }
 
-    
+    private DoesNotContainDuplicates(nodes: Node[]): boolean {
+        let values = nodes.map(x => (x as HTMLInputElement).value);
+        let setValues = new Set(values);
+        return values.length === setValues.size
+    }
 
-    private AllNodesAreValidIn(nodeMap: Map<Node, boolean>): boolean {
+
+    private AllNodesAreValid(nodeMap: Map<Node, boolean>): boolean {
         for (let [node, valid] of nodeMap)
             if (!valid) return false;
         return true;
