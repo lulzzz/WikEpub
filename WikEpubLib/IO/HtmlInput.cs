@@ -13,7 +13,6 @@ namespace WikEpubLib.IO
         {
             if (UrlsAreValid(urls))
                 return await Task.WhenAll(urls.Select(url => htmlWeb.LoadFromWebAsync(TranslateToApiCall(url))));
-
             throw new InvalidWikiUrlException(urls);
         }
         private string TranslateToApiCall(string url) =>
