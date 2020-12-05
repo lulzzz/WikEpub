@@ -25,15 +25,29 @@ export class InputManager {
         newSiblingNode.parentNode.insertBefore(newNode, newSiblingNode);
         return newSiblingNode;
     }
-    createInputNode(enclosingNodeType) {
-        let enclosingNode = document.createElement(enclosingNodeType);
-        enclosingNode.id = "input-frame-" + (this.nodeNum).toString();
+    CreateInputNode() {
         let inputNode = document.createElement("input");
         inputNode.setAttribute("name", "WikiPages");
-        inputNode.setAttribute("id", "input" + (this.nodeNum).toString());
+        inputNode.setAttribute("id", "input" + this.nodeNum.toString());
         inputNode.className = "url-input";
+        return inputNode;
+    }
+    CreateEnclosingNode(enclosingNodeType) {
+        let enclosingNode = document.createElement(enclosingNodeType);
+        enclosingNode.id = "input-frame-" + this.nodeNum.toString();
         enclosingNode.textContent = "Wikipedia url: ";
-        enclosingNode.appendChild(inputNode);
+        return enclosingNode;
+    }
+    CreateCrossElement() {
+        let span = document.createElement("span");
+        span.textContent = '\u2718';
+        span.id = "url-cross-" + this.nodeNum.toString();
+        return span;
+    }
+    createInputNode(enclosingNodeType) {
+        let enclosingNode = this.CreateEnclosingNode(enclosingNodeType);
+        enclosingNode.appendChild(this.CreateInputNode());
+        enclosingNode.appendChild(this.CreateCrossElement());
         return enclosingNode;
     }
 }
