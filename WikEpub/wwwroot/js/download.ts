@@ -20,7 +20,10 @@ class DownloadPageManager {
         this.urlValidator = inputValidator;
         this.submitButton = <HTMLInputElement>document.getElementById("submit-button");
         this.bookTitleInput = <HTMLInputElement>document.getElementById("book-title");
-        this.bookTitleInput.addEventListener('change', () => this.CheckSubmitStatus());
+        this.bookTitleInput.addEventListener('change', () => {
+            this.CheckSubmitStatus();
+            this.DisplayTitleStatus();
+        });
 
         let firstInput = document.getElementById("input1");
         this.AddNode(firstInput, this.validNodeMap, this.inputNodes);
@@ -31,23 +34,24 @@ class DownloadPageManager {
         let addButton = document.getElementById("add-button");
         let removeButton = document.getElementById("remove-button");
         addButton.addEventListener('click', () => {
-            this.addNewInputNode();
+            this.AddNewInputNode();
             this.CheckSubmitStatus();
+            this.DisplayStatus();
         });
         removeButton.addEventListener('click', () => {
-            this.removeInputNode();
+            this.RemoveInputNode();
             this.CheckSubmitStatus();
         });
     }
 
-    private removeInputNode() {
+    private RemoveInputNode() {
         if (this.inputManager.removeInput()) {
             let removedNode = this.inputNodes.pop(); // side-effect on DOM
             this.validNodeMap.delete(removedNode);
         }
     }
 
-    private addNewInputNode() {
+    private AddNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
             let inputElement = newNode.childNodes[1]; // get actual input element
@@ -60,7 +64,8 @@ class DownloadPageManager {
         nodes.push(inputElement);
         inputElement.addEventListener('change', () => {
             this.ValidateNode(inputElement)
-                .then(() => this.CheckSubmitStatus());
+                .then(() => this.CheckSubmitStatus())
+                .then(() => this.DisplayStatus());
         });
         this.submitButton.disabled = true;
     }
@@ -80,6 +85,29 @@ class DownloadPageManager {
             this.submitButton.disabled = false;
         } else {
             this.submitButton.disabled = true;
+        }
+    }
+
+    private DisplayStatus(): void {
+        this.validNodeMap.forEach((nodeIsValid: boolean, node: Node) => {
+            let spanElement = node.parentNode.querySelector("span"); 
+            if (nodeIsValid) {
+                spanElement.textContent = '\u2714';
+            }
+            else {
+                spanElement.textContent = '\u2718';
+            }
+        });
+    }
+
+    
+    private DisplayTitleStatus() {
+        let titleCross = document.getElementById("title-cross");
+        if (this.bookTitleInput.value.length !== 0) {
+            titleCross.textContent = '\u2714';
+        }
+        else {
+            titleCross.textContent = '\u2718';
         }
     }
 
