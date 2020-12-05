@@ -46,13 +46,15 @@ namespace WikEpubLibTests
         }
 
         [TestMethod]
-        public async Task Url_Throws_Exception()
+        public async Task Empty_Url_Throws()
         {
             List<string> validUrls = new()
             {
-                "https://en.wikipedia.org/wiki/"
+                ""
             };
-            await htmlInput.GetHtmlDocumentsFromAsync(validUrls, htmlWeb);
+            await Assert.ThrowsExceptionAsync<InvalidWikiUrlException>(
+                () => htmlInput.GetHtmlDocumentsFromAsync(validUrls, htmlWeb)
+                );
         }
 
 
