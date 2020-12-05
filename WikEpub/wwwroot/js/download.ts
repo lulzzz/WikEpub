@@ -8,13 +8,13 @@ import { ILinkRequestValidator } from "./Interfaces/ILinkRequestValidator";
 class DownloadPageManager {
     private inputManager: IManageInputs;
     private urlValidator: IValidateUrls;
-    private nodes: Node[];
+    private inputNodes: Node[];
     private validNodeMap: Map<Node, boolean>;
     private submitButton: HTMLInputElement;
     private bookTitleInput: HTMLInputElement;
    
     constructor(inputManager: IManageInputs, inputValidator: IValidateUrls) {
-        this.nodes = [];
+        this.inputNodes = [];
         this.validNodeMap = new Map();
         this.inputManager = inputManager;
         this.urlValidator = inputValidator;
@@ -23,7 +23,7 @@ class DownloadPageManager {
         this.bookTitleInput.addEventListener('change', () => this.CheckSubmitStatus());
 
         let firstInput = document.getElementById("input1");
-        this.AddNode(firstInput, this.validNodeMap, this.nodes);
+        this.AddNode(firstInput, this.validNodeMap, this.inputNodes);
         this.SetUpButtons();
     }
 
@@ -42,7 +42,7 @@ class DownloadPageManager {
 
     private removeInputNode() {
         if (this.inputManager.removeInput()) {
-            let removedNode = this.nodes.pop(); // side-effect on DOM
+            let removedNode = this.inputNodes.pop(); // side-effect on DOM
             this.validNodeMap.delete(removedNode);
         }
     }
@@ -51,7 +51,7 @@ class DownloadPageManager {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
             let inputElement = newNode.childNodes[1]; // get actual input element
-            this.AddNode(inputElement, this.validNodeMap, this.nodes)
+            this.AddNode(inputElement, this.validNodeMap, this.inputNodes)
         }
     }
 
@@ -75,7 +75,8 @@ class DownloadPageManager {
 
     private CheckSubmitStatus() {
         if (this.AllNodesAreValid(this.validNodeMap)
-            && this.DoesNotContainDuplicates(this.nodes) && this.bookTitleInput.value.length !== 0) {
+            && this.DoesNotContainDuplicates(this.inputNodes)
+            && this.bookTitleInput.value.length !== 0) {
             this.submitButton.disabled = false;
         } else {
             this.submitButton.disabled = true;

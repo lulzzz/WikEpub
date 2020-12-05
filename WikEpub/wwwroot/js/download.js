@@ -3,7 +3,7 @@ import { ValidateUrls } from "./ValidateUrls.js";
 import { LinkRequestValidator } from "./LinkRequestValidator.js";
 class DownloadPageManager {
     constructor(inputManager, inputValidator) {
-        this.nodes = [];
+        this.inputNodes = [];
         this.validNodeMap = new Map();
         this.inputManager = inputManager;
         this.urlValidator = inputValidator;
@@ -11,7 +11,7 @@ class DownloadPageManager {
         this.bookTitleInput = document.getElementById("book-title");
         this.bookTitleInput.addEventListener('change', () => this.CheckSubmitStatus());
         let firstInput = document.getElementById("input1");
-        this.AddNode(firstInput, this.validNodeMap, this.nodes);
+        this.AddNode(firstInput, this.validNodeMap, this.inputNodes);
         this.SetUpButtons();
     }
     SetUpButtons() {
@@ -28,7 +28,7 @@ class DownloadPageManager {
     }
     removeInputNode() {
         if (this.inputManager.removeInput()) {
-            let removedNode = this.nodes.pop(); // side-effect on DOM
+            let removedNode = this.inputNodes.pop(); // side-effect on DOM
             this.validNodeMap.delete(removedNode);
         }
     }
@@ -36,7 +36,7 @@ class DownloadPageManager {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
             let inputElement = newNode.childNodes[1]; // get actual input element
-            this.AddNode(inputElement, this.validNodeMap, this.nodes);
+            this.AddNode(inputElement, this.validNodeMap, this.inputNodes);
         }
     }
     AddNode(inputElement, validNodeMap, nodes) {
@@ -58,7 +58,8 @@ class DownloadPageManager {
     }
     CheckSubmitStatus() {
         if (this.AllNodesAreValid(this.validNodeMap)
-            && this.DoesNotContainDuplicates(this.nodes) && this.bookTitleInput.value.length !== 0) {
+            && this.DoesNotContainDuplicates(this.inputNodes)
+            && this.bookTitleInput.value.length !== 0) {
             this.submitButton.disabled = false;
         }
         else {
