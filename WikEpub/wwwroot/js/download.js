@@ -8,6 +8,8 @@ class DownloadPageManager {
         this.inputManager = inputManager;
         this.urlValidator = inputValidator;
         this.submitButton = document.getElementById("submit-button");
+        this.bookTitleInput = document.getElementById("book-title");
+        this.bookTitleInput.addEventListener('change', () => this.CheckSubmitStatus());
         let firstInput = document.getElementById("input1");
         this.AddNode(firstInput, this.validNodeMap, this.nodes);
         this.SetUpButtons();
@@ -55,8 +57,9 @@ class DownloadPageManager {
         }
     }
     CheckSubmitStatus() {
+        console.log(this.bookTitleInput.value.length);
         if (this.AllNodesAreValid(this.validNodeMap)
-            && this.DoesNotContainDuplicates(this.nodes)) {
+            && this.DoesNotContainDuplicates(this.nodes) && this.bookTitleInput.value.length !== 0) {
             this.submitButton.disabled = false;
         }
         else {
