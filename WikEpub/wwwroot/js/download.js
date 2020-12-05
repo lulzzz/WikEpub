@@ -57,7 +57,6 @@ class DownloadPageManager {
         }
     }
     CheckSubmitStatus() {
-        console.log(this.bookTitleInput.value.length);
         if (this.AllNodesAreValid(this.validNodeMap)
             && this.DoesNotContainDuplicates(this.nodes) && this.bookTitleInput.value.length !== 0) {
             this.submitButton.disabled = false;

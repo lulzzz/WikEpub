@@ -74,7 +74,6 @@ class DownloadPageManager {
     }
 
     private CheckSubmitStatus() {
-        console.log(this.bookTitleInput.value.length);
         if (this.AllNodesAreValid(this.validNodeMap)
             && this.DoesNotContainDuplicates(this.nodes) && this.bookTitleInput.value.length !== 0) {
             this.submitButton.disabled = false;
@@ -97,7 +96,7 @@ class DownloadPageManager {
     }
 }
 
-let inputChangeManager: InputManager = new InputManager(document.getElementById("main-form"), 3);
+let inputChangeManager = new InputManager(document.getElementById("main-form"), 3);
 let linkRequestValidator = new LinkRequestValidator();
 let validateUrls = new ValidateUrls(linkRequestValidator);
 let pageManager = new DownloadPageManager(inputChangeManager, validateUrls);
