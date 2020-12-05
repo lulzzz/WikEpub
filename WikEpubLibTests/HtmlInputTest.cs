@@ -56,7 +56,5 @@ namespace WikEpubLibTests
                 () => htmlInput.GetHtmlDocumentsFromAsync(validUrls, htmlWeb)
                 );
         }
-
-
     }
 }
