@@ -10,7 +10,7 @@ export class ValidateUrls {
         return false;
     }
     UrlStringIsValid(url) {
-        const regex = new RegExp('(https:\\/\\/)?(en\\.)?wikipedia\\.org\\/[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=,]*)');
+        const regex = new RegExp('(https:\\/\\/)?(en\\.)?wikipedia\\.org\\/(wiki\\/\\b(([-a-zA-Z0-9()@:%_\\+.~#?&\/\/=,]*){1}))');
         return regex.test(url.trim());
     }
     async CheckUrlResponse(url) {

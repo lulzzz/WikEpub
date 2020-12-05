@@ -12,7 +12,7 @@ namespace WikEpubLib.IO
         public async Task<HtmlDocument[]> GetHtmlDocumentsFromAsync(IEnumerable<string> urls, HtmlWeb htmlWeb)
         {
             if (UrlsAreValid(urls))
-                await Task.WhenAll(urls.Select(url => htmlWeb.LoadFromWebAsync(TranslateToApiCall(url))));
+                return await Task.WhenAll(urls.Select(url => htmlWeb.LoadFromWebAsync(TranslateToApiCall(url))));
 
             throw new InvalidWikiUrlException(urls);
         }
@@ -21,8 +21,8 @@ namespace WikEpubLib.IO
 
         private bool UrlsAreValid(IEnumerable<string> urls)
         {
-            Regex regex = new Regex("(https:\\/\\/)?(en\\.)?wikipedia\\.org\\/[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=,]*)");
-            foreach(var url in urls)
+            Regex regex = new Regex("(https:\\/\\/)?(en\\.)?wikipedia\\.org\\/(wiki\\/\\b(([-a-zA-Z0-9()@:%_\\+.~#?&\\/\\/=,]*){1}))");
+            foreach (var url in urls)
                 if (!regex.IsMatch(url))
                     return false;
             return true;
