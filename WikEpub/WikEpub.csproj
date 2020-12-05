@@ -24,6 +24,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.0-preview-20201126-03" />
   </ItemGroup>
 
   <ItemGroup>
