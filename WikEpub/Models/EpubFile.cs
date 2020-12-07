@@ -14,6 +14,7 @@ namespace WikEpub.Models
         [Required]
         public IEnumerable<string> WikiPages { get; set; }
         public Guid guid { get; set; }
+        public string FilePath {get; set;}
 
         
     }
