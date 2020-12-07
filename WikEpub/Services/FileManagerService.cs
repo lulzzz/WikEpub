@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -13,26 +14,44 @@ namespace WikEpub.Services
     public class FileManagerService : BackgroundService
     {
 
-        IDictionary<EpubFile, DateTime> epubFileTimeStamps { get; set; } = new Dictionary<EpubFile, DateTime>();
-        public FileManagerService()
+        public IDictionary<string, DateTime> epubFileLocationTimeStamps { get; set; } = new Dictionary<string, DateTime>();
+        private IWebHostEnvironment _webHostEnv;
+        public FileManagerService(IWebHostEnvironment webHostEnv)
         {
+            _webHostEnv = webHostEnv; 
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // call await worker.DoWork(token)
-            await DoWork(stoppingToken, epubFileTimeStamps);
+            await DoWork(stoppingToken, epubFileLocationTimeStamps);
         }
         
-        public async Task DoWork(CancellationToken cancellationToken, IDictionary<EpubFile, DateTime> epubFilesTimeStamps)
+        public async Task DoWork(CancellationToken cancellationToken, IDictionary<string, DateTime> epubFilesTimeStamps)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                //do somethings
-                await Task.Delay(1000 * 60); // 1 min
+                await RemoveOldDownloads(epubFilesTimeStamps);
             }
         }
 
+        private async Task RemoveOldDownloads(IDictionary<string, DateTime> epubFilesTimeStamps)
+        {
+            var currentDateTime = DateTime.Now;
+            foreach (var (directory, dateTimeAdded) in epubFilesTimeStamps)
+            {
+                if ((currentDateTime - dateTimeAdded).TotalMinutes >= 1)
+                {
+                   System.Diagnostics.Debug.WriteLine($"current dt: {currentDateTime} \n" +
+                        $"directory dt: {dateTimeAdded} \n" +
+                        $"directory: {directory}");
+                    var deleteFileTask = Task.Run(() =>
+                    { if (File.Exists(directory)) File.Delete(directory); });
+                    epubFileLocationTimeStamps.Remove(directory);
+                    await deleteFileTask;
+                }
+            }
+            await Task.Delay(1000 * 60); // 1 min
+        }
     }
 }
 
