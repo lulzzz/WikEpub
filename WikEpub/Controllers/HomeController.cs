@@ -42,10 +42,8 @@ namespace WikEpub.Controllers
             epubFile.guid = Guid.NewGuid();
             if (!ModelState.IsValid)
             {
-                return View();
+                return RedirectToAction("BadUrls");
             }
-            // validation of urls here, and checks for exceptions thrown by converter too (try/catch)
-            if (epubFile.WikiPages is null | epubFile.BookTitle is null) return RedirectToAction("BadUrls");
             if (await GetEpub(epubFile))
                 return RedirectToAction("DownloadPage", epubFile);
             return Redirect("/ConversionFail");
