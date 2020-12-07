@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WikEpub.Services;
 using WikEpubLib;
 using WikEpubLib.CreateDocs;
 using WikEpubLib.Interfaces;
@@ -39,8 +40,14 @@ namespace WikEpub
                 .AddScoped<IGetWikiPageRecords, GetWikiPageRecords>()
                 .AddScoped<IGetXmlDocs, GetXmlDocs>()
                 .AddScoped<IEpubOutput, EpubOutput>()
-                .AddScoped<IHtmlsToEpub, GetEpub>()
-                .AddControllersWithViews();
+                .AddScoped<IHtmlsToEpub, GetEpub>();
+            
+            services.AddControllersWithViews();
+            services.AddSingleton<FileManagerService>();
+            services.AddHostedService(provider => provider.GetService<FileManagerService>());
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
