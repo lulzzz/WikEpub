@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using WikEpubLib.Interfaces;
 using WikEpubLib;
 using Microsoft.AspNetCore.Authorization;
+using WikEpub.Services;
 
 namespace WikEpub.Controllers
 {
@@ -21,16 +22,17 @@ namespace WikEpub.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         public IHtmlsToEpub _getEpub;
         private readonly string _downloadRoot;
+        private FileManagerService _fileManagerService;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment webHostEnv, IHtmlsToEpub getEpub)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment webHostEnv, IHtmlsToEpub getEpub, FileManagerService fileManagerService)
         {
             _logger = logger;
             _webHostEnvironment = webHostEnv;
             _getEpub = getEpub;
             _downloadRoot = $@"{_webHostEnvironment.ContentRootPath}\Downloads\";
+            _fileManagerService = fileManagerService;
         }
         
-        public IActionResult Index() => RedirectToAction("CreateEpub");
         
         [HttpGet, Route("")]
         public IActionResult CreateEpub() => View();
@@ -40,6 +42,7 @@ namespace WikEpub.Controllers
         public async Task<IActionResult> CreateEpub(EpubFile epubFile)
         {
             epubFile.guid = Guid.NewGuid();
+            epubFile.FilePath = $"{_downloadRoot}{epubFile.guid}.epub";
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("BadUrls");
@@ -48,7 +51,21 @@ namespace WikEpub.Controllers
                 return RedirectToAction("DownloadPage", epubFile);
             return Redirect("/ConversionFail");
         }
-         
+        public async Task<bool> GetEpub(EpubFile EpubFile)
+        {
+            await _getEpub.FromAsync(EpubFile.WikiPages, _downloadRoot, EpubFile.BookTitle, EpubFile.guid);
+            return true;
+        }
+
+        public async Task<IActionResult> DownloadFile(EpubFile epubFile)
+        {
+            if (!System.IO.File.Exists(epubFile.FilePath))
+                return Redirect("/FileNotFound");
+            byte[] byteFile = await System.IO.File.ReadAllBytesAsync(epubFile.FilePath);
+            await ClearEpubFile(epubFile.FilePath);
+            return File(byteFile, "application/epub+zip", $"{epubFile.BookTitle}.epub");
+        }
+
         [Route("Download")]
         public IActionResult DownloadPage(EpubFile epubFile) => View(epubFile);
 
@@ -60,34 +77,18 @@ namespace WikEpub.Controllers
 
         public async Task<IActionResult> GoBackAndDelete(EpubFile epubFile)
         {
-            await ClearEpubFile(epubFile.guid);
+            await ClearEpubFile(epubFile.FilePath);
             return RedirectToAction("CreateEpub");
         }
         
-        public async Task ClearEpubFile(Guid guid) =>
+        public async Task ClearEpubFile(string filePath) =>
             await Task.Run(() =>
             {
-                var filePath = $@"{_downloadRoot}{guid}.epub";
                 if (System.IO.File.Exists(filePath))
                     System.IO.File.Delete(filePath);
             });
 
-        public async Task<bool> GetEpub(EpubFile EpubFile)
-        {
-            await _getEpub.FromAsync(EpubFile.WikiPages, _downloadRoot, EpubFile.BookTitle, EpubFile.guid);
-            return true;
-        }
-
-        public async Task<IActionResult> DownloadFile(EpubFile epubFile)
-        {
-            var fullDownloadPath = $"{_downloadRoot}{epubFile.guid}.epub";
-            if (!System.IO.File.Exists(fullDownloadPath))
-                return Redirect("/FileNotFound");
-            byte[] byteFile = await System.IO.File.ReadAllBytesAsync(fullDownloadPath);
-            await ClearEpubFile(epubFile.guid);
-            return File(byteFile, "application/epub+zip", $"{epubFile.BookTitle}.epub");
-        }
-
+       
        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() =>
