@@ -48,7 +48,10 @@ namespace WikEpub.Controllers
                 return RedirectToAction("BadUrls");
             }
             if (await GetEpub(epubFile))
+            {
+                _fileManagerService.epubFileLocationTimeStamps.Add(epubFile.FilePath, DateTime.Now);
                 return RedirectToAction("DownloadPage", epubFile);
+            }
             return Redirect("/ConversionFail");
         }
         public async Task<bool> GetEpub(EpubFile EpubFile)
