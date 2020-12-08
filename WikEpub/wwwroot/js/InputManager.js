@@ -16,9 +16,8 @@ export class InputManager {
         this.inputNodes.push(insertNode);
         return insertNode;
     }
-    insertAfter(sibling, newNode) {
-        sibling.after(newNode);
-        return sibling;
+    insertAfter(olderSibling, youngerSibling) {
+        olderSibling.after(youngerSibling);
     }
     removeInput() {
         if (this.nodeNum === 1)

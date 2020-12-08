@@ -24,10 +24,9 @@ export class InputManager implements IManageInputs {
         this.inputNodes.push(insertNode);
         return insertNode;
     }
-   
-    private insertAfter(sibling: Node, newNode: Node): Node {
-        (sibling as HTMLElement).after(newNode);
-        return sibling;
+
+    private insertAfter(olderSibling: Node, youngerSibling: Node): void {
+        (olderSibling as HTMLElement).after(youngerSibling);
     }
 
     public removeInput(): boolean {
