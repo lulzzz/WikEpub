@@ -54,7 +54,7 @@ class DownloadPageManager {
     private AddNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
-            let inputElement = newNode.childNodes[1]; // get actual input element
+            let inputElement = (newNode as HTMLElement).querySelector('input'); // get actual input element
             this.AddNode(inputElement, this.validNodeMap, this.inputNodes)
         }
     }
@@ -124,7 +124,7 @@ class DownloadPageManager {
     }
 }
 
-let inputChangeManager = new InputManager(document.getElementById("main-form"));
+let inputChangeManager = new InputManager(document.getElementById("main-form") );
 let linkRequestValidator = new LinkRequestValidator();
 let validateUrls = new ValidateUrls(linkRequestValidator);
 let pageManager = new DownloadPageManager(inputChangeManager, validateUrls);

@@ -39,7 +39,7 @@ class DownloadPageManager {
     AddNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
-            let inputElement = newNode.childNodes[1]; // get actual input element
+            let inputElement = newNode.querySelector('input'); // get actual input element
             this.AddNode(inputElement, this.validNodeMap, this.inputNodes);
         }
     }
