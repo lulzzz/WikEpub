@@ -1,6 +1,5 @@
 import { InputManager } from "./InputManager.js";
 import { ValidateUrls } from "./ValidateUrls.js";
-import { LinkRequestValidator } from "./LinkRequestValidator.js";
 class DownloadPageManager {
     constructor(inputManager, inputValidator) {
         this.inputNodes = [];
@@ -10,7 +9,7 @@ class DownloadPageManager {
         this.submitButton = document.getElementById("submit-button");
         this.bookTitleInput = document.getElementById("book-title");
         this.bookTitleInput.addEventListener('change', () => {
-            this.CheckSubmitStatus();
+            this.ChangeSubmitStatus();
             this.DisplayTitleStatus();
         });
         let firstInput = document.getElementById("input1");
@@ -22,12 +21,12 @@ class DownloadPageManager {
         let removeButton = document.getElementById("remove-button");
         addButton.addEventListener('click', () => {
             this.AddNewInputNode();
-            this.CheckSubmitStatus();
+            this.ChangeSubmitStatus();
             this.DisplayStatus();
         });
         removeButton.addEventListener('click', () => {
             this.RemoveInputNode();
-            this.CheckSubmitStatus();
+            this.ChangeSubmitStatus();
         });
     }
     RemoveInputNode() {
@@ -47,13 +46,13 @@ class DownloadPageManager {
         validNodeMap.set(inputElement, false);
         inputNodes.push(inputElement);
         inputElement.addEventListener('change', () => {
-            this.ValidateNode(inputElement)
-                .then(() => this.CheckSubmitStatus())
+            this.CheckIfNodeIsValid(inputElement)
+                .then(() => this.ChangeSubmitStatus())
                 .then(() => this.DisplayStatus());
         });
         this.submitButton.disabled = true;
     }
-    async ValidateNode(node) {
+    async CheckIfNodeIsValid(node) {
         if (await this.urlValidator.UrlIsValidInInput(node)) {
             this.validNodeMap.set(node, true);
         }
@@ -61,7 +60,7 @@ class DownloadPageManager {
             this.validNodeMap.set(node, false);
         }
     }
-    CheckSubmitStatus() {
+    ChangeSubmitStatus() {
         if (this.AllNodesAreValid(this.validNodeMap)
             && this.DoesNotContainDuplicates(this.inputNodes)
             && this.bookTitleInput.value.length !== 0) {
@@ -104,7 +103,6 @@ class DownloadPageManager {
     }
 }
 let inputChangeManager = new InputManager(document.getElementById("main-form"));
-let linkRequestValidator = new LinkRequestValidator();
-let validateUrls = new ValidateUrls(linkRequestValidator);
+let validateUrls = new ValidateUrls();
 let pageManager = new DownloadPageManager(inputChangeManager, validateUrls);
 //# sourceMappingURL=download.js.map
