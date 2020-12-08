@@ -1,6 +1,5 @@
 export class ValidateUrls {
-    constructor(requestValidator) {
-        this.requestValidator = requestValidator;
+    constructor() {
     }
     async UrlIsValidInInput(node) {
         let urlString = node.value;
@@ -15,7 +14,17 @@ export class ValidateUrls {
     }
     async CheckUrlResponse(url) {
         let apiUrl = 'https://en.wikipedia.org/api/rest_v1/page/title/' + url.split("/").slice(-1)[0];
-        return await this.requestValidator.ValidateLink(apiUrl);
+        return await this.ValidateLink(apiUrl);
+    }
+    async ValidateLink(url) {
+        let response = await fetch(url, {
+            mode: 'cors',
+            headers: { 'origin': 'include' }
+        });
+        if (response.status === 200) {
+            return true;
+        }
+        return false;
     }
 }
 //# sourceMappingURL=ValidateUrls.js.map

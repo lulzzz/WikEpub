@@ -1,11 +1,7 @@
-﻿import { ILinkRequestValidator } from "./Interfaces/ILinkRequestValidator"
-import { IValidateUrls } from "./Interfaces/IValidateUrls";
+﻿import { IValidateUrls } from "./Interfaces/IValidateUrls";
 
 export class ValidateUrls implements IValidateUrls {
-    private requestValidator: ILinkRequestValidator;
-
-    constructor(requestValidator: ILinkRequestValidator) {
-        this.requestValidator = requestValidator;
+    constructor() {
     }
 
     public async UrlIsValidInInput(node: Node): Promise<boolean> {
@@ -24,6 +20,19 @@ export class ValidateUrls implements IValidateUrls {
 
     private async CheckUrlResponse(url: string): Promise<boolean> {
         let apiUrl = 'https://en.wikipedia.org/api/rest_v1/page/title/' + url.split("/").slice(-1)[0];
-        return await this.requestValidator.ValidateLink(apiUrl);
+        return await this.ValidateLink(apiUrl);
     }
+
+    private async ValidateLink(url: string): Promise<boolean> {
+        let response: Response = await fetch(url, {
+            mode: 'cors',
+            headers: {'origin': 'include'}
+                }
+            );
+        if (response.status === 200) {
+            return true;
+        }
+        return false;
+    }
+
 }
