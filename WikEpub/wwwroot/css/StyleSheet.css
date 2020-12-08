@@ -1,0 +1,14 @@
+﻿#title{
+}
+@font-face{
+    font-family: 'Hoefler';
+    src: url('Font/Hoefler Text Regular.ttf');
+}
+body{
+    font-family: Hoefler;
+}
+
+.centered {
+    display: grid;
+    place-items: center;
+}
