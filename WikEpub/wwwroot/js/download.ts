@@ -59,9 +59,9 @@ class DownloadPageManager {
         }
     }
 
-    private AddNode(inputElement: Node, validNodeMap: Map<Node, boolean>, nodes: Node[]) {
+    private AddNode(inputElement: Node, validNodeMap: Map<Node, boolean>, inputNodes: Node[]) {
         validNodeMap.set(inputElement, false);
-        nodes.push(inputElement);
+        inputNodes.push(inputElement);
         inputElement.addEventListener('change', () => {
             this.ValidateNode(inputElement)
                 .then(() => this.CheckSubmitStatus())
@@ -100,7 +100,6 @@ class DownloadPageManager {
         });
     }
 
-    
     private DisplayTitleStatus() {
         let titleCross = document.getElementById("title-cross");
         if (this.bookTitleInput.value.length !== 0) {

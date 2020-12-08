@@ -43,9 +43,9 @@ class DownloadPageManager {
             this.AddNode(inputElement, this.validNodeMap, this.inputNodes);
         }
     }
-    AddNode(inputElement, validNodeMap, nodes) {
+    AddNode(inputElement, validNodeMap, inputNodes) {
         validNodeMap.set(inputElement, false);
-        nodes.push(inputElement);
+        inputNodes.push(inputElement);
         inputElement.addEventListener('change', () => {
             this.ValidateNode(inputElement)
                 .then(() => this.CheckSubmitStatus())
@@ -107,4 +107,4 @@ let inputChangeManager = new InputManager(document.getElementById("main-form"), 
 let linkRequestValidator = new LinkRequestValidator();
 let validateUrls = new ValidateUrls(linkRequestValidator);
 let pageManager = new DownloadPageManager(inputChangeManager, validateUrls);
-//# sourceMappingURL=Download.js.map
+//# sourceMappingURL=download.js.map
