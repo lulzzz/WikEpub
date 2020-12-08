@@ -4,15 +4,17 @@
 *@
 @{
 }
-<h2>Book details</h2>
-<dl>
-    <dt>Title</dt>
-    <dd>@Model.BookTitle</dd>
-    <dt>Wikipedia pages</dt>
-    @foreach (string p in Model.WikiPages)
-    {
-        <dd>@p.Split('/')[^1].Replace('_', ' ')</dd>
-    }
-</dl>
-<input type="button" value="Download" onclick="location.href='@Url.Action("DownloadFile","Home", Model)'" />
-<input  type="button" value="Back", onclick="location.href='@Url.Action("GoBackAndDelete","Home")'" />
+<div class="centered">
+    <h2>Book details</h2>
+    <dl>
+        <dt>Title</dt>
+        <dd>@Model.BookTitle</dd>
+        <dt>Wikipedia pages</dt>
+        @foreach (string p in Model.WikiPages)
+        {
+            <dd>@p.Split('/')[^1].Replace('_', ' ')</dd>
+        }
+    </dl>
+    <input type="button" value="Download" onclick="location.href='@Url.Action("DownloadFile","Home", Model)'" />
+    <input type="button" value="Back" , onclick="location.href='@Url.Action("GoBackAndDelete","Home")'" />
+</div>
