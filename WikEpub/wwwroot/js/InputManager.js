@@ -1,31 +1,32 @@
 export class InputManager {
-    constructor(parentNode, nodeIndex) {
+    constructor(parentNode) {
         this.parentNode = parentNode;
-        this.nodeIndex = nodeIndex;
         this.nodeNum = 1;
-        console.log(this.parentNode.childNodes);
+        this.inputNodes = [];
+        this.currentNode = document.getElementById('input-frame-1');
+        this.inputNodes.push(this.currentNode);
     }
     insertInput(enclosingNodeType) {
         if (this.nodeNum > 9)
             return null;
-        this.nodeIndex++;
         this.nodeNum++;
         let insertNode = this.createInputNode(enclosingNodeType);
-        // keep track of last node instead of using index
-        this.insertAfter(this.parentNode.childNodes[this.nodeIndex], insertNode);
+        this.insertAfter(this.currentNode, insertNode);
+        this.currentNode = insertNode;
+        this.inputNodes.push(insertNode);
         return insertNode;
+    }
+    insertAfter(sibling, newNode) {
+        sibling.after(newNode);
+        return sibling;
     }
     removeInput() {
         if (this.nodeNum === 1)
             return false;
-        this.parentNode.childNodes[this.nodeIndex].remove();
-        this.nodeIndex--;
+        this.parentNode.removeChild(this.inputNodes.pop());
+        this.currentNode = this.inputNodes[this.inputNodes.length - 1];
         this.nodeNum--;
         return true;
-    }
-    insertAfter(newSiblingNode, newNode) {
-        newSiblingNode.parentNode.insertBefore(newNode, newSiblingNode);
-        return newSiblingNode;
     }
     CreateInputNode() {
         let inputNode = document.createElement("input");

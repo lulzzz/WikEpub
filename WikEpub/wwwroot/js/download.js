@@ -103,7 +103,7 @@ class DownloadPageManager {
         return true;
     }
 }
-let inputChangeManager = new InputManager(document.getElementById("main-form"), 3);
+let inputChangeManager = new InputManager(document.getElementById("main-form"));
 let linkRequestValidator = new LinkRequestValidator();
 let validateUrls = new ValidateUrls(linkRequestValidator);
 let pageManager = new DownloadPageManager(inputChangeManager, validateUrls);

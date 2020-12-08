@@ -3,35 +3,39 @@
 export class InputManager implements IManageInputs {
     private nodeNum = 1;
     private inputNodes : Node[];
+    private currentNode: Node;
+    
 
     constructor(
         private parentNode: Node,
-        private nodeIndex: number
-    ) {
-        console.log(this.parentNode.childNodes)
+    )
+    {
+        this.inputNodes = [];
+        this.currentNode = document.getElementById('input-frame-1');
+        this.inputNodes.push(this.currentNode);
     }
 
     public insertInput(enclosingNodeType: string): Node {
         if (this.nodeNum > 9) return null;
-        this.nodeIndex++;
         this.nodeNum++;
         let insertNode = this.createInputNode(enclosingNodeType);
-        // keep track of last node instead of using index
-        this.insertAfter(this.parentNode.childNodes[this.nodeIndex], insertNode);
+        this.insertAfter(this.currentNode, insertNode)
+        this.currentNode = insertNode;
+        this.inputNodes.push(insertNode);
         return insertNode;
+    }
+   
+    private insertAfter(sibling: Node, newNode: Node): Node {
+        (sibling as HTMLElement).after(newNode);
+        return sibling;
     }
 
     public removeInput(): boolean {
         if (this.nodeNum === 1) return false;
-        this.parentNode.childNodes[this.nodeIndex].remove();
-        this.nodeIndex--;
+        this.parentNode.removeChild(this.inputNodes.pop());
+        this.currentNode = this.inputNodes[this.inputNodes.length - 1];
         this.nodeNum--;
         return true;
-    }
-
-    private insertAfter(newSiblingNode: Node, newNode: Node): Node {
-        newSiblingNode.parentNode.insertBefore(newNode, newSiblingNode);
-        return newSiblingNode;
     }
 
     public CreateInputNode(): Node {
@@ -52,7 +56,6 @@ export class InputManager implements IManageInputs {
         span.textContent = '\u2718';
         span.id = "url-cross-" + this.nodeNum.toString();
         return span;
-
     }
 
     private createInputNode(enclosingNodeType: string): Node {
