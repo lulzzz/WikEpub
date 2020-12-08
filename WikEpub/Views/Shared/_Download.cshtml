@@ -7,10 +7,12 @@
 }
 <div id="main-input-container" class="centered">
     <form id="main-form" asp-controller="Home" asp-action="CreateEpub">
+        <h4 style="text-decoration:underline">Book Title</h4>
         <p id="title-input">
             <input id="book-title"  asp-for="BookTitle" name="bookTitle" required/>
                         <span id="title-cross">&#x2718</span>
         </p>
+        <h4 style="text-decoration:underline">Wikipedia Links</h4>
         <p id="input-frame-1">
             <input name="WikiPages" id="input1" class="url-input" />
                            <span id="url-cross-1">&#x2718</span>
