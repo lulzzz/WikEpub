@@ -3,6 +3,7 @@ export class InputManager {
         this.parentNode = parentNode;
         this.nodeIndex = nodeIndex;
         this.nodeNum = 1;
+        console.log(this.parentNode.childNodes);
     }
     insertInput(enclosingNodeType) {
         if (this.nodeNum > 9)
@@ -10,6 +11,7 @@ export class InputManager {
         this.nodeIndex++;
         this.nodeNum++;
         let insertNode = this.createInputNode(enclosingNodeType);
+        // keep track of last node instead of using index
         this.insertAfter(this.parentNode.childNodes[this.nodeIndex], insertNode);
         return insertNode;
     }
@@ -35,7 +37,6 @@ export class InputManager {
     CreateEnclosingNode(enclosingNodeType) {
         let enclosingNode = document.createElement(enclosingNodeType);
         enclosingNode.id = "input-frame-" + this.nodeNum.toString();
-        enclosingNode.textContent = "Wikipedia url: ";
         return enclosingNode;
     }
     CreateCrossElement() {

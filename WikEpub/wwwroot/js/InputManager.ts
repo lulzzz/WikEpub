@@ -2,17 +2,21 @@
 
 export class InputManager implements IManageInputs {
     private nodeNum = 1;
+    private inputNodes : Node[];
 
     constructor(
         private parentNode: Node,
         private nodeIndex: number
-    ) { }
+    ) {
+        console.log(this.parentNode.childNodes)
+    }
 
     public insertInput(enclosingNodeType: string): Node {
         if (this.nodeNum > 9) return null;
         this.nodeIndex++;
         this.nodeNum++;
         let insertNode = this.createInputNode(enclosingNodeType);
+        // keep track of last node instead of using index
         this.insertAfter(this.parentNode.childNodes[this.nodeIndex], insertNode);
         return insertNode;
     }
@@ -41,7 +45,6 @@ export class InputManager implements IManageInputs {
     public CreateEnclosingNode(enclosingNodeType: string): Node {
         let enclosingNode = document.createElement(enclosingNodeType);
         enclosingNode.id = "input-frame-" + this.nodeNum.toString();
-        enclosingNode.textContent = "Wikipedia url: ";
         return enclosingNode;
     }
     public CreateCrossElement(): Node {
