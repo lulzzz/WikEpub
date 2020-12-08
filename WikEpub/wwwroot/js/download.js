@@ -22,7 +22,7 @@ class DownloadPageManager {
         addButton.addEventListener('click', () => {
             this.AddNewInputNode();
             this.ChangeSubmitStatus();
-            this.DisplayStatus();
+            this.DisplayUrlStatus();
         });
         removeButton.addEventListener('click', () => {
             this.RemoveInputNode();
@@ -48,10 +48,13 @@ class DownloadPageManager {
         inputElement.addEventListener('change', () => {
             this.CheckIfNodeIsValid(inputElement)
                 .then(() => this.ChangeSubmitStatus())
-                .then(() => this.DisplayStatus());
+                .then(() => this.DisplayUrlStatus());
         });
         this.submitButton.disabled = true;
     }
+    // extract
+    // Add additional check: & is not duplicate
+    // Store result (invalid url | duplicate | all good)
     async CheckIfNodeIsValid(node) {
         if (await this.urlValidator.UrlIsValidInInput(node)) {
             this.validNodeMap.set(node, true);
@@ -70,7 +73,7 @@ class DownloadPageManager {
             this.submitButton.disabled = true;
         }
     }
-    DisplayStatus() {
+    DisplayUrlStatus() {
         this.validNodeMap.forEach((nodeIsValid, node) => {
             let spanElement = node.parentNode.querySelector("span");
             if (nodeIsValid) {
@@ -90,6 +93,7 @@ class DownloadPageManager {
             titleCross.textContent = '\u2718';
         }
     }
+    // extract 
     DoesNotContainDuplicates(nodes) {
         let values = nodes.map(x => x.value);
         let setValues = new Set(values);

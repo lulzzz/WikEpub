@@ -34,7 +34,7 @@ class DownloadPageManager {
         addButton.addEventListener('click', () => {
             this.AddNewInputNode();
             this.ChangeSubmitStatus();
-            this.DisplayStatus();
+            this.DisplayUrlStatus();
         });
         removeButton.addEventListener('click', () => {
             this.RemoveInputNode();
@@ -63,11 +63,14 @@ class DownloadPageManager {
         inputElement.addEventListener('change', () => {
             this.CheckIfNodeIsValid(inputElement)
                 .then(() => this.ChangeSubmitStatus())
-                .then(() => this.DisplayStatus());
+                .then(() => this.DisplayUrlStatus());
         });
         this.submitButton.disabled = true;
     }
 
+    // extract
+    // Add additional check: & is not duplicate
+    // Store result (invalid url | duplicate | all good)
     private async CheckIfNodeIsValid(node: Node): Promise<void>{
         if (await this.urlValidator.UrlIsValidInInput(node)) {
             this.validNodeMap.set(node, true);
@@ -86,7 +89,7 @@ class DownloadPageManager {
         }
     }
 
-    private DisplayStatus(): void {
+    private DisplayUrlStatus(): void {
         this.validNodeMap.forEach((nodeIsValid: boolean, node: Node) => {
             let spanElement = node.parentNode.querySelector("span"); 
             if (nodeIsValid) {
@@ -108,6 +111,7 @@ class DownloadPageManager {
         }
     }
 
+    // extract 
     private DoesNotContainDuplicates(nodes: Node[]): boolean {
         let values = nodes.map(x => (x as HTMLInputElement).value);
         let setValues = new Set(values);
