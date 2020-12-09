@@ -1,7 +1,7 @@
 ﻿export interface IInputValidator {
     AddNode(node: Node): void;
     RemoveNode(): void;
-    CheckNode(node: Node): boolean;
+    CheckNodeOnChange(node: Node): Promise<void>;
     AllNodesAreValid(): boolean;
     GetValidNodeReason(node: Node): [boolean, string];
 }
