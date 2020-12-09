@@ -60,8 +60,8 @@ class DownloadPageManager {
     private AddNode(inputElement: Node, validNodeMap: Map<Node, boolean>, inputNodes: Node[]) {
         validNodeMap.set(inputElement, false);
         inputNodes.push(inputElement);
-        inputElement.addEventListener('change', () => {
-            this.CheckIfNodeIsValid(inputElement)
+        inputElement.addEventListener('change', async () => {
+            await this.CheckIfNodeIsValid(inputElement)
                 .then(() => this.ChangeSubmitStatus())
                 .then(() => this.DisplayUrlStatus());
         });
