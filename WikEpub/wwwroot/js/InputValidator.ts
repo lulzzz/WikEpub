@@ -1,5 +1,5 @@
 ﻿import { IInputValidator } from "./Interfaces/IInputValidator";
-import { ValidNodeReason } from "./ValidNodeReasonEnum";
+import { ValidNodeReason } from "./ValidNodeReasonEnum.js";
 import { IValidateUrls } from "./Interfaces/IValidateUrls";
 
 export class InputValidator implements IInputValidator {
@@ -48,7 +48,13 @@ export class InputValidator implements IInputValidator {
             if (!valid) return false;
         return true;
     }
-    GetValidNodeReason(node: Node): [boolean, string] {
+    GetValidNodeReasons(): [Node, boolean, string][] {
+        return this.inputNodes.map(node => {
+            let [isValid, reason] = this.GetValidNodeReason(node);
+            return [node, isValid, reason] 
+        });
+    }
+    private GetValidNodeReason(node: Node): [boolean, string] {
         let [isValid, reason] = this.validNodeMap.get(node);
         let reasonString;
         switch (reason) {
@@ -102,15 +108,6 @@ export class InputValidator implements IInputValidator {
         // update urlMap with new value
         nodeUrlMap.set(node, inputText);
     }
-
-    private ContainsDuplicate(node: Node, urlCountMap: Map<string, number>): boolean {
-        return urlCountMap.get(this.GetNodeInputText(node)) > 1;
-    }
-
-
-
-
-    
 
 }
 

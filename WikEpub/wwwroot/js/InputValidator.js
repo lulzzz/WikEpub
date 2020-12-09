@@ -1,4 +1,4 @@
-import { ValidNodeReason } from "./ValidNodeReasonEnum";
+import { ValidNodeReason } from "./ValidNodeReasonEnum.js";
 export class InputValidator {
     constructor(urlValidator) {
         this.validNodeMap = new Map();
@@ -39,6 +39,12 @@ export class InputValidator {
             if (!valid)
                 return false;
         return true;
+    }
+    GetValidNodeReasons() {
+        return this.inputNodes.map(node => {
+            let [isValid, reason] = this.GetValidNodeReason(node);
+            return [node, isValid, reason];
+        });
     }
     GetValidNodeReason(node) {
         let [isValid, reason] = this.validNodeMap.get(node);
@@ -96,9 +102,6 @@ export class InputValidator {
         this.RemoveUrlFromCountMap(nodeUrlMap.get(node), urlCountMap);
         // update urlMap with new value
         nodeUrlMap.set(node, inputText);
-    }
-    ContainsDuplicate(node, urlCountMap) {
-        return urlCountMap.get(this.GetNodeInputText(node)) > 1;
     }
 }
 //# sourceMappingURL=InputValidator.js.map
