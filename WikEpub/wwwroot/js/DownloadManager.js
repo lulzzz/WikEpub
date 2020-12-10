@@ -2,18 +2,14 @@ export class DownloadPageManager {
     constructor(inputManager, inputValidator) {
         this.inputManager = inputManager;
         this.inputValidator = inputValidator;
-        this.submitButton = document.getElementById("submit-button");
-        this.bookTitleInput = document.getElementById("book-title");
-        this.bookTitleInput.addEventListener('change', () => {
-            this.CheckSubmitStatus();
-            this.DisplayTitleStatus();
-        });
         this.AddFirstInputNode();
         this.SetUpButtons();
+        this.SetUpBookTitleInput();
     }
     SetUpButtons() {
         let addButton = document.getElementById("add-button");
         let removeButton = document.getElementById("remove-button");
+        this.submitButton = document.getElementById("submit-button");
         addButton.addEventListener('click', () => {
             this.AddNewInputNode();
             this.CheckSubmitStatus();
@@ -24,12 +20,19 @@ export class DownloadPageManager {
             this.CheckSubmitStatus();
         });
     }
+    SetUpBookTitleInput() {
+        this.bookTitleInput = document.getElementById("book-title");
+        this.bookTitleInput.addEventListener('change', () => {
+            this.CheckSubmitStatus();
+            this.DisplayTitleStatus();
+        });
+    }
     AddNewInputNode() {
         let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
         if (newNode !== null) {
             this.inputValidator.AddNode(newNode);
             newNode.addEventListener('change', async () => {
-                await this.inputValidator.CheckNodeOnChange(newNode)
+                await this.inputValidator.CheckNodeOnChange(newNode.querySelector('input'))
                     .then(() => this.CheckSubmitStatus())
                     .then(() => this.DisplayUrlStatus());
             });
@@ -40,10 +43,13 @@ export class DownloadPageManager {
             this.inputValidator.RemoveNode();
     }
     AddFirstInputNode() {
-        let firstNode = document.getElementById("input1");
+        let firstNode = document.getElementById("input-frame-1");
         this.inputValidator.AddNode(firstNode);
-        firstNode.addEventListener('change', () => {
-            this.inputValidator.CheckNodeOnChange(firstNode);
+        let inputNode = firstNode.querySelector('input');
+        inputNode.addEventListener('change', async () => {
+            await this.inputValidator.CheckNodeOnChange(inputNode)
+                .then(() => this.CheckSubmitStatus())
+                .then(() => this.DisplayUrlStatus());
         });
     }
     CheckSubmitStatus() {
