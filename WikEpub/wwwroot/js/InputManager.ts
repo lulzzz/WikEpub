@@ -2,14 +2,12 @@
 
 export class InputManager implements IManageInputs {
     private nodeNum = 1;
-    private inputNodes : Node[];
+    private inputNodes: Node[];
     private currentNode: Node;
-    
 
     constructor(
         private parentNode: Node,
-    )
-    {
+    ) {
         this.inputNodes = [];
         this.currentNode = document.getElementById('input-frame-1');
         this.inputNodes.push(this.currentNode);
