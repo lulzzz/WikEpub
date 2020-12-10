@@ -26,13 +26,12 @@ export class ValidateUrls implements IValidateUrls {
     private async ValidateLink(url: string): Promise<boolean> {
         let response: Response = await fetch(url, {
             mode: 'cors',
-            headers: {'origin': 'include'}
-                }
-            );
+            headers: { 'origin': 'include' }
+        }
+        );
         if (response.status === 200) {
             return true;
         }
         return false;
     }
-
 }
