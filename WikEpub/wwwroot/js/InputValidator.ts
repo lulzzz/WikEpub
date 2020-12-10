@@ -29,29 +29,33 @@ export class InputValidator implements IInputValidator {
         this.nodeUrlMap.delete(removedNode)
         this.RemoveUrlFromCountMap(this.GetNodeInputText(removedNode), this.urlCount);
     }
-    async CheckNodeOnChange(node: Node): Promise<void>{
+    async CheckNodeOnChange(node: Node): Promise<void> {
         this.UpdateNodeMaps(node, this.urlCount, this.nodeUrlMap)
         let containsDuplicateUrl = this.urlCount.get(this.GetNodeInputText(node)) > 1;
-        let isValidUrl = await this.urlValidator.UrlIsValidInInput
+        let isValidUrl = await this.urlValidator.UrlIsValidInInput(node);
         let inputText = this.GetNodeInputText(node);
-        if (inputText.length === 0 || inputText === null)
-            this.validNodeMap.set(node, [false, ValidNodeReason.Empty])
-        else if (containsDuplicateUrl && isValidUrl) 
+        if (isValidUrl && !containsDuplicateUrl)
+            this.validNodeMap.set(node, [true, ValidNodeReason.Valid])
+        else if (isValidUrl && containsDuplicateUrl)
             this.validNodeMap.set(node, [false, ValidNodeReason.Duplicate])
         else if (!isValidUrl)
             this.validNodeMap.set(node, [false, ValidNodeReason.InvalidUrl])
-        else
-            this.validNodeMap.set(node, [true, ValidNodeReason.Valid])
+        else if (inputText.length === 0 || inputText === null)
+            this.validNodeMap.set(node, [false, ValidNodeReason.Empty])
+        //console.log(this.nodeUrlMap);
+        //console.log(this.urlCount);
+        //console.log(this.validNodeMap);
+        //console.log("isValidurl: " + isValidUrl + ". containsDups: " + containsDuplicateUrl)
     }
     AllNodesAreValid(): boolean {
-        for (let [node, [valid, reason]] of this.validNodeMap) 
+        for (let [node, [valid, reason]] of this.validNodeMap)
             if (!valid) return false;
         return true;
     }
     GetValidNodeReasons(): [Node, boolean, string][] {
         return this.inputNodes.map(node => {
             let [isValid, reason] = this.GetValidNodeReason(node);
-            return [node, isValid, reason] 
+            return [node, isValid, reason]
         });
     }
     private GetValidNodeReason(node: Node): [boolean, string] {
@@ -79,7 +83,7 @@ export class InputValidator implements IInputValidator {
     private GetInputNodeFrom(containingNode: Node): Node {
         return (containingNode as HTMLElement).querySelector('input');
     }
-    private AddNodeToUrlCountMap(node: Node, urlCount: Map<string, number>) : void {
+    private AddNodeToUrlCountMap(node: Node, urlCount: Map<string, number>): void {
         let inputText = this.GetNodeInputText(node);
         if (urlCount.has(inputText)) {
             let previousValue = urlCount.get(inputText);
@@ -100,14 +104,12 @@ export class InputValidator implements IInputValidator {
     private UpdateNodeMaps(node: Node, urlCountMap: Map<string, number>, nodeUrlMap: Map<Node, string>) {
         let inputText = this.GetNodeInputText(node);
         if (nodeUrlMap.get(node) === inputText) return; // if there is no change do nothing
-        // otherwise: 
-        // add new url to counter 
+        // otherwise:
+        // add new url to counter
         this.AddNodeToUrlCountMap(node, urlCountMap);
         // remove old value from counter
         this.RemoveUrlFromCountMap(nodeUrlMap.get(node), urlCountMap)
         // update urlMap with new value
         nodeUrlMap.set(node, inputText);
     }
-
 }
-

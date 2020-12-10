@@ -23,16 +23,20 @@ export class InputValidator {
     async CheckNodeOnChange(node) {
         this.UpdateNodeMaps(node, this.urlCount, this.nodeUrlMap);
         let containsDuplicateUrl = this.urlCount.get(this.GetNodeInputText(node)) > 1;
-        let isValidUrl = await this.urlValidator.UrlIsValidInInput;
+        let isValidUrl = await this.urlValidator.UrlIsValidInInput(node);
         let inputText = this.GetNodeInputText(node);
-        if (inputText.length === 0 || inputText === null)
-            this.validNodeMap.set(node, [false, ValidNodeReason.Empty]);
-        else if (containsDuplicateUrl && isValidUrl)
+        if (isValidUrl && !containsDuplicateUrl)
+            this.validNodeMap.set(node, [true, ValidNodeReason.Valid]);
+        else if (isValidUrl && containsDuplicateUrl)
             this.validNodeMap.set(node, [false, ValidNodeReason.Duplicate]);
         else if (!isValidUrl)
             this.validNodeMap.set(node, [false, ValidNodeReason.InvalidUrl]);
-        else
-            this.validNodeMap.set(node, [true, ValidNodeReason.Valid]);
+        else if (inputText.length === 0 || inputText === null)
+            this.validNodeMap.set(node, [false, ValidNodeReason.Empty]);
+        //console.log(this.nodeUrlMap);
+        //console.log(this.urlCount);
+        //console.log(this.validNodeMap);
+        //console.log("isValidurl: " + isValidUrl + ". containsDups: " + containsDuplicateUrl)
     }
     AllNodesAreValid() {
         for (let [node, [valid, reason]] of this.validNodeMap)
@@ -95,8 +99,8 @@ export class InputValidator {
         let inputText = this.GetNodeInputText(node);
         if (nodeUrlMap.get(node) === inputText)
             return; // if there is no change do nothing
-        // otherwise: 
-        // add new url to counter 
+        // otherwise:
+        // add new url to counter
         this.AddNodeToUrlCountMap(node, urlCountMap);
         // remove old value from counter
         this.RemoveUrlFromCountMap(nodeUrlMap.get(node), urlCountMap);
