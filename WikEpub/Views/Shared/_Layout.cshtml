@@ -7,15 +7,17 @@
     <title>@ViewData["Title"] - WikEpub</title>
 </head>
 <body>
-    <div id="title-container" class="centered">
-        <h1 id="title">
-            WIKEPUB   <img src="~/images/book-open.svg" alt="WikipubLogo">
-        </h1>
+    <div class="main-grid">
+        <div id="header-container" >
+            <h1 id="title">
+                WIKEPUB   <img src="~/images/book-open.svg" alt="WikipubLogo">
+            </h1>
+        </div>
+        @RenderBody()
+        @RenderSection("Scripts", required: false)
+        <footer>
+            <div id="donate">Please <a href="https://donate.wikimedia.org/">donate to Wikipedia</a></div>
+        </footer>
     </div>
-    @RenderBody()
-    @RenderSection("Scripts", required: false)
-    <footer class="centered">
-        <div id="donate">Please <a href="https://donate.wikimedia.org/">donate to Wikipedia</a></div>
-    </footer>
 </body>
 </html>
