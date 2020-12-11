@@ -11,7 +11,7 @@ namespace WikEpubLib.IO
     {
         public async Task<HtmlDocument[]> GetHtmlDocumentsFromAsync(IEnumerable<string> urls, HtmlWeb htmlWeb)
         {
-            if (UrlsAreValid(urls))
+            if (UrlsAreValid(urls) & UrlsAreUnique(urls))
                 return await Task.WhenAll(urls.Select(url => htmlWeb.LoadFromWebAsync(TranslateToApiCall(url))));
             throw new InvalidWikiUrlException(urls);
         }
@@ -26,5 +26,6 @@ namespace WikEpubLib.IO
                     return false;
             return true;
         }
+        private bool UrlsAreUnique(IEnumerable<string> urls) => urls.ToHashSet().Count() < urls.Count();
     }
 }
