@@ -28,7 +28,7 @@ export class DownloadPageManager {
         });
     }
     AddNewInputNode() {
-        let newNode = this.inputManager.insertInput('p'); // side-effect on DOM
+        let newNode = this.inputManager.insertInput(); // side-effect on DOM
         if (newNode !== null) {
             this.inputValidator.AddNode(newNode);
             newNode.addEventListener('change', async () => {
