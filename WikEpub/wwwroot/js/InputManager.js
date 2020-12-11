@@ -6,11 +6,11 @@ export class InputManager {
         this.currentNode = document.getElementById('input-frame-1');
         this.inputNodes.push(this.currentNode);
     }
-    insertInput(enclosingNodeType) {
+    insertInput() {
         if (this.nodeNum > 9)
             return null;
         this.nodeNum++;
-        let insertNode = this.createInputNode(enclosingNodeType);
+        let insertNode = this.createInputNode();
         this.insertAfter(this.currentNode, insertNode);
         this.currentNode = insertNode;
         this.inputNodes.push(insertNode);
@@ -34,8 +34,8 @@ export class InputManager {
         inputNode.className = "url-input";
         return inputNode;
     }
-    CreateEnclosingNode(enclosingNodeType) {
-        let enclosingNode = document.createElement(enclosingNodeType);
+    CreateEnclosingNode() {
+        let enclosingNode = document.createElement("div");
         enclosingNode.id = "input-frame-" + this.nodeNum.toString();
         return enclosingNode;
     }
@@ -45,8 +45,8 @@ export class InputManager {
         span.id = "url-cross-" + this.nodeNum.toString();
         return span;
     }
-    createInputNode(enclosingNodeType) {
-        let enclosingNode = this.CreateEnclosingNode(enclosingNodeType);
+    createInputNode() {
+        let enclosingNode = this.CreateEnclosingNode();
         enclosingNode.appendChild(this.CreateInputNode());
         enclosingNode.appendChild(this.CreateCrossElement());
         return enclosingNode;

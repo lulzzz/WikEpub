@@ -13,10 +13,10 @@ export class InputManager implements IManageInputs {
         this.inputNodes.push(this.currentNode);
     }
 
-    public insertInput(enclosingNodeType: string): Node {
+    public insertInput(): Node {
         if (this.nodeNum > 9) return null;
         this.nodeNum++;
-        let insertNode = this.createInputNode(enclosingNodeType);
+        let insertNode = this.createInputNode();
         this.insertAfter(this.currentNode, insertNode)
         this.currentNode = insertNode;
         this.inputNodes.push(insertNode);
@@ -43,8 +43,8 @@ export class InputManager implements IManageInputs {
         return inputNode;
     }
 
-    public CreateEnclosingNode(enclosingNodeType: string): Node {
-        let enclosingNode = document.createElement(enclosingNodeType);
+    public CreateEnclosingNode(): Node {
+        let enclosingNode = document.createElement("div");
         enclosingNode.id = "input-frame-" + this.nodeNum.toString();
         return enclosingNode;
     }
@@ -55,8 +55,8 @@ export class InputManager implements IManageInputs {
         return span;
     }
 
-    private createInputNode(enclosingNodeType: string): Node {
-        let enclosingNode = this.CreateEnclosingNode(enclosingNodeType);
+    private createInputNode(): Node {
+        let enclosingNode = this.CreateEnclosingNode();
         enclosingNode.appendChild(this.CreateInputNode());
         enclosingNode.appendChild(this.CreateCrossElement())
         return enclosingNode;
