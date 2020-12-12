@@ -26,6 +26,6 @@ namespace WikEpubLib.IO
                     return false;
             return true;
         }
-        private bool UrlsAreUnique(IEnumerable<string> urls) => urls.ToHashSet().Count() < urls.Count();
+        private bool UrlsAreUnique(IEnumerable<string> urls) => urls.ToHashSet().Count == urls.Count();
     }
 }
