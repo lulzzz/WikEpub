@@ -46,6 +46,7 @@ export class InputManager implements IManageInputs {
     public CreateEnclosingNode(): Node {
         let enclosingNode = document.createElement("div");
         enclosingNode.id = "input-frame-" + this.nodeNum.toString();
+        enclosingNode.setAttribute("class", "input-frame");
         return enclosingNode;
     }
     public CreateCrossElement(): Node {

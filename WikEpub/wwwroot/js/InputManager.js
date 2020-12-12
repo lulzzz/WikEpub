@@ -37,6 +37,7 @@ export class InputManager {
     CreateEnclosingNode() {
         let enclosingNode = document.createElement("div");
         enclosingNode.id = "input-frame-" + this.nodeNum.toString();
+        enclosingNode.setAttribute("class", "input-frame");
         return enclosingNode;
     }
     CreateCrossElement() {
