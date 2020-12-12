@@ -7,18 +7,20 @@
 }
 <div id="main-input-container">
     <form id="main-form" asp-controller="Home" asp-action="CreateEpub">
-        <div id="title-container">
-            <h4 style="text-decoration:underline">Book Title</h4>
-            <div id="title-input">
-                <input id="book-title" asp-for="BookTitle" name="bookTitle" required />
-                <span id="title-cross">&#x2718</span>
+        <div id="input-container">
+            <div id="title-container">
+                <h4 style="text-decoration:underline">Book Title</h4>
+                <div id="title-input">
+                    <input id="book-title" asp-for="BookTitle" name="bookTitle" required />
+                    <span id="title-cross">&#x2718</span>
+                </div>
             </div>
-        </div>
-        <div id="url-link-container">
-            <h4 style="text-decoration:underline">Wikipedia Links</h4>
-            <div id="input-frame-1">
-                <input name="WikiPages" id="input1" class="url-input" />
-                <span id="url-cross-1">&#x2718</span>
+            <div id="url-link-container">
+                <h4 style="text-decoration:underline">Wikipedia Links</h4>
+                <div id="input-frame-1" class="input-frame">
+                    <input name="WikiPages" id="input1" class="url-input" />
+                    <span id="url-cross-1">&#x2718</span>
+                </div>
             </div>
         </div>
         <div id="button-container">
