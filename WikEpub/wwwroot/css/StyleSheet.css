@@ -20,3 +20,23 @@ body{
 
 
 */
+
+@font-face{
+    font-family: 'Hoefler';
+    src: url('Font/Hoefler Text Regular.ttf');
+}
+body{
+    font-family: Hoefler;
+}
+
+.main-grid{
+    display:grid;
+    place-items:center;
+}
+
+#main-form {
+    display: grid;
+    grid-template-columns: 400px 200px;    
+}
+
+
