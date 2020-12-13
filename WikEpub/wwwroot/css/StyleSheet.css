@@ -1,42 +1,129 @@
-﻿/*#title{
-}
-@font-face{
+﻿@font-face {
     font-family: 'Hoefler';
     src: url('Font/Hoefler Text Regular.ttf');
 }
-body{
+
+body {
     font-family: Hoefler;
 }
-.main-grid{
-    display:grid;
+
+.main-grid {
+    display: grid;
     place-items: center;
 }
 
-#main-form{
-    display:grid;
-    grid-template-columns: auto auto;
 
-}
-
-
-*/
-
-@font-face{
-    font-family: 'Hoefler';
-    src: url('Font/Hoefler Text Regular.ttf');
-}
-body{
-    font-family: Hoefler;
-}
-
-.main-grid{
-    display:grid;
-    place-items:center;
-}
-
-#main-form {
+.input-frame {
     display: grid;
-    grid-template-columns: 400px 200px;    
+    grid-template-columns: 95% 5%;
+}
+
+.plus-icon {
+    background: url(../images/plus-circle.svg);
+    height: 20px;
+    width: 20px;
+    display: block;
+}
+
+.minus-icon {
+    background: url(../images/minus-circle.svg);
+    height: 20px;
+    width: 20px;
+    display: block;
+}
+
+.add-remove-btn {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    position:relative;
+    padding: 0px;
 }
 
 
+.add-remove-btn-active:active {
+    transform: translateY(2px);
+}
+
+.add-remove-btn-inactive:active {
+    animation-name: shake;
+    animation-duration: 1s;
+    animation-timing-function: ease-in;
+}
+
+@keyframes shake {
+    0% {
+        left: 0
+    }
+
+    1% {
+        left: -2px
+    }
+
+    2% {
+        left: 2px
+    }
+
+    3% {
+        left: -2px
+    }
+
+    4% {
+        left: 2px
+    }
+
+    5% {
+        left: -2px
+    }
+
+    6% {
+        left: 2px
+    }
+
+    7% {
+        left: 0
+    }
+}
+
+#main-input-container {
+    width: 50%;
+    min-width: 200px;
+    max-width: 450px;
+}
+
+#url-title-header {
+    display: grid;
+    grid-template-columns: 60% 35% 5%;
+    margin-bottom: 5px;
+
+}
+
+#book-title-header{
+    display: grid;
+    grid-template-columns: 60% 35% 5%;
+    margin-bottom: 10px;
+
+}
+
+#submit-button-container{
+    margin-left:auto;
+}
+#add-remove-button-container {
+    margin-left: auto;
+}
+
+.main-info{
+    display: grid;
+    place-items: center;
+    width: 50%
+
+}
+
+#footer{
+    position:relative;
+    top: 50px;
+    margin-bottom: 100px;
+}
