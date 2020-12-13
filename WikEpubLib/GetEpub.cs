@@ -31,7 +31,7 @@ namespace WikEpubLib
         {
             Task<HtmlDocument[]> initialDocs = _htmlInput.GetHtmlDocumentsFromAsync(urls, new HtmlWeb());
 
-            var directories = GetDirectoryDict(rootDirectory, folderID);
+            var directories = GetDirectoryContext(rootDirectory, folderID);
             Task createDirectories = _epubOutput.CreateDirectoriesAsync(directories);
 
             List<(HtmlDocument doc, WikiPageRecord record)> htmlRecordTuple =
@@ -50,7 +50,7 @@ namespace WikEpubLib
             await _epubOutput.ZipFiles(directories, folderID);
         }
 
-        private Dictionary<Directories, string> GetDirectoryDict(string rootDir, Guid folderId) => new Dictionary<Directories, string> {
+        private Dictionary<Directories, string> GetDirectoryContext(string rootDir, Guid folderId) => new Dictionary<Directories, string> {
             {Directories.ROOT, rootDir},
             {Directories.OEBPS, @$"{rootDir}\{folderId}\OEBPS" },
             {Directories.METAINF, @$"{rootDir}\{folderId}\META-INF" },
