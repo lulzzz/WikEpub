@@ -7,15 +7,15 @@ export class DownloadPageManager {
         this.SetUpBookTitleInput();
     }
     SetUpButtons() {
-        let addButton = document.getElementById("add-button");
-        let removeButton = document.getElementById("remove-button");
+        this.addButton = document.getElementById("add-button");
+        this.removeButton = document.getElementById("remove-button");
         this.submitButton = document.getElementById("submit-button");
-        addButton.addEventListener('click', () => {
+        this.addButton.addEventListener('click', () => {
             this.AddNewInputNode();
             this.CheckSubmitStatus();
             this.DisplayUrlStatus();
         });
-        removeButton.addEventListener('click', () => {
+        this.removeButton.addEventListener('click', () => {
             this.RemoveInputNode();
             this.CheckSubmitStatus();
         });
@@ -30,6 +30,7 @@ export class DownloadPageManager {
     AddNewInputNode() {
         let newNode = this.inputManager.insertInput(); // side-effect on DOM
         if (newNode !== null) {
+            this.addButton.setAttribute("class", "add-remove-btn add-remove-btn-active");
             this.inputValidator.AddNode(newNode);
             newNode.addEventListener('change', async () => {
                 await this.inputValidator.CheckNodeOnChange(newNode.querySelector('input'))
@@ -37,10 +38,20 @@ export class DownloadPageManager {
                     .then(() => this.DisplayUrlStatus());
             });
         }
+        else {
+            this.addButton.setAttribute("class", "add-remove-btn add-remove-btn-inactive");
+            this.removeButton.setAttribute("class", "add-remove-btn add-remove-btn-active");
+        }
     }
     RemoveInputNode() {
-        if (this.inputManager.removeInput())
+        if (this.inputManager.removeInput()) {
             this.inputValidator.RemoveNode();
+            this.removeButton.setAttribute("class", "add-remove-btn add-remove-btn-active");
+        }
+        else {
+            this.removeButton.setAttribute("class", "add-remove-btn add-remove-btn-inactive");
+            this.addButton.setAttribute("class", "add-remove-btn add-remove-btn-active");
+        }
     }
     AddFirstInputNode() {
         let firstNode = document.getElementById("input-frame-1");
