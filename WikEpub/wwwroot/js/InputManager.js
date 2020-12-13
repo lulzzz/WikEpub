@@ -42,6 +42,7 @@ export class InputManager {
     }
     CreateCrossElement() {
         let span = document.createElement("span");
+        span.setAttribute("class", "valid-status");
         span.textContent = '\u2718';
         span.id = "url-cross-" + this.nodeNum.toString();
         return span;

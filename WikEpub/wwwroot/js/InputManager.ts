@@ -51,6 +51,7 @@ export class InputManager implements IManageInputs {
     }
     public CreateCrossElement(): Node {
         let span = document.createElement("span");
+        span.setAttribute("class", "valid-status")
         span.textContent = '\u2718';
         span.id = "url-cross-" + this.nodeNum.toString();
         return span;
