@@ -5,28 +5,32 @@
 @{
     ViewData["Title"] = "Create Book";
 }
+<h3 class="main-info">Convert wikipedia pages into an epub format.</h3>
 <div id="main-input-container">
     <form id="main-form" asp-controller="Home" asp-action="CreateEpub">
         <div id="input-container">
             <div id="title-container">
-                <h4 style="text-decoration:underline">Book Title</h4>
-                <div id="title-input">
+                <h4 id="book-title-header">
+                    Book Title <span id="submit-button-container"><button id="submit-button" type="submit" disabled>Submit</button></span>
+                </h4>
+                <div id="title-input" class="input-frame">
                     <input id="book-title" asp-for="BookTitle" name="bookTitle" required />
                     <span id="title-cross">&#x2718</span>
                 </div>
             </div>
             <div id="url-link-container">
-                <h4 style="text-decoration:underline">Wikipedia Links</h4>
+                <h4 id="url-title-header">
+                    Wikipedia Links
+                    <span id="add-remove-button-container">
+                        <button class="add-remove-btn add-remove-btn-active" id="add-button" type="button"><img src="~/images/plus-circle.svg" /></button>
+                        <button class="add-remove-btn add-remove-btn-inactive" id="remove-button" type="button"><img src="~/images/minus-circle.svg" /></button>
+                    </span>
+                </h4>
                 <div id="input-frame-1" class="input-frame">
                     <input name="WikiPages" id="input1" class="url-input" />
                     <span id="url-cross-1">&#x2718</span>
                 </div>
             </div>
-        </div>
-        <div id="button-container">
-            <button id="submit-button" type="submit" disabled>Submit</button>
-            <button id="add-button" type="button">Add wikipage</button>
-            <button id="remove-button" type="button">Remove wikipage</button>
         </div>
     </form>
 </div>
