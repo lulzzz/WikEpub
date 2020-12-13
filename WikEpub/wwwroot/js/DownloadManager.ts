@@ -66,9 +66,6 @@ export class DownloadPageManager {
             this.removeButton.setAttribute("class", "add-remove-btn add-remove-btn-inactive");
             this.addButton.setAttribute("class", "add-remove-btn add-remove-btn-active")
         }
-
-
-
     }
 
     private AddFirstInputNode() {
@@ -93,10 +90,15 @@ export class DownloadPageManager {
         let validNodeReasons = this.inputValidator.GetValidNodeReasons();
         for (let [node, isValid, reason] of validNodeReasons) {
             let spanElement = node.parentNode.querySelector("span");
-            if (isValid)
+            if (isValid) {
                 spanElement.textContent = '\u2714';
-            else
+                spanElement.setAttribute("title", "");
+            }
+            else {
                 spanElement.textContent = '\u2718';
+                spanElement.setAttribute("title", reason);
+
+            }
         }
     }
 
