@@ -29,7 +29,8 @@ namespace WikEpub.Controllers
             _logger = logger;
             _webHostEnvironment = webHostEnv;
             _getEpub = getEpub;
-            _downloadRoot = $@"{_webHostEnvironment.ContentRootPath}\Downloads\";
+            //_downloadRoot = $@"{_webHostEnvironment.ContentRootPath}\Downloads\";
+            _downloadRoot = Path.Combine(_webHostEnvironment.ContentRootPath, "Downloads"); 
             _fileManagerService = fileManagerService;
         }
         
@@ -42,7 +43,7 @@ namespace WikEpub.Controllers
         public async Task<IActionResult> CreateEpub(EpubFile epubFile)
         {
             epubFile.guid = Guid.NewGuid();
-            epubFile.FilePath = $"{_downloadRoot}{epubFile.guid}.epub";
+            epubFile.FilePath = Path.Combine(_downloadRoot, $@"{epubFile.guid}.epub");
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("BadUrls");
