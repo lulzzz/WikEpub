@@ -39,11 +39,11 @@ namespace WikEpub.Services
             var currentDateTime = DateTime.Now;
             foreach (var (directory, dateTimeAdded) in epubFilesTimeStamps)
             {
-                if ((currentDateTime - dateTimeAdded).TotalMinutes >= 1)
+                if (ElapsedTimeSinceDownloadRequest(dateTimeAdded, currentDateTime) >= 1)
                 {
-                   System.Diagnostics.Debug.WriteLine($"current dt: {currentDateTime} \n" +
-                        $"directory dt: {dateTimeAdded} \n" +
-                        $"directory: {directory}");
+                   //System.Diagnostics.Debug.WriteLine($"current dt: {currentDateTime} \n" +
+                   //     $"directory dt: {dateTimeAdded} \n" +
+                   //     $"directory: {directory}");
                     var deleteFileTask = Task.Run(() =>
                     { if (File.Exists(directory)) File.Delete(directory); });
                     epubFileLocationTimeStamps.Remove(directory);
@@ -52,6 +52,10 @@ namespace WikEpub.Services
             }
             await Task.Delay(1000 * 60); // 1 min
         }
+
+        private double ElapsedTimeSinceDownloadRequest(DateTime timeAdded, DateTime currentTime)
+            => (currentTime - timeAdded).TotalMinutes;
+        
     }
 }
 
